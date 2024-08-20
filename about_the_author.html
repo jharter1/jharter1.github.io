@@ -2,24 +2,68 @@
 <html>
   <head>
     <title>Jack Harter - Online CV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
-            width: 35em;
-            margin: 0 auto;
-            font-family: Arial, Helvetica, serif;
-        }
-        .section {
-            margin-bottom: 20px;
-        }
-        .section h2 {
-            border-bottom: 2px solid #000;
-            padding-bottom: 5px;
-        }
-    </style>
-  </head>
+      body {
+          width: 35em;
+          margin: 0 auto;
+          font-family: Arial, Helvetica, serif;
+          background-color: #f0f8ff;
+          color: #333;
+      }
+      h1 {
+          color: #2e8b57;
+      }
+      .section {
+          margin-bottom: 20px;
+          padding: 10px;
+          border-radius: 8px;
+          background-color: #fff;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .section h2 {
+          border-bottom: 2px solid #2e8b57;
+          padding-bottom: 5px;
+          color: #2e8b57;
+      }
+      a {
+          color: #1e90ff;
+          text-decoration: none;
+      }
+      a:hover {
+          text-decoration: underline;
+      }
+      ul {
+          list-style-type: none;
+          padding: 0;
+      }
+      ul li {
+          position: relative;
+          padding-left: 30px;
+          margin-bottom: 10px;
+      }
+      ul li::before {
+          content: "\f00c";
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          position: absolute;
+          left: 0;
+          top: 0;
+          color: #2e8b57;
+      }
+      .contact a {
+          display: inline-block;
+          margin-right: 10px;
+      }
+      .contact a img {
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+      }
+  </style>  </head>
   <body>
     <h1>Jack Harter</h1>
-    <p>DevOps and Linux Engineer</p>
+    <h3>DevOps and Linux Engineer</h3>
     <div class="section">
       <h2>Professional Summary</h2>
       <p>Experienced DevOps and Linux engineer with a passion for open-source technologies and a proven track record in project management and enterprise implementation. Adept at improving system efficiency and fostering team collaboration.</p>
@@ -39,6 +83,7 @@
         <li>Project Management</li>
         <li>Networking</li>
         <li>Enterprise Implementation</li>
+        <li>Automation and AI-driven technologies</li>
       </ul>
     </div>
 
@@ -60,7 +105,7 @@
     </div>
     <div class="section">
       <h2>Contact</h2>
-      <p>Email: <a href="mailto:jack.harter.8@gmail.com">
+      <p>Email: <a href="mailto:jack.harter.8@gmail.com">jack@hartr.net</a></p>
       <p>LinkedIn: <a href="https://linkedin.com/in/jwharter">linkedin.com/in/jwharter</a></p>
     </div>
   </body>
