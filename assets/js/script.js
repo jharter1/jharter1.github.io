@@ -305,6 +305,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Listen for scroll events
     window.addEventListener('scroll', onScroll, { passive: true });
 
+    // Timeline expand/collapse functionality
+    const timelineHeaders = document.querySelectorAll('.timeline-header');
+
+    timelineHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const details = this.parentElement.querySelector('.timeline-details');
+            const toggle = this.querySelector('.timeline-toggle');
+
+            if (details && toggle) {
+                const isExpanded = details.classList.toggle('expanded');
+                toggle.classList.toggle('expanded');
+
+                // Update aria-expanded for accessibility
+                this.setAttribute('aria-expanded', isExpanded.toString());
+            }
+        });
+
+        // Add keyboard support
+        header.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+
+        // Make it focusable
+        header.setAttribute('tabindex', '0');
+        header.setAttribute('role', 'button');
+        header.setAttribute('aria-expanded', 'false');
+    });
+
     // Case Study Toggle Functionality
     const caseStudyToggles = document.querySelectorAll('.case-study-toggle');
     
@@ -347,9 +378,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
             button.addEventListener('click', () => {
                 // Remove active class from all buttons
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                
+
                 // Add active class to clicked button
                 button.classList.add('active');
+
+                // Get filter value
+                const filterValue = button.getAttribute('data-filter');
+
+                
                 
                 // Get filter value
                 const filterValue = button.getAttribute('data-filter');
