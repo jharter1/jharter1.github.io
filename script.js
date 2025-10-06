@@ -214,6 +214,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
             contentCards[cardIndex].classList.remove('card-hidden');
             contentCards[cardIndex].classList.add('visible');
         }
+        
+        // Fade in project cards after content cards
+        await delay(500);
+        const projectCards = document.querySelectorAll('.project-card.fade-in-section');
+        for (let cardIndex = 0; cardIndex < projectCards.length; cardIndex++) {
+            await delay(200);
+            projectCards[cardIndex].classList.remove('card-hidden');
+            projectCards[cardIndex].classList.add('visible');
+        }
     }
     
     if (heroTitle) {
