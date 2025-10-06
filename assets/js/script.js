@@ -63,6 +63,54 @@ document.addEventListener('DOMContentLoaded', (event) => {
         setTimeout(() => document.body.removeChild(announcement), 1000);
     }
 
+    // Hamburger menu functionality
+    const hamburger = document.querySelector('.hamburger');
+    const nav = document.querySelector('nav');
+    
+    if (hamburger && nav) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('active');
+            
+            // Update ARIA attributes for accessibility
+            const isExpanded = nav.classList.contains('active');
+            hamburger.setAttribute('aria-expanded', isExpanded);
+            
+            // Announce menu state to screen readers
+            const menuState = isExpanded ? 'Menu opened' : 'Menu closed';
+            announceThemeChange(menuState);
+            
+            // Prevent body scroll when menu is open
+            if (isExpanded) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close menu when clicking navigation links
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                nav.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Close menu on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && nav.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                nav.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+                hamburger.focus(); // Return focus to hamburger button
+            }
+        });
+    }
+
     // Animated hero section
     const heroTitle = document.getElementById('hero-title');
     const heroSubtitle = document.getElementById('hero-subtitle');
