@@ -71,19 +71,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         heroCTA.style.opacity = 1;
         heroCTA.classList.add('visible');
         await delay(700);
-        // Fade in About Me section (home page) or content cards (other pages)
-        const aboutCard = document.getElementById('about-card');
-        if (aboutCard) {
-            aboutCard.classList.add('visible');
-            aboutCard.style.opacity = 1;
-        } else {
-            // Animate content cards on other pages
-            const contentCards = document.querySelectorAll('.card.fade-in-section');
-            for (let i = 0; i < contentCards.length; i++) {
-                await delay(300); // Stagger the animations
-                contentCards[i].classList.add('visible');
-                contentCards[i].style.opacity = 1;
-            }
+        // Fade in content cards (all pages now use the same system)
+        const contentCards = document.querySelectorAll('.card.fade-in-section');
+        for (let cardIndex = 0; cardIndex < contentCards.length; cardIndex++) {
+            await delay(300); // Stagger the animations
+            contentCards[cardIndex].classList.add('visible');
+            contentCards[cardIndex].style.opacity = 1;
         }
     }
     if (heroTitle) {
