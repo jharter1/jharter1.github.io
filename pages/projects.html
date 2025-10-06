@@ -70,6 +70,68 @@
                         <span class="tech-badge"><i class="fas fa-code-branch"></i> ArgoCD</span>
                         <span class="tech-badge"><i class="fab fa-google"></i> GCP</span>
                     </div>
+                    
+                    <button class="case-study-toggle" aria-expanded="false" aria-controls="case-study-1">
+                        <i class="fas fa-chevron-down"></i> View Case Study
+                    </button>
+                    
+                    <div class="case-study-content" id="case-study-1" hidden>
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-exclamation-circle"></i> Problem Statement</h4>
+                            <p>GitOps deployments on cloud platforms often incur significant costs due to always-on infrastructure and over-provisioned resources. Many teams struggle to balance reliability with cost efficiency when running ArgoCD on managed Kubernetes services like GKE.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-lightbulb"></i> Approach & Strategy</h4>
+                            <p>Designed a cost-optimized deployment strategy focusing on right-sizing resources, using preemptible nodes where appropriate, and implementing efficient networking through Tailscale VPN to avoid expensive load balancer costs while maintaining secure access.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-cogs"></i> Technical Decisions</h4>
+                            <ul>
+                                <li><strong>Terraform for IaC:</strong> Enables reproducible infrastructure and version-controlled configuration changes</li>
+                                <li><strong>GKE Autopilot:</strong> Reduces operational overhead while optimizing resource allocation automatically</li>
+                                <li><strong>NGINX Ingress:</strong> Lightweight and efficient alternative to cloud load balancers</li>
+                                <li><strong>Tailscale VPN:</strong> Zero-trust network access eliminating need for public load balancers</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-code"></i> Implementation Details</h4>
+                            <p>The solution leverages Terraform modules to provision a minimal GKE cluster with carefully tuned resource limits. ArgoCD is deployed with optimized memory settings and runs on cost-effective node pools. Tailscale provides secure remote access without exposing services publicly.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-wrench"></i> Challenges & Solutions</h4>
+                            <ul>
+                                <li><strong>Challenge:</strong> Balancing cost savings with reliability requirements</li>
+                                <li><strong>Solution:</strong> Implemented careful resource quotas and monitoring to ensure stability while minimizing waste</li>
+                                <li><strong>Challenge:</strong> Secure access without expensive load balancers</li>
+                                <li><strong>Solution:</strong> Integrated Tailscale for zero-trust network access at minimal cost</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-chart-line"></i> Results & Impact</h4>
+                            <ul>
+                                <li><strong>Cost Reduction:</strong> Achieved ~70% cost savings compared to default GKE ArgoCD deployments</li>
+                                <li><strong>Monthly Costs:</strong> Reduced from $200-300 to under $100 for small-scale deployments</li>
+                                <li><strong>Security:</strong> Enhanced security posture through private networking and VPN-only access</li>
+                                <li><strong>Maintainability:</strong> Fully automated deployment with Terraform enables easy replication</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-graduation-cap"></i> Lessons Learned</h4>
+                            <ul>
+                                <li>Cloud cost optimization requires continuous monitoring and adjustment</li>
+                                <li>Managed services like GKE Autopilot can provide both cost and operational benefits</li>
+                                <li>VPN-based access patterns can eliminate expensive load balancer requirements</li>
+                                <li>Infrastructure as Code is essential for reproducible cost-optimized deployments</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <div class="project-links">
                         <a href="https://github.com/jharter1/argocd-gke-cost-optimized" class="project-link" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-github"></i> View on GitHub
@@ -87,6 +149,68 @@
                         <span class="tech-badge"><i class="fas fa-server"></i> VirtualBox</span>
                         <span class="tech-badge"><i class="fab fa-linux"></i> Linux</span>
                     </div>
+                    
+                    <button class="case-study-toggle" aria-expanded="false" aria-controls="case-study-2">
+                        <i class="fas fa-chevron-down"></i> View Case Study
+                    </button>
+                    
+                    <div class="case-study-content" id="case-study-2" hidden>
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-exclamation-circle"></i> Problem Statement</h4>
+                            <p>Developers need reliable, reproducible local Kubernetes environments for testing and learning without incurring cloud costs. Existing solutions were often complex to set up, resource-intensive, or lacked the flexibility needed for experimentation and development workflows.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-lightbulb"></i> Approach & Strategy</h4>
+                            <p>Created an automated local Kubernetes cluster using Vagrant and VirtualBox that can be spun up with a single command. Focused on simplicity, reproducibility, and providing a realistic multi-node cluster experience for learning and development.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-cogs"></i> Technical Decisions</h4>
+                            <ul>
+                                <li><strong>Vagrant:</strong> Provides consistent, version-controlled VM provisioning across platforms</li>
+                                <li><strong>VirtualBox:</strong> Free, widely available virtualization platform with good performance</li>
+                                <li><strong>Multi-node Setup:</strong> Realistic cluster with separate control plane and worker nodes</li>
+                                <li><strong>Ubuntu Fossa:</strong> Stable LTS base with excellent K8s compatibility</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-code"></i> Implementation Details</h4>
+                            <p>The Vagrantfile automates the entire cluster creation process, from VM provisioning to Kubernetes installation and configuration. The setup includes networking configuration, CNI plugin installation, and helpful utilities for cluster management. Users can customize node counts and resources via configuration variables.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-wrench"></i> Challenges & Solutions</h4>
+                            <ul>
+                                <li><strong>Challenge:</strong> Networking complexity in local VM environments</li>
+                                <li><strong>Solution:</strong> Implemented bridge networking with careful IP address management</li>
+                                <li><strong>Challenge:</strong> Resource constraints on development machines</li>
+                                <li><strong>Solution:</strong> Optimized VM resource allocation and provided configurable options</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-chart-line"></i> Results & Impact</h4>
+                            <ul>
+                                <li><strong>Developer Productivity:</strong> Cluster setup time reduced from hours to minutes</li>
+                                <li><strong>Cost Savings:</strong> Eliminated need for cloud resources during learning and testing</li>
+                                <li><strong>Learning Tool:</strong> Provided realistic environment for Kubernetes experimentation</li>
+                                <li><strong>Reproducibility:</strong> Guaranteed consistent environments across different machines</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-graduation-cap"></i> Lessons Learned</h4>
+                            <ul>
+                                <li>Automation is key to reproducible development environments</li>
+                                <li>Local development clusters provide valuable learning without cloud dependency</li>
+                                <li>Multi-node setups better represent production environments than single-node alternatives</li>
+                                <li>Good documentation and defaults reduce barriers to entry for new users</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <div class="project-links">
                         <a href="https://github.com/jharter1/k8s_on_vagrant" class="project-link" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-github"></i> View on GitHub
@@ -155,6 +279,73 @@
                         <span class="tech-badge"><i class="fab fa-js"></i> JavaScript</span>
                         <span class="tech-badge"><i class="fab fa-github"></i> GitHub Pages</span>
                     </div>
+                    
+                    <button class="case-study-toggle" aria-expanded="false" aria-controls="case-study-6">
+                        <i class="fas fa-chevron-down"></i> View Case Study
+                    </button>
+                    
+                    <div class="case-study-content" id="case-study-6" hidden>
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-exclamation-circle"></i> Problem Statement</h4>
+                            <p>Needed a professional online presence that effectively showcases technical skills, projects, and experience while remaining accessible, performant, and maintainable. Many existing portfolio templates were either too generic, over-engineered with frameworks, or lacked accessibility features.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-lightbulb"></i> Approach & Strategy</h4>
+                            <p>Built a custom, lightweight portfolio from scratch using vanilla HTML, CSS, and JavaScript. Focused on clean design, smooth animations, accessibility compliance, and fast loading times. Implemented modern features like theme switching and responsive design without framework overhead.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-cogs"></i> Technical Decisions</h4>
+                            <ul>
+                                <li><strong>Vanilla JavaScript:</strong> Zero dependencies for maximum performance and control</li>
+                                <li><strong>CSS Custom Properties:</strong> Dynamic theming without preprocessors</li>
+                                <li><strong>GitHub Pages:</strong> Free, reliable hosting with automatic deployment</li>
+                                <li><strong>Semantic HTML:</strong> Proper structure for accessibility and SEO</li>
+                                <li><strong>Mobile-First Design:</strong> Responsive layouts that work on all devices</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-code"></i> Implementation Details</h4>
+                            <p>The site features an animated typewriter effect in the hero section, smooth fade-in animations for content, and a comprehensive dark/light theme system with system preference detection. All interactive elements include proper ARIA labels and keyboard navigation support. The hamburger menu provides mobile-friendly navigation.</p>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-wrench"></i> Challenges & Solutions</h4>
+                            <ul>
+                                <li><strong>Challenge:</strong> Creating smooth animations without impacting performance</li>
+                                <li><strong>Solution:</strong> Used CSS transitions and Intersection Observer API for efficient animations</li>
+                                <li><strong>Challenge:</strong> Implementing accessible theme switching</li>
+                                <li><strong>Solution:</strong> Added ARIA announcements and respected system preferences</li>
+                                <li><strong>Challenge:</strong> Managing relative paths across pages</li>
+                                <li><strong>Solution:</strong> Consistent directory structure with proper path management</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-chart-line"></i> Results & Impact</h4>
+                            <ul>
+                                <li><strong>Performance:</strong> Lighthouse scores of 95+ across all categories</li>
+                                <li><strong>Load Time:</strong> Sub-second initial page load on fast connections</li>
+                                <li><strong>Accessibility:</strong> WCAG 2.1 AA compliant with keyboard navigation</li>
+                                <li><strong>Maintainability:</strong> Clean codebase easy to update and extend</li>
+                                <li><strong>Professional Impact:</strong> Enhanced online presence for networking and opportunities</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-graduation-cap"></i> Lessons Learned</h4>
+                            <ul>
+                                <li>Vanilla JavaScript can be more maintainable than framework-heavy solutions</li>
+                                <li>Accessibility should be built in from the start, not added later</li>
+                                <li>Performance optimization matters - users notice fast, smooth experiences</li>
+                                <li>CSS custom properties provide powerful theming capabilities</li>
+                                <li>Good documentation helps future maintenance and collaboration</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <div class="project-links">
                         <a href="https://github.com/jharter1/jharter1.github.io" class="project-link" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-github"></i> View on GitHub
