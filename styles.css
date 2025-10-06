@@ -4,6 +4,14 @@
     --text-color: #e0e0e0;
     --card-background-color: #1f1f1f;
     --accent-color: #bb86fc;
+    
+    /* Spacing scale */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-xl: 40px;
+    --spacing-xxl: 48px;
 }
 
 body.light-theme {
@@ -65,14 +73,15 @@ nav ul li a:hover {
 }
 
 main {
-    width: 80%;
+    width: 90%;
     max-width: 800px;
-    margin: 20px auto;
+    margin: var(--spacing-xl) auto;
+    padding: 0 var(--spacing-md);
 }
 
 .hero {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-xl);
     min-height: 220px;
     position: relative;
 }
@@ -130,8 +139,8 @@ main {
     color: var(--text-color);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
     width: 100%;
     max-width: 800px;
     box-sizing: border-box;
@@ -167,10 +176,107 @@ ul {
     margin-bottom: 0; /* Remove individual card margins since grid handles spacing */
 }
 
-/* Responsive - single column on mobile */
+/* Responsive Design - Tablet and below */
 @media (max-width: 768px) {
+    main {
+        width: 95%;
+        padding: 0 var(--spacing-sm);
+        margin: var(--spacing-lg) auto;
+    }
+    
+    .card {
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .hero {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .logo {
+        margin-left: var(--spacing-sm);
+    }
+    
+    .theme-switcher {
+        margin-right: var(--spacing-sm);
+    }
+
     .cards-grid {
         grid-template-columns: 1fr;
         gap: 20px;
+    }
+}
+
+/* Responsive Design - Mobile */
+@media (max-width: 480px) {
+    main {
+        width: 100%;
+        padding: 0 var(--spacing-sm);
+        margin: var(--spacing-md) auto;
+    }
+    
+    .card {
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .hero {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .animated-hero h1 {
+        font-size: 2em;
+    }
+    
+    .logo {
+        margin-left: var(--spacing-xs);
+    }
+    
+    .logo h1 {
+        font-size: 1.2em;
+    }
+    
+    nav ul {
+        flex-wrap: nowrap;
+    }
+    
+    nav ul li {
+        margin: 0 var(--spacing-xs);
+    }
+    
+    nav ul li a {
+        font-size: 0.75em;
+        white-space: nowrap;
+    }
+    
+    .theme-switcher {
+        margin-right: var(--spacing-xs);
+    }
+}
+
+/* Responsive Design - Extra Small Mobile */
+@media (max-width: 380px) {
+    header {
+        padding: 8px 0;
+    }
+    
+    .logo {
+        margin-left: 4px;
+    }
+    
+    .logo h1 {
+        font-size: 1em;
+    }
+    
+    nav ul li {
+        margin: 0 4px;
+    }
+    
+    nav ul li a {
+        font-size: 0.7em;
+    }
+    
+    .theme-switcher {
+        margin-right: 4px;
     }
 }
