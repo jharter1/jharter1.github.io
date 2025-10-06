@@ -126,8 +126,8 @@ main {
 }
 
 .card {
-    background-color: var(--card-background-color) !important;
-    color: var(--text-color) !important;
+    background-color: var(--card-background-color);
+    color: var(--text-color);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     padding: 20px;

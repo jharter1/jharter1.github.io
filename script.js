@@ -23,12 +23,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const heroCTA = document.getElementById('hero-cta');
     const titleText = 'Welcome to Hartr.net';
     let i = 0;
+    const TYPING_SPEED_MS = 60;
 
     function typeWriter() {
         if (i < titleText.length) {
             heroTitle.textContent += titleText.charAt(i);
             i++;
-            setTimeout(typeWriter, 60);
+            setTimeout(typeWriter, TYPING_SPEED_MS);
         } else {
             // Fade in subtitle after typing is done
             setTimeout(() => {
