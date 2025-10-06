@@ -305,6 +305,127 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Listen for scroll events
     window.addEventListener('scroll', onScroll, { passive: true });
 
+    // Testimonials Carousel Functionality
+    const testimonialsCarousel = document.querySelector('.testimonials-carousel');
+    
+    if (testimonialsCarousel) {
+        const testimonialCards = document.querySelectorAll('.testimonial-card');
+        const prevBtn = document.querySelector('.carousel-nav.prev');
+        const nextBtn = document.querySelector('.carousel-nav.next');
+        const indicatorsContainer = document.querySelector('.carousel-indicators');
+        
+        let currentIndex = 0;
+        let autoRotateInterval;
+        const AUTO_ROTATE_DELAY = 7000; // 7 seconds
+        
+        // Create indicator dots
+        testimonialCards.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.classList.add('indicator-dot');
+            dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
+            dot.setAttribute('role', 'tab');
+            if (index === 0) dot.classList.add('active');
+            
+            dot.addEventListener('click', () => {
+                goToSlide(index);
+                resetAutoRotate();
+            });
+            
+            indicatorsContainer.appendChild(dot);
+        });
+        
+        const indicators = document.querySelectorAll('.indicator-dot');
+        
+        function updateCarousel() {
+            testimonialCards.forEach((card, index) => {
+                card.classList.remove('active', 'prev');
+                
+                if (index === currentIndex) {
+                    card.classList.add('active');
+                } else if (index < currentIndex) {
+                    card.classList.add('prev');
+                }
+            });
+            
+            // Update indicators
+            indicators.forEach((dot, index) => {
+                if (index === currentIndex) {
+                    dot.classList.add('active');
+                    dot.setAttribute('aria-selected', 'true');
+                } else {
+                    dot.classList.remove('active');
+                    dot.setAttribute('aria-selected', 'false');
+                }
+            });
+        }
+        
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+        
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % testimonialCards.length;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + testimonialCards.length) % testimonialCards.length;
+            updateCarousel();
+        }
+        
+        function startAutoRotate() {
+            autoRotateInterval = setInterval(nextSlide, AUTO_ROTATE_DELAY);
+        }
+        
+        function stopAutoRotate() {
+            if (autoRotateInterval) {
+                clearInterval(autoRotateInterval);
+            }
+        }
+        
+        function resetAutoRotate() {
+            stopAutoRotate();
+            startAutoRotate();
+        }
+        
+        // Event listeners
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetAutoRotate();
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetAutoRotate();
+            });
+        }
+        
+        // Keyboard navigation
+        testimonialsCarousel.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+                resetAutoRotate();
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+                resetAutoRotate();
+                e.preventDefault();
+            }
+        });
+        
+        // Pause auto-rotate on hover
+        testimonialsCarousel.addEventListener('mouseenter', stopAutoRotate);
+        testimonialsCarousel.addEventListener('mouseleave', startAutoRotate);
+        
+        // Start auto-rotate
+        startAutoRotate();
+        
+        // Initialize first slide
+        updateCarousel();
     // Skills filtering functionality
     const filterButtons = document.querySelectorAll('.filter-btn');
     const skillCategories = document.querySelectorAll('.skill-category');
