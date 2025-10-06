@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Footer configuration
     const footerConfig = {
         copyrightYear: new Date().getFullYear(),
-        ownerName: 'Jack Harter',
         companyName: 'Jack Harter', // Can be different from owner if needed
         allRightsReserved: true
     };
