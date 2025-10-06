@@ -225,4 +225,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         }, 400);
     }
+
+    // Sticky header with shrinking animation
+    const header = document.querySelector('header');
+    let lastScrollTop = 0;
+    let ticking = false;
+
+    function updateHeader() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Add or remove scrolled class based on scroll position
+        if (scrollTop > 100) {
+            header.classList.add('header-scrolled');
+        } else {
+            header.classList.remove('header-scrolled');
+        }
+
+        ticking = false;
+    }
+
+    function onScroll() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateHeader);
+            ticking = true;
+        }
+    }
+
+    // Listen for scroll events
+    window.addEventListener('scroll', onScroll, { passive: true });
 });
