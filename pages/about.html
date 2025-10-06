@@ -64,16 +64,233 @@
             <p>Jack is a dedicated and detail-oriented professional with a strong work ethic and a passion for continuous learning. He excels in fast-paced environments and is known for his problem-solving skills and ability to work well under pressure. Jack is a team player who values collaboration and open communication. He lives in Chicago with his wife and daughter and enjoys hiking, reading, and playing golf in his free time.</p>
         </div>
         <div class="card fade-in-section card-hidden" id="skills">
-            <h2>Skills</h2>
-            <ul>
-                <li><i class="fas fa-tools"></i> DevOps and SRE</li>
-                <li><i class="fas fa-server"></i> Linux and Windows Administration</li>
-                <li><i class="fas fa-code-branch"></i> Open-Source Technologies</li>
-                <li><i class="fas fa-project-diagram"></i> Project Management</li>
-                <li><i class="fas fa-network-wired"></i> Secure Networking</li>
-                <li><i class="fas fa-building"></i> Enterprise Implementation</li>
-                <li><i class="fas fa-robot"></i> Automation and AI-driven development</li>
-            </ul>
+            <h2>Technical Skills & Proficiencies</h2>
+            
+            <div class="skills-filter">
+                <button class="filter-btn active" data-filter="all" aria-label="Show all skills">All</button>
+                <button class="filter-btn" data-filter="infrastructure" aria-label="Filter Infrastructure & Cloud skills">Infrastructure & Cloud</button>
+                <button class="filter-btn" data-filter="containers" aria-label="Filter Container Orchestration skills">Containers</button>
+                <button class="filter-btn" data-filter="programming" aria-label="Filter Programming skills">Programming</button>
+                <button class="filter-btn" data-filter="devops" aria-label="Filter DevOps Tools skills">DevOps Tools</button>
+                <button class="filter-btn" data-filter="monitoring" aria-label="Filter Monitoring skills">Monitoring</button>
+            </div>
+
+            <div class="skills-container">
+                <!-- Infrastructure & Cloud -->
+                <div class="skill-category" data-category="infrastructure">
+                    <h3><i class="fas fa-cloud"></i> Infrastructure & Cloud</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">AWS</span>
+                                <span class="skill-years">6+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%;" aria-label="AWS proficiency: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Azure</span>
+                                <span class="skill-years">3+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%;" aria-label="Azure proficiency: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">VMWare</span>
+                                <span class="skill-years">3+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%;" aria-label="VMWare proficiency: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Terraform</span>
+                                <span class="skill-years">5+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 95%;" aria-label="Terraform proficiency: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Container Orchestration -->
+                <div class="skill-category" data-category="containers">
+                    <h3><i class="fas fa-box"></i> Container Orchestration</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Kubernetes</span>
+                                <span class="skill-years">4+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%;" aria-label="Kubernetes proficiency: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Docker</span>
+                                <span class="skill-years">6+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%;" aria-label="Docker proficiency: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">ArgoCD</span>
+                                <span class="skill-years">2+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 65%;" aria-label="ArgoCD proficiency: 65%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Nomad</span>
+                                <span class="skill-years">2+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 50%;" aria-label="Nomad proficiency: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Programming & Scripting -->
+                <div class="skill-category" data-category="programming">
+                    <h3><i class="fas fa-code"></i> Programming & Scripting</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Python</span>
+                                <span class="skill-years">5+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%;" aria-label="Python proficiency: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Bash</span>
+                                <span class="skill-years">10+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%;" aria-label="Bash proficiency: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Ruby</span>
+                                <span class="skill-years">2+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%;" aria-label="Go proficiency: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">HCP</span>
+                                <span class="skill-years">4+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%;" aria-label="HCP proficiency: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DevOps Tools -->
+                <div class="skill-category" data-category="devops">
+                    <h3><i class="fas fa-cogs"></i> DevOps Tools</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">GitHub Actions</span>
+                                <span class="skill-years">4+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%;" aria-label="GitHub Actions proficiency: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Ansible</span>
+                                <span class="skill-years">5+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%;" aria-label="Ansible proficiency: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Vagrant</span>
+                                <span class="skill-years">4+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%;" aria-label="Vagrant proficiency: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Packer</span>
+                                <span class="skill-years">3+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%;" aria-label="Packer proficiency: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitoring & Observability -->
+                <div class="skill-category" data-category="monitoring">
+                    <h3><i class="fas fa-chart-line"></i> Monitoring & Observability</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Prometheus</span>
+                                <span class="skill-years">4+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%;" aria-label="Prometheus proficiency: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Grafana</span>
+                                <span class="skill-years">4+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%;" aria-label="Grafana proficiency: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Alertmanager</span>
+                                <span class="skill-years">3+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%;" aria-label="Alertmanager proficiency: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Consul</span>
+                                <span class="skill-years">2+ years</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%;" aria-label="Consul proficiency: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card fade-in-section card-hidden" id="achievements">
             <h2>Achievements</h2>
