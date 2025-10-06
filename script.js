@@ -1,4 +1,25 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+    // Footer configuration
+    const footerConfig = {
+        copyrightYear: new Date().getFullYear(),
+        companyName: 'Jack Harter', // Can be different from owner if needed
+        allRightsReserved: true
+    };
+
+    // Update footer content
+    function updateFooter() {
+        const footers = document.querySelectorAll('footer p');
+        if (footers.length > 0) {
+            const rightsText = footerConfig.allRightsReserved ? ' All rights reserved.' : '';
+            footers.forEach(footer => {
+                footer.textContent = `© ${footerConfig.copyrightYear} ${footerConfig.companyName}.${rightsText}`;
+            });
+        }
+    }
+
+    // Initialize footer
+    updateFooter();
+
     const themeToggle = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme') || 'dark';
 
