@@ -134,23 +134,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         } else {
             // Other pages: single phrase
+            
+            // Set content for subtitle and CTA based on page (while still hidden)
+            if (document.title.includes('About')) {
+                heroSubtitle.textContent = 'DevOps and Linux Engineer';
+                heroCTA.textContent = 'Get in touch';
+                heroCTA.href = 'contact.html';
+            } else if (document.title.includes('Contact')) {
+                heroSubtitle.textContent = 'Get in touch with me';
+                heroCTA.textContent = 'Learn about me';
+                heroCTA.href = 'about_the_author.html';
+            }
+            
             const phrase = titlePhrases[0];
             await typePhrase(phrase);
             
             // Continue with original animation sequence
             await delay(200);
-            heroSubtitle.style.opacity = 1;
-            heroSubtitle.classList.add('fade-in');
+            heroSubtitle.classList.add('show');
             await delay(700);
-            heroCTA.style.opacity = 1;
-            heroCTA.classList.add('visible');
+            heroCTA.classList.add('show');
             await delay(700);
             // Fade in content cards (all pages now use the same system)
             const contentCards = document.querySelectorAll('.card.fade-in-section');
             for (let cardIndex = 0; cardIndex < contentCards.length; cardIndex++) {
                 await delay(300); // Stagger the animations
+                contentCards[cardIndex].classList.remove('card-hidden');
                 contentCards[cardIndex].classList.add('visible');
-                contentCards[cardIndex].style.opacity = 1;
             }
         }
     }
@@ -160,19 +170,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         await delay(TYPING_SPEED_MS * titlePhrases[0].length + PHRASE_PAUSE_MS + 200);
         
         // Fade in subtitle and CTA
-        heroSubtitle.style.opacity = 1;
-        heroSubtitle.classList.add('fade-in');
+        heroSubtitle.classList.add('show');
         await delay(700);
-        heroCTA.style.opacity = 1;
-        heroCTA.classList.add('visible');
+        heroCTA.classList.add('show');
         await delay(700);
         
         // Fade in content cards
         const contentCards = document.querySelectorAll('.card.fade-in-section');
         for (let cardIndex = 0; cardIndex < contentCards.length; cardIndex++) {
             await delay(300);
+            contentCards[cardIndex].classList.remove('card-hidden');
             contentCards[cardIndex].classList.add('visible');
-            contentCards[cardIndex].style.opacity = 1;
         }
     }
     
