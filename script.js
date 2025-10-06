@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (footers.length > 0) {
             const rightsText = footerConfig.allRightsReserved ? ' All rights reserved.' : '';
             footers.forEach(footer => {
-                footer.innerHTML = `&copy; ${footerConfig.copyrightYear} ${footerConfig.companyName}.${rightsText}`;
+                footer.textContent = `\u00A9 ${footerConfig.copyrightYear} ${footerConfig.companyName}.${rightsText}`;
             });
         }
     }
