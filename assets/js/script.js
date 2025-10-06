@@ -384,11 +384,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
                 // Get filter value
                 const filterValue = button.getAttribute('data-filter');
-
-                
-                
-                // Get filter value
-                const filterValue = button.getAttribute('data-filter');
                 
                 // Filter skill categories
                 skillCategories.forEach(category => {
