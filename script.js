@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             'Vim VVizard',
             'Docker Dabbler',
             'Terraform Taskmaster',
-            'Github Gardener',
+            'GitHub Gardener',
             'Wireless Wonk',
             'Cat Herder',
             'Biking Enthusiast',
