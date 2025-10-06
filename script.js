@@ -9,10 +9,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Update footer content
     function updateFooter() {
-        const footer = document.querySelector('footer p');
-        if (footer) {
+        const footers = document.querySelectorAll('footer p');
+        if (footers.length > 0) {
             const rightsText = footerConfig.allRightsReserved ? ' All rights reserved.' : '';
-            footer.textContent = `© ${footerConfig.copyrightYear} ${footerConfig.companyName}.${rightsText}`;
+            footers.forEach(footer => {
+                footer.textContent = `© ${footerConfig.copyrightYear} ${footerConfig.companyName}.${rightsText}`;
+            });
         }
     }
 
