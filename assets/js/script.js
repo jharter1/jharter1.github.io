@@ -79,6 +79,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     } else if (document.title.includes('Contact')) {
         titlePhrases = ['Contact Jack Harter'];
         isHomePage = false;
+    } else if (document.title.includes('Projects')) {
+        titlePhrases = ['My Projects'];
+        isHomePage = false;
     } else {
         // Homepage - rotating professional phrases
         titlePhrases = [
@@ -188,7 +191,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             heroCTA.classList.add('show');
             await delay(700);
             // Fade in content cards (all pages now use the same system)
-            const contentCards = document.querySelectorAll('.card.fade-in-section');
+            const contentCards = document.querySelectorAll('.card.fade-in-section, .project-card.fade-in-section');
             for (let cardIndex = 0; cardIndex < contentCards.length; cardIndex++) {
                 await delay(300); // Stagger the animations
                 contentCards[cardIndex].classList.remove('card-hidden');

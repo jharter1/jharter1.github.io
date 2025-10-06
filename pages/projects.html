@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jack Harter - Projects</title>
+    <link rel="shortcut icon" type="image/svg" href="../assets/images/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+        <div class="logo">
+            <h1>Hartr.net</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="about.html">About the Author</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="theme-switcher">
+            <label class="switch" for="theme-toggle">
+                <span class="sr-only">Toggle between light and dark theme</span>
+                <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
+                <span class="slider round" aria-hidden="true"></span>
+                <span class="theme-icon" aria-hidden="true">
+                    <i class="fas fa-moon"></i>
+                </span>
+            </label>
+        </div>
+    </header>
+    <main id="main-content">
+        <section class="hero animated-hero" aria-labelledby="hero-title">
+            <h2 class="hero-name">Jack Harter:</h2>
+            <h1 id="hero-title"><span id="cursor" class="cursor">|</span></h1>
+            <p id="hero-subtitle" class="hero-content-hidden">Explore my work</p>
+            <a href="contact.html" id="hero-cta" class="hero-cta hero-content-hidden">Get in touch</a>
+        </section>
+        
+        <section aria-labelledby="projects-heading">
+            <h2 id="projects-heading" class="sr-only">My Projects</h2>
+            <div class="projects-grid">
+                <!-- Project Card 1 -->
+                <div class="project-card fade-in-section card-hidden">
+                    <h3>Infrastructure Automation Platform</h3>
+                    <p class="project-description">Built a comprehensive infrastructure automation platform using Terraform and Ansible to manage multi-cloud deployments across AWS and Azure.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-cloud"></i> Terraform</span>
+                        <span class="tech-badge"><i class="fas fa-server"></i> Ansible</span>
+                        <span class="tech-badge"><i class="fas fa-code"></i> Python</span>
+                        <span class="tech-badge"><i class="fab fa-aws"></i> AWS</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/jackharter" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-card fade-in-section card-hidden">
+                    <h3>Kubernetes Monitoring Stack</h3>
+                    <p class="project-description">Deployed a comprehensive monitoring solution for Kubernetes clusters using Prometheus, Grafana, and custom alerting rules for proactive incident management.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-dharmachakra"></i> Kubernetes</span>
+                        <span class="tech-badge"><i class="fas fa-chart-line"></i> Prometheus</span>
+                        <span class="tech-badge"><i class="fas fa-chart-area"></i> Grafana</span>
+                        <span class="tech-badge"><i class="fab fa-docker"></i> Docker</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/jackharter" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-card fade-in-section card-hidden">
+                    <h3>CI/CD Pipeline Framework</h3>
+                    <p class="project-description">Designed and implemented a GitOps-based CI/CD pipeline framework using GitHub Actions and ArgoCD for automated application deployments.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fab fa-github"></i> GitHub Actions</span>
+                        <span class="tech-badge"><i class="fas fa-code-branch"></i> ArgoCD</span>
+                        <span class="tech-badge"><i class="fas fa-dharmachakra"></i> Kubernetes</span>
+                        <span class="tech-badge"><i class="fas fa-file-code"></i> YAML</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/jackharter" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 4 -->
+                <div class="project-card fade-in-section card-hidden">
+                    <h3>Automated Backup System</h3>
+                    <p class="project-description">Developed an automated backup and disaster recovery system with encryption, multi-region replication, and automated testing of restore procedures.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-shield-alt"></i> Encryption</span>
+                        <span class="tech-badge"><i class="fas fa-database"></i> PostgreSQL</span>
+                        <span class="tech-badge"><i class="fas fa-code"></i> Bash</span>
+                        <span class="tech-badge"><i class="fab fa-linux"></i> Linux</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/jackharter" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 5 -->
+                <div class="project-card fade-in-section card-hidden">
+                    <h3>Network Configuration Management</h3>
+                    <p class="project-description">Created a centralized network configuration management system using Infrastructure as Code principles to manage firewall rules and security policies.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-network-wired"></i> Networking</span>
+                        <span class="tech-badge"><i class="fas fa-shield-alt"></i> Security</span>
+                        <span class="tech-badge"><i class="fas fa-code"></i> Python</span>
+                        <span class="tech-badge"><i class="fas fa-cloud"></i> Terraform</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/jackharter" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 6 -->
+                <div class="project-card fade-in-section card-hidden">
+                    <h3>Personal Portfolio Website</h3>
+                    <p class="project-description">Designed and developed this responsive portfolio website with dark/light theme support, accessibility features, and animated hero section.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fab fa-html5"></i> HTML5</span>
+                        <span class="tech-badge"><i class="fab fa-css3-alt"></i> CSS3</span>
+                        <span class="tech-badge"><i class="fab fa-js"></i> JavaScript</span>
+                        <span class="tech-badge"><i class="fab fa-github"></i> GitHub Pages</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/jharter1/jharter1.github.io" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                        <a href="https://hartr.net" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>Loading...</p>
+    </footer>
+    <script src="../assets/js/script.js"></script>
+</body>
+</html>
