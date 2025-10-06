@@ -21,7 +21,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     updateFooter();
 
     const themeToggle = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme') || 'dark';
+    
+    // Detect system preference if no stored preference
+    const getSystemTheme = () => {
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    };
+    
+    const currentTheme = localStorage.getItem('theme') || getSystemTheme();
 
     if (currentTheme === 'light') {
         document.body.classList.add('light-theme');
@@ -32,11 +38,30 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (themeToggle.checked) {
             document.body.classList.add('light-theme');
             localStorage.setItem('theme', 'light');
+            // Announce to screen readers
+            announceThemeChange('Light theme activated');
         } else {
             document.body.classList.remove('light-theme');
             localStorage.setItem('theme', 'dark');
+            // Announce to screen readers
+            announceThemeChange('Dark theme activated');
         }
     });
+    
+    // Accessibility: Announce theme changes to screen readers
+    function announceThemeChange(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.style.position = 'absolute';
+        announcement.style.left = '-10000px';
+        announcement.style.width = '1px';
+        announcement.style.height = '1px';
+        announcement.style.overflow = 'hidden';
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        setTimeout(() => document.body.removeChild(announcement), 1000);
+    }
 
     // Animated hero section
     const heroTitle = document.getElementById('hero-title');
