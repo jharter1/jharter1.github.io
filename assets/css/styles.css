@@ -1284,6 +1284,7 @@ ul {
 
     .timeline-content {
         padding: var(--spacing-sm);
+    }
     
     .case-study-toggle {
         font-size: 0.85rem;
@@ -1472,14 +1473,8 @@ body.light-theme .skill-bar {
     .skills-grid {
         grid-template-columns: 1fr;
     }
-
-    
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
     
     .skill-category h3 {
         font-size: 1.1rem;
     }
-}
 }
