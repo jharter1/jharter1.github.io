@@ -314,8 +314,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const toggle = this.querySelector('.timeline-toggle');
             
             if (details && toggle) {
-                details.classList.toggle('expanded');
+                const isExpanded = details.classList.toggle('expanded');
                 toggle.classList.toggle('expanded');
+                
+                // Update aria-expanded for accessibility
+                this.setAttribute('aria-expanded', isExpanded.toString());
             }
         });
         
