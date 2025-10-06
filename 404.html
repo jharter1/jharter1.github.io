@@ -147,7 +147,7 @@
             </p>
             
             <div class="terminal-output">
-                <div><span class="terminal-prompt">$</span> curl -I https://hartr.net/{{ requested_page }}</div>
+                <div><span class="terminal-prompt">$</span> curl -I <span id="requested-url">https://hartr.net/unknown-page</span></div>
                 <div>HTTP/1.1 404 Not Found</div>
                 <div>Content-Type: text/html</div>
                 <div>X-Error: Resource not found in cluster</div>
@@ -179,5 +179,15 @@
         <p>&copy; 2024 Jack Harter. All rights reserved.</p>
     </footer>
     <script src="script.js"></script>
+    <script>
+        // Show the actual requested URL in the terminal output
+        document.addEventListener('DOMContentLoaded', function() {
+            const requestedUrlElement = document.getElementById('requested-url');
+            if (requestedUrlElement) {
+                const currentUrl = window.location.href;
+                requestedUrlElement.textContent = currentUrl;
+            }
+        });
+    </script>
 </body>
 </html>
