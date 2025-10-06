@@ -304,4 +304,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Listen for scroll events
     window.addEventListener('scroll', onScroll, { passive: true });
+    
+    // Timeline expand/collapse functionality
+    const timelineHeaders = document.querySelectorAll('.timeline-header');
+    
+    timelineHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const details = this.parentElement.querySelector('.timeline-details');
+            const toggle = this.querySelector('.timeline-toggle');
+            
+            if (details && toggle) {
+                details.classList.toggle('expanded');
+                toggle.classList.toggle('expanded');
+            }
+        });
+        
+        // Add keyboard support
+        header.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+        
+        // Make it focusable
+        header.setAttribute('tabindex', '0');
+        header.setAttribute('role', 'button');
+        header.setAttribute('aria-expanded', 'false');
+    });
 });
