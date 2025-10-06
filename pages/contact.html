@@ -20,9 +20,13 @@
             </ul>
         </nav>
         <div class="theme-switcher">
-            <label class="switch">
-                <input type="checkbox" id="theme-toggle">
-                <span class="slider round"></span>
+            <label class="switch" for="theme-toggle">
+                <span class="sr-only">Toggle between light and dark theme</span>
+                <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
+                <span class="slider round" aria-hidden="true"></span>
+                <span class="theme-icon" aria-hidden="true">
+                    <i class="fas fa-moon"></i>
+                </span>
             </label>
         </div>
     </header>
