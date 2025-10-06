@@ -386,8 +386,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 const filterValue = button.getAttribute('data-filter');
 
                 
-                // Add active class to clicked button
-                button.classList.add('active');
                 
                 // Get filter value
                 const filterValue = button.getAttribute('data-filter');
