@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     async function typeWriter() {
         for (; i < titleText.length; i++) {
             heroTitle.textContent += titleText.charAt(i);
-            await delay(60);
+            await delay(TYPING_SPEED_MS);
         }
         // Fade in subtitle after typing is done
         await delay(200);
