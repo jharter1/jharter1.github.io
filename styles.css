@@ -164,6 +164,18 @@ ul {
     padding: 0;
 }
 
+/* Two-column card grid */
+.cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.cards-grid .card {
+    margin-bottom: 0; /* Remove individual card margins since grid handles spacing */
+}
+
 /* Responsive Design - Tablet and below */
 @media (max-width: 768px) {
     main {
@@ -187,6 +199,11 @@ ul {
     
     .theme-switcher {
         margin-right: var(--spacing-sm);
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }
 
