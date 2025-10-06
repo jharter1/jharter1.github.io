@@ -336,6 +336,39 @@ document.addEventListener('DOMContentLoaded', (event) => {
         header.setAttribute('aria-expanded', 'false');
     });
 
+    // Case Study Toggle Functionality
+    const caseStudyToggles = document.querySelectorAll('.case-study-toggle');
+    
+    caseStudyToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const contentId = this.getAttribute('aria-controls');
+            const content = document.getElementById(contentId);
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                // Collapse
+                this.setAttribute('aria-expanded', 'false');
+                content.setAttribute('hidden', '');
+                this.innerHTML = '<i class="fas fa-chevron-down"></i> View Case Study';
+                
+                // Scroll to the card if it's partially off screen
+                setTimeout(() => {
+                    const cardRect = this.closest('.project-card').getBoundingClientRect();
+                    if (cardRect.top < 100) {
+                        this.closest('.project-card').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                }, 100);
+            } else {
+                // Expand
+                this.setAttribute('aria-expanded', 'true');
+                content.removeAttribute('hidden');
+                this.innerHTML = '<i class="fas fa-chevron-up"></i> Hide Case Study';
+            }
+        });
+    });
     // Skills filtering functionality
     const filterButtons = document.querySelectorAll('.filter-btn');
     const skillCategories = document.querySelectorAll('.skill-category');
@@ -352,6 +385,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 // Get filter value
                 const filterValue = button.getAttribute('data-filter');
 
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Get filter value
+                const filterValue = button.getAttribute('data-filter');
+                
                 // Filter skill categories
                 skillCategories.forEach(category => {
                     if (filterValue === 'all') {
