@@ -211,7 +211,55 @@ ul {
         font-size: 2em;
     }
     
+    .logo {
+        margin-left: var(--spacing-xs);
+    }
+    
+    .logo h1 {
+        font-size: 1.2em;
+    }
+    
+    nav ul {
+        flex-wrap: nowrap;
+    }
+    
     nav ul li {
         margin: 0 var(--spacing-xs);
+    }
+    
+    nav ul li a {
+        font-size: 0.75em;
+        white-space: nowrap;
+    }
+    
+    .theme-switcher {
+        margin-right: var(--spacing-xs);
+    }
+}
+
+/* Responsive Design - Extra Small Mobile */
+@media (max-width: 380px) {
+    header {
+        padding: 8px 0;
+    }
+    
+    .logo {
+        margin-left: 4px;
+    }
+    
+    .logo h1 {
+        font-size: 1em;
+    }
+    
+    nav ul li {
+        margin: 0 4px;
+    }
+    
+    nav ul li a {
+        font-size: 0.7em;
+    }
+    
+    .theme-switcher {
+        margin-right: 4px;
     }
 }
