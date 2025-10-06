@@ -304,4 +304,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Listen for scroll events
     window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Skills filtering functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const skillCategories = document.querySelectorAll('.skill-category');
+
+    if (filterButtons.length > 0 && skillCategories.length > 0) {
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Get filter value
+                const filterValue = button.getAttribute('data-filter');
+                
+                // Filter skill categories
+                skillCategories.forEach(category => {
+                    if (filterValue === 'all') {
+                        category.classList.remove('hidden');
+                    } else {
+                        const categoryValue = category.getAttribute('data-category');
+                        if (categoryValue === filterValue) {
+                            category.classList.remove('hidden');
+                        } else {
+                            category.classList.add('hidden');
+                        }
+                    }
+                });
+
+                // Announce filter change to screen readers
+                announceThemeChange(`Filtered to ${filterValue === 'all' ? 'all skills' : filterValue + ' skills'}`);
+            });
+        });
+    }
 });
