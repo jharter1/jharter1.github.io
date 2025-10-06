@@ -281,6 +281,9 @@ main {
     max-width: 800px;
     box-sizing: border-box;
     transition: all 0.3s ease;
+}
+
+.card--clickable {
     cursor: pointer;
 }
 
