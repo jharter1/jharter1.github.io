@@ -25,33 +25,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let i = 0;
     const TYPING_SPEED_MS = 60;
 
-    function typeWriter() {
-        if (i < titleText.length) {
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function typeWriter() {
+        for (; i < titleText.length; i++) {
             heroTitle.textContent += titleText.charAt(i);
-            i++;
-            setTimeout(typeWriter, TYPING_SPEED_MS);
-        } else {
-            // Fade in subtitle after typing is done
-            setTimeout(() => {
-                heroSubtitle.style.opacity = 1;
-                heroSubtitle.classList.add('fade-in');
-                setTimeout(() => {
-                    heroCTA.style.opacity = 1;
-                    heroCTA.classList.add('visible');
-                    setTimeout(() => {
-                        // Fade in About Me section
-                        const aboutCard = document.getElementById('about-card');
-                        if (aboutCard) {
-                            aboutCard.classList.add('visible');
-                            aboutCard.style.opacity = 1;
-                        }
-                    }, 700);
-                }, 700);
-            }, 200);
+            await delay(60);
+        }
+        // Fade in subtitle after typing is done
+        await delay(200);
+        heroSubtitle.style.opacity = 1;
+        heroSubtitle.classList.add('fade-in');
+        await delay(700);
+        heroCTA.style.opacity = 1;
+        heroCTA.classList.add('visible');
+        await delay(700);
+        // Fade in About Me section
+        const aboutCard = document.getElementById('about-card');
+        if (aboutCard) {
+            aboutCard.classList.add('visible');
+            aboutCard.style.opacity = 1;
         }
     }
     if (heroTitle) {
         heroTitle.textContent = '';
-        setTimeout(typeWriter, 400);
+        setTimeout(() => { typeWriter(); }, 400);
     }
 });
