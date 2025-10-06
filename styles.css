@@ -170,6 +170,8 @@ body {
 }
 
 header {
+    position: sticky;
+    top: 0;
     width: 100%;
     background-color: var(--card-background-color);
     color: var(--text-color);
@@ -178,11 +180,58 @@ header {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    z-index: 100;
 }
 
 .logo {
     margin-left: 20px;
+    transition: all 0.3s ease;
+}
+
+.logo h1 {
+    transition: all 0.3s ease;
+}
+
+/* Compact header state when scrolled */
+.header-scrolled {
+    padding: 8px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.header-scrolled .logo {
+    margin-left: 15px;
+}
+
+.header-scrolled .logo h1 {
+    font-size: 0.85em;
+}
+
+.header-scrolled nav ul li {
+    margin: 0 10px;
+}
+
+.header-scrolled nav ul li a {
+    padding: 6px 10px;
+    font-size: 0.9em;
+}
+
+.header-scrolled .theme-switcher {
+    margin-right: 15px;
+}
+
+.header-scrolled .theme-switcher .switch {
+    width: 50px;
+    height: 25px;
+}
+
+.header-scrolled .theme-switcher .slider:before {
+    height: 17px;
+    width: 17px;
+}
+
+.header-scrolled .theme-switcher input:checked + .slider:before {
+    transform: translateX(23px);
 }
 
 nav ul {
@@ -194,6 +243,7 @@ nav ul {
 
 nav ul li {
     margin: 0 15px;
+    transition: all 0.3s ease;
 }
 
 nav ul li a {
@@ -219,6 +269,11 @@ nav ul li a:focus {
 
 .theme-switcher {
     margin-right: 20px;
+    transition: all 0.3s ease;
+}
+
+.theme-switcher .switch {
+    transition: all 0.3s ease;
 }
 
 main {
@@ -484,6 +539,24 @@ ul {
     .theme-switcher {
         margin-right: var(--spacing-xs);
     }
+    
+    /* Scrolled header adjustments for mobile */
+    .header-scrolled {
+        padding: 6px 0;
+    }
+    
+    .header-scrolled .logo h1 {
+        font-size: 1em;
+    }
+    
+    .header-scrolled nav ul li {
+        margin: 0 6px;
+    }
+    
+    .header-scrolled nav ul li a {
+        font-size: 0.7em;
+        padding: 4px 6px;
+    }
 }
 
 /* Responsive Design - Extra Small Mobile */
@@ -510,5 +583,23 @@ ul {
     
     .theme-switcher {
         margin-right: 4px;
+    }
+    
+    /* Scrolled header adjustments for extra small mobile */
+    .header-scrolled {
+        padding: 4px 0;
+    }
+    
+    .header-scrolled .logo h1 {
+        font-size: 0.85em;
+    }
+    
+    .header-scrolled nav ul li {
+        margin: 0 3px;
+    }
+    
+    .header-scrolled nav ul li a {
+        font-size: 0.65em;
+        padding: 4px 6px;
     }
 }
