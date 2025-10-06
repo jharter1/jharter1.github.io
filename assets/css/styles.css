@@ -236,9 +236,16 @@ header {
     height: 25px;
 }
 
+.header-scrolled .theme-switcher .slider {
+    border-radius: 25px;
+}
+
 .header-scrolled .theme-switcher .slider:before {
     height: 17px;
     width: 17px;
+    top: 2px;
+    left: 2px;
+    border-radius: 50%;
 }
 
 .header-scrolled .theme-switcher input:checked + .slider:before {
@@ -1463,7 +1470,6 @@ body.light-theme .skill-bar {
     .skills-filter {
         gap: 8px;
     }
-
     
     .filter-btn {
         font-size: 0.85rem;
