@@ -51,6 +51,7 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 4. **Accessibility**: WCAG compliance with skip links, semantic markup
 5. **Custom 404 Page**: DevOps-themed terminal simulation
 6. **Professional Portfolio**: Showcasing DevOps skills and experience
+7. **Case Study Expandables**: Detailed project case studies with expand/collapse functionality
 
 ## Common Tasks
 
@@ -69,6 +70,10 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 - **About**: Edit `pages/about.html`
 - **Contact**: Edit `pages/contact.html`
 - **Homepage**: Edit `index.html`
+- **Projects**: Edit `pages/projects.html` 
+  - Add new project cards following existing structure
+  - For case studies: Add `.case-study-toggle` button and `.case-study-content` section
+  - Include sections: Problem Statement, Approach & Strategy, Technical Decisions, Implementation Details, Challenges & Solutions, Results & Impact, Lessons Learned
 
 ## Important Considerations
 
