@@ -232,23 +232,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const phrase = titlePhrases[0];
             await typePhrase(phrase);
             
-            // Continue with original animation sequence
+            // Continue with original animation sequence for hero elements
             await delay(200);
             heroSubtitle.classList.add('show');
             await delay(700);
             heroCTA.classList.add('show');
-            await delay(700);
-            // Fade in content cards (all pages now use the same system)
-            const contentCards = document.querySelectorAll('.card.fade-in-section, .project-card.fade-in-section');
-            for (let cardIndex = 0; cardIndex < contentCards.length; cardIndex++) {
-                await delay(300); // Stagger the animations
-                contentCards[cardIndex].classList.remove('card-hidden');
-                contentCards[cardIndex].classList.add('visible');
-            }
+            // Cards will be handled by Intersection Observer (scroll-based)
         }
     }
     
-    // Trigger card animations for homepage after first phrase completes
+    // Trigger hero animations for homepage after first phrase completes
     async function triggerHomePageAnimations() {
         await delay(TYPING_SPEED_MS * titlePhrases[0].length + PHRASE_PAUSE_MS + 200);
         
@@ -256,15 +249,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         heroSubtitle.classList.add('show');
         await delay(700);
         heroCTA.classList.add('show');
-        await delay(700);
-        
-        // Fade in content cards
-        const contentCards = document.querySelectorAll('.card.fade-in-section');
-        for (let cardIndex = 0; cardIndex < contentCards.length; cardIndex++) {
-            await delay(300);
-            contentCards[cardIndex].classList.remove('card-hidden');
-            contentCards[cardIndex].classList.add('visible');
-        }
+        // Cards will be handled by Intersection Observer (scroll-based)
     }
     
     if (heroTitle) {
@@ -304,6 +289,59 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Listen for scroll events
     window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Scroll-triggered animations using Intersection Observer
+    function setupScrollAnimations() {
+        // Check if Intersection Observer is supported
+        if (!('IntersectionObserver' in window)) {
+            // Fallback: make all cards visible immediately
+            const allCards = document.querySelectorAll('.card.fade-in-section, .project-card.fade-in-section');
+            allCards.forEach(card => {
+                card.classList.remove('card-hidden');
+                card.classList.add('visible');
+            });
+            return;
+        }
+
+        // Check for reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Select all cards that should animate on scroll
+        const cards = document.querySelectorAll('.card.fade-in-section, .project-card.fade-in-section');
+        
+        // Create an intersection observer
+        const observerOptions = {
+            root: null, // Use viewport as root
+            rootMargin: '0px 0px -50px 0px', // Trigger slightly before element enters viewport
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Add a small stagger delay for cards that become visible simultaneously
+                    const card = entry.target;
+                    const delay = prefersReducedMotion ? 0 : index * 100;
+                    
+                    setTimeout(() => {
+                        card.classList.remove('card-hidden');
+                        card.classList.add('visible');
+                    }, delay);
+                    
+                    // Stop observing this card after animation
+                    observer.unobserve(card);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    }
+
+    // Initialize scroll animations after a brief delay to ensure hero animations start first
+    setTimeout(setupScrollAnimations, 100);
 
     // Timeline expand/collapse functionality
     const timelineHeaders = document.querySelectorAll('.timeline-header');
