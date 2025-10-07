@@ -1,12 +1,18 @@
+/**
+ * Main application initialization
+ * Handles theme switching, navigation, hero animations, and scroll effects
+ */
 document.addEventListener('DOMContentLoaded', (event) => {
-    // Footer configuration
+    // ===== Footer Configuration =====
     const footerConfig = {
         copyrightYear: new Date().getFullYear(),
-        companyName: 'Jack Harter', // Can be different from owner if needed
+        companyName: 'Jack Harter',
         allRightsReserved: true
     };
 
-    // Update footer content
+    /**
+     * Update footer with current year and copyright info
+     */
     function updateFooter() {
         const footers = document.querySelectorAll('footer p');
         if (footers.length > 0) {
@@ -17,38 +23,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    // Initialize footer
     updateFooter();
 
+    // ===== Theme Management =====
     const themeToggle = document.getElementById('theme-toggle');
     
-    // Detect system preference if no stored preference
+    /**
+     * Get system theme preference
+     * @returns {string} 'light' or 'dark'
+     */
     const getSystemTheme = () => {
         return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     };
     
+    // Apply saved or system theme
     const currentTheme = localStorage.getItem('theme') || getSystemTheme();
 
     if (currentTheme === 'light') {
         document.body.classList.add('light-theme');
         themeToggle.checked = true;
     }
-
+    
     themeToggle.addEventListener('change', () => {
         if (themeToggle.checked) {
             document.body.classList.add('light-theme');
             localStorage.setItem('theme', 'light');
-            // Announce to screen readers
             announceThemeChange('Light theme activated');
         } else {
             document.body.classList.remove('light-theme');
             localStorage.setItem('theme', 'dark');
-            // Announce to screen readers
             announceThemeChange('Dark theme activated');
         }
     });
     
-    // Accessibility: Announce theme changes to screen readers
+    /**
+     * Announce changes to screen readers for accessibility
+     * @param {string} message - Message to announce
+     */
     function announceThemeChange(message) {
         const announcement = document.createElement('div');
         announcement.setAttribute('aria-live', 'polite');
@@ -63,7 +74,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         setTimeout(() => document.body.removeChild(announcement), 1000);
     }
 
-    // Hamburger menu functionality
+    // ===== Hamburger Menu =====
     const hamburger = document.querySelector('.hamburger');
     const nav = document.querySelector('nav');
     
@@ -72,20 +83,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
             hamburger.classList.toggle('active');
             nav.classList.toggle('active');
             
-            // Update ARIA attributes for accessibility
             const isExpanded = nav.classList.contains('active');
             hamburger.setAttribute('aria-expanded', isExpanded);
-            
-            // Announce menu state to screen readers
-            const menuState = isExpanded ? 'Menu opened' : 'Menu closed';
-            announceThemeChange(menuState);
+            announceThemeChange(isExpanded ? 'Menu opened' : 'Menu closed');
             
             // Prevent body scroll when menu is open
-            if (isExpanded) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
+            document.body.style.overflow = isExpanded ? 'hidden' : '';
         });
         
         // Close menu when clicking navigation links
@@ -106,18 +109,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 nav.classList.remove('active');
                 hamburger.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = '';
-                hamburger.focus(); // Return focus to hamburger button
+                hamburger.focus();
             }
         });
     }
 
-    // Animated hero section
+    // ===== Hero Section Typewriter Animation =====
     const heroTitle = document.getElementById('hero-title');
     const heroSubtitle = document.getElementById('hero-subtitle');
     const heroCTA = document.getElementById('hero-cta');
     const cursor = document.getElementById('cursor');
     
-    // Page configuration map - centralizes page-specific content
+    /**
+     * Page configuration map - centralizes page-specific content
+     * Eliminates duplicate title checks throughout the code
+     */
     const PAGE_CONFIGS = {
         'About': {
             titlePhrases: ['Jack Harter'],
@@ -187,34 +193,45 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     };
     
-    // Get page configuration based on document title
+    /**
+     * Get page configuration based on document title
+     * @returns {Object} Configuration object for current page
+     */
     function getPageConfig() {
         for (const [pageName, config] of Object.entries(PAGE_CONFIGS)) {
             if (document.title.includes(pageName)) {
                 return config;
             }
         }
-        // Default to home page config
-        return PAGE_CONFIGS['Home'];
+        return PAGE_CONFIGS['Home']; // Default to home
     }
     
-    // Determine page-specific content
     const pageConfig = getPageConfig();
     let titlePhrases = pageConfig.titlePhrases;
     let isHomePage = pageConfig.isHomePage;
     
     let currentPhraseIndex = 0;
     let i = 0;
+    
+    // Animation timing constants
     const TYPING_SPEED_MS = 60;
-    const PHRASE_PAUSE_MS = 2000; // Pause between phrases
-    const DELETE_SPEED_MS = 30;   // Faster deletion
+    const PHRASE_PAUSE_MS = 2000;
+    const DELETE_SPEED_MS = 30;
 
+    /**
+     * Delay helper for async timing
+     * @param {number} ms - Milliseconds to delay
+     * @returns {Promise} Resolves after delay
+     */
     function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    /**
+     * Type out a phrase character by character
+     * @param {string} phrase - The phrase to type
+     */
     async function typePhrase(phrase) {
-        // Type the phrase
         for (let j = 0; j < phrase.length; j++) {
             const currentText = phrase.substring(0, j + 1);
             heroTitle.innerHTML = currentText + '<span id="cursor" class="cursor">|</span>';
@@ -222,8 +239,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    /**
+     * Delete the current phrase character by character
+     */
     async function deletePhrase() {
-        // Delete the current phrase
         const currentText = heroTitle.textContent.replace('|', '');
         for (let j = currentText.length; j > 0; j--) {
             const newText = currentText.substring(0, j - 1);
@@ -232,7 +251,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    // Configure hero section content for non-home pages
+    /**
+     * Configure hero section content for non-home pages
+     * Sets subtitle, CTA text, and CTA href from page config
+     */
     function configureHeroContent() {
         if (!isHomePage && heroSubtitle && heroCTA) {
             heroSubtitle.textContent = pageConfig.subtitle;
@@ -241,7 +263,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
     
-    // Animate hero subtitle and CTA reveal
+    /**
+     * Animate hero subtitle and CTA reveal with fade-in effect
+     */
     async function animateHeroElements() {
         await delay(200);
         if (heroSubtitle) heroSubtitle.classList.add('show');
@@ -249,20 +273,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (heroCTA) heroCTA.classList.add('show');
     }
 
+    /**
+     * Main typewriter animation controller
+     * Handles both looping (homepage) and single-phrase (other pages) modes
+     */
     async function typeWriter() {
         if (isHomePage && titlePhrases.length > 1) {
-            // Homepage: cycle through phrases
+            // Homepage: cycle through phrases indefinitely
             while (true) {
                 const currentPhrase = titlePhrases[currentPhraseIndex];
                 await typePhrase(currentPhrase);
                 await delay(PHRASE_PAUSE_MS);
                 await deletePhrase();
-                await delay(500); // Brief pause before next phrase
+                await delay(500);
                 
                 currentPhraseIndex = (currentPhraseIndex + 1) % titlePhrases.length;
             }
         } else {
-            // Other pages: single phrase
+            // Other pages: type single phrase and show hero elements
             configureHeroContent();
             const phrase = titlePhrases[0];
             await typePhrase(phrase);
@@ -270,12 +298,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
     
-    // Trigger hero animations for homepage after first phrase completes
+    /**
+     * Trigger hero animations for homepage after first phrase completes
+     */
     async function triggerHomePageAnimations() {
         await delay(TYPING_SPEED_MS * titlePhrases[0].length + PHRASE_PAUSE_MS + 200);
         await animateHeroElements();
     }
     
+    // Initialize typewriter animation
     if (heroTitle) {
         heroTitle.innerHTML = '<span id="cursor" class="cursor">|</span>';
         setTimeout(() => { 
@@ -286,15 +317,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, 400);
     }
 
-    // Sticky header with shrinking animation
+    // ===== Sticky Header with Scroll Effects =====
     const header = document.querySelector('header');
     let lastScrollTop = 0;
     let ticking = false;
 
+    /**
+     * Update header style based on scroll position
+     */
     function updateHeader() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        // Add or remove scrolled class based on scroll position
         if (scrollTop > 100) {
             header.classList.add('header-scrolled');
         } else {
@@ -304,6 +337,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         ticking = false;
     }
 
+    /**
+     * Request animation frame for scroll handler (performance optimization)
+     */
     function onScroll() {
         if (!ticking) {
             window.requestAnimationFrame(updateHeader);
@@ -311,14 +347,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    // Listen for scroll events
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Scroll-triggered animations using Intersection Observer
+    // ===== Scroll-Triggered Animations =====
+    /**
+     * Setup Intersection Observer for card animations
+     * Cards fade in as they enter the viewport
+     */
     function setupScrollAnimations() {
-        // Check if Intersection Observer is supported
+        // Fallback for browsers without Intersection Observer support
         if (!('IntersectionObserver' in window)) {
-            // Fallback: make all cards visible immediately
             const allCards = document.querySelectorAll('.card.fade-in-section, .project-card.fade-in-section');
             allCards.forEach(card => {
                 card.classList.remove('card-hidden');
@@ -330,20 +368,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // Check for reduced motion preference
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // Select all cards that should animate on scroll
         const cards = document.querySelectorAll('.card.fade-in-section, .project-card.fade-in-section');
         
-        // Create an intersection observer
         const observerOptions = {
-            root: null, // Use viewport as root
-            rootMargin: '0px 0px -50px 0px', // Trigger slightly before element enters viewport
-            threshold: 0.1 // Trigger when 10% of the element is visible
+            root: null,
+            rootMargin: '0px 0px -50px 0px',
+            threshold: 0.1
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    // Add a small stagger delay for cards that become visible simultaneously
                     const card = entry.target;
                     const delay = prefersReducedMotion ? 0 : index * 100;
                     
@@ -352,22 +387,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         card.classList.add('visible');
                     }, delay);
                     
-                    // Stop observing this card after animation
                     observer.unobserve(card);
                 }
             });
         }, observerOptions);
 
-        // Observe all cards
-        cards.forEach(card => {
-            observer.observe(card);
-        });
+        cards.forEach(card => observer.observe(card));
     }
 
-    // Initialize scroll animations after a brief delay to ensure hero animations start first
     setTimeout(setupScrollAnimations, 100);
 
-    // Timeline expand/collapse functionality
+    // ===== Timeline Expand/Collapse =====
     const timelineHeaders = document.querySelectorAll('.timeline-header');
 
     timelineHeaders.forEach(header => {
@@ -378,13 +408,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (details && toggle) {
                 const isExpanded = details.classList.toggle('expanded');
                 toggle.classList.toggle('expanded');
-
-                // Update aria-expanded for accessibility
                 this.setAttribute('aria-expanded', isExpanded.toString());
             }
         });
 
-        // Add keyboard support
+        // Keyboard support
         header.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -392,13 +420,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         });
 
-        // Make it focusable
         header.setAttribute('tabindex', '0');
         header.setAttribute('role', 'button');
         header.setAttribute('aria-expanded', 'false');
     });
 
-    // Case Study Toggle Functionality
+    // ===== Case Study Toggle =====
     const caseStudyToggles = document.querySelectorAll('.case-study-toggle');
     
     caseStudyToggles.forEach(toggle => {
@@ -413,7 +440,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 content.setAttribute('hidden', '');
                 this.innerHTML = '<i class="fas fa-chevron-down"></i> View Case Study';
                 
-                // Scroll to the card if it's partially off screen
+                // Scroll to card if partially off screen
                 setTimeout(() => {
                     const cardRect = this.closest('.project-card').getBoundingClientRect();
                     if (cardRect.top < 100) {
@@ -431,20 +458,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         });
     });
-    // Skills filtering functionality
+    
+    // ===== Skills Filtering =====
     const filterButtons = document.querySelectorAll('.filter-btn');
     const skillCategories = document.querySelectorAll('.skill-category');
 
     if (filterButtons.length > 0 && skillCategories.length > 0) {
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Remove active class from all buttons
+                // Update active button
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                // Add active class to clicked button
                 button.classList.add('active');
 
-                // Get filter value
                 const filterValue = button.getAttribute('data-filter');
                 
                 // Filter skill categories
@@ -453,15 +478,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         category.classList.remove('hidden');
                     } else {
                         const categoryValue = category.getAttribute('data-category');
-                        if (categoryValue === filterValue) {
-                            category.classList.remove('hidden');
-                        } else {
-                            category.classList.add('hidden');
-                        }
+                        category.classList.toggle('hidden', categoryValue !== filterValue);
                     }
                 });
 
-                // Announce filter change to screen readers
+                // Announce to screen readers
                 announceThemeChange(`Filtered to ${filterValue === 'all' ? 'all skills' : filterValue + ' skills'}`);
             });
         });
