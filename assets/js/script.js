@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             } else if (document.title.includes('Contact')) {
                 heroSubtitle.textContent = 'Get in touch with me';
                 heroCTA.textContent = 'Learn about me';
-                heroCTA.href = 'about_the_author.html';
+                heroCTA.href = 'about.html';
             }
             
             const phrase = titlePhrases[0];
