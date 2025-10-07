@@ -1487,6 +1487,38 @@ body.light-theme .skill-bar {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+/* Enhanced skill item styling with icons */
+.skill-name i {
+    margin-right: 8px;
+    color: var(--accent-color);
+    font-size: 1.1em;
+}
+
+/* Add a subtle pulse animation on hover for skill items */
+.skill-item:hover .skill-progress {
+    animation: pulse-bar 1s ease-in-out;
+}
+
+@keyframes pulse-bar {
+    0%, 100% {
+        transform: scaleX(1);
+    }
+    50% {
+        transform: scaleX(1.02);
+    }
+}
+
+/* Enhanced hover effect with scale */
+.skill-item:hover .skill-name i {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+}
+
+/* Add a glowing effect to progress bars on hover */
+.skill-item:hover .skill-bar {
+    box-shadow: 0 0 8px rgba(187, 134, 252, 0.5);
+}
+
 /* Responsive adjustments for skills section */
 @media (max-width: 768px) {
     .skills-filter {
