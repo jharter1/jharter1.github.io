@@ -117,62 +117,91 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const heroCTA = document.getElementById('hero-cta');
     const cursor = document.getElementById('cursor');
     
-    // Determine page-specific content
-    let titlePhrases = ['Welcome to Hartr.net'];
-    let isHomePage = true;
+    // Page configuration map - centralizes page-specific content
+    const PAGE_CONFIGS = {
+        'About': {
+            titlePhrases: ['Jack Harter'],
+            subtitle: 'DevOps and Linux Engineer',
+            ctaText: 'Get in touch',
+            ctaHref: 'contact.html',
+            isHomePage: false
+        },
+        'Contact': {
+            titlePhrases: ['Contact Jack Harter'],
+            subtitle: 'Get in touch with me',
+            ctaText: 'Learn about me',
+            ctaHref: 'about.html',
+            isHomePage: false
+        },
+        'Projects': {
+            titlePhrases: ['My Projects'],
+            subtitle: 'Explore my work',
+            ctaText: 'Get in touch',
+            ctaHref: 'contact.html',
+            isHomePage: false
+        },
+        'Home': {
+            titlePhrases: [
+                'DevOps Engineer',
+                'Linux Lover',
+                'Automation Striver',
+                'Infrastructure Builder',
+                'CI/CD Designer',
+                'Occasional Podcaster',
+                'Tech Blogger',
+                'Continuous Improvement Zealot',
+                'Wicked Problem Solver',
+                'Cloud Navigator',
+                'Network Nomad',
+                'Silo Buster',
+                'GitOps Practitioner',
+                'Collaboration Champion',
+                'Wait, are you still reading this?',
+                'I didn\'t think anyone would get this far!',
+                'Alright, Back to Work!',
+                'Making the Complex Simpler',
+                'Building Reliable Systems',
+                'System Automation Appreciator',
+                'Newbie Mentor',
+                'Friend to the Terminal',
+                'Coffee Enthusiast',
+                'Tmux Tinkerer',
+                'Vim VVizard',
+                'Docker Dabbler',
+                'Terraform Taskmaster',
+                'GitHub Gardener',
+                'Wireless Wonk',
+                'Cat Herder',
+                'Biking Enthusiast',
+                'Avid Reader',
+                'Meetup Regular',
+                'You can feel free to check out other pages too!',
+                'Thanks for stopping by!',
+                'Have a great day!',
+                'Keep on Hacking!'
+            ],
+            subtitle: 'Welcome to my corner of the internet',
+            ctaText: 'Learn more about me',
+            ctaHref: 'pages/about.html',
+            isHomePage: true
+        }
+    };
     
-    if (document.title.includes('About')) {
-        titlePhrases = ['Jack Harter'];
-        isHomePage = false;
-    } else if (document.title.includes('Contact')) {
-        titlePhrases = ['Contact Jack Harter'];
-        isHomePage = false;
-    } else if (document.title.includes('Projects')) {
-        titlePhrases = ['My Projects'];
-        isHomePage = false;
-    } else {
-        // Homepage - rotating professional phrases
-        titlePhrases = [
-            'DevOps Engineer',
-            'Linux Lover',
-            'Automation Striver',
-            'Infrastructure Builder',
-            'CI/CD Designer',
-            'Occasional Podcaster',
-            'Tech Blogger',
-            'Continuous Improvement Zealot',
-            'Wicked Problem Solver',
-            'Cloud Navigator',
-            'Network Nomad',
-            'Silo Buster',
-            'GitOps Practitioner',
-            'Collaboration Champion',
-            'Wait, are you still reading this?',
-            'I didn\'t think anyone would get this far!',
-            'Alright, Back to Work!',
-            'Making the Complex Simpler',
-            'Building Reliable Systems',
-            'System Automation Appreciator',
-            'Newbie Mentor',
-            'Friend to the Terminal',
-            'Coffee Enthusiast',
-            'Tmux Tinkerer',
-            'Vim VVizard',
-            'Docker Dabbler',
-            'Terraform Taskmaster',
-            'GitHub Gardener',
-            'Wireless Wonk',
-            'Cat Herder',
-            'Biking Enthusiast',
-            'Avid Reader',
-            'Meetup Regular',
-            'You can feel free to check out other pages too!',
-            'Thanks for stopping by!',
-            'Have a great day!',
-            'Keep on Hacking!',
-            // Add more phrases as desired
-        ];
+    // Get page configuration based on document title
+    function getPageConfig() {
+        for (const [pageName, config] of Object.entries(PAGE_CONFIGS)) {
+            if (document.title.includes(pageName)) {
+                return config;
+            }
+        }
+        // Default to home page config
+        return PAGE_CONFIGS['Home'];
     }
+    
+    // Determine page-specific content
+    const pageConfig = getPageConfig();
+    let titlePhrases = pageConfig.titlePhrases;
+    let isHomePage = pageConfig.isHomePage;
     
     let currentPhraseIndex = 0;
     let i = 0;
@@ -203,6 +232,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    // Configure hero section content for non-home pages
+    function configureHeroContent() {
+        if (!isHomePage && heroSubtitle && heroCTA) {
+            heroSubtitle.textContent = pageConfig.subtitle;
+            heroCTA.textContent = pageConfig.ctaText;
+            heroCTA.href = pageConfig.ctaHref;
+        }
+    }
+    
+    // Animate hero subtitle and CTA reveal
+    async function animateHeroElements() {
+        await delay(200);
+        if (heroSubtitle) heroSubtitle.classList.add('show');
+        await delay(700);
+        if (heroCTA) heroCTA.classList.add('show');
+    }
+
     async function typeWriter() {
         if (isHomePage && titlePhrases.length > 1) {
             // Homepage: cycle through phrases
@@ -217,39 +263,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         } else {
             // Other pages: single phrase
-            
-            // Set content for subtitle and CTA based on page (while still hidden)
-            if (document.title.includes('About')) {
-                heroSubtitle.textContent = 'DevOps and Linux Engineer';
-                heroCTA.textContent = 'Get in touch';
-                heroCTA.href = 'contact.html';
-            } else if (document.title.includes('Contact')) {
-                heroSubtitle.textContent = 'Get in touch with me';
-                heroCTA.textContent = 'Learn about me';
-                heroCTA.href = 'about.html';
-            }
-            
+            configureHeroContent();
             const phrase = titlePhrases[0];
             await typePhrase(phrase);
-            
-            // Continue with original animation sequence for hero elements
-            await delay(200);
-            heroSubtitle.classList.add('show');
-            await delay(700);
-            heroCTA.classList.add('show');
-            // Cards will be handled by Intersection Observer (scroll-based)
+            await animateHeroElements();
         }
     }
     
     // Trigger hero animations for homepage after first phrase completes
     async function triggerHomePageAnimations() {
         await delay(TYPING_SPEED_MS * titlePhrases[0].length + PHRASE_PAUSE_MS + 200);
-        
-        // Fade in subtitle and CTA
-        heroSubtitle.classList.add('show');
-        await delay(700);
-        heroCTA.classList.add('show');
-        // Cards will be handled by Intersection Observer (scroll-based)
+        await animateHeroElements();
     }
     
     if (heroTitle) {
