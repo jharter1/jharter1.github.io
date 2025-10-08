@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found | Jack Harter</title>
-    <link rel="shortcut icon" type="image/svg" href="assets/images/favicon.svg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <style>
+---
+layout: error
+title: 404 - Page Not Found
+permalink: /404.html
+custom_css: |
         .error-404 {
             text-align: center;
             padding: 60px 20px;
@@ -82,7 +77,6 @@
         .error-btn:hover {
             background: transparent;
             color: var(--accent-color);
-            transform: translateY(-2px);
         }
         
         .error-btn.secondary {
@@ -111,80 +105,7 @@
                 justify-content: center;
             }
         }
-    </style>
-</head>
-<body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    <header>
-        <div class="logo">
-            <h1>Hartr.net</h1>
-        </div>
-        <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="pages/about.html">About the Author</a></li>
-                <li><a href="pages/contact.html">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="theme-switcher">
-            <label class="switch" for="theme-toggle">
-                <span class="sr-only">Toggle between light and dark theme</span>
-                <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
-                <span class="slider round" aria-hidden="true"></span>
-                <span class="theme-icon" aria-hidden="true">
-                    <i class="fas fa-moon"></i>
-                </span>
-            </label>
-        </div>
-    </header>
-    <main id="main-content">
-        <div class="error-404">
-            <h1 class="error-code">404</h1>
-            <h2 class="error-message">Pipeline Failed: Page Not Found</h2>
-            <p class="error-description">
-                Looks like this page got lost in the DevOps pipeline! 🚀<br>
-                It might have been containerized, auto-scaled, or simply doesn't exist yet.
-            </p>
-            
-            <div class="terminal-output">
-                <div><span class="terminal-prompt">$</span> curl -I <span id="requested-url">https://hartr.net/unknown-page</span></div>
-                <div>HTTP/1.1 404 Not Found</div>
-                <div>Content-Type: text/html</div>
-                <div>X-Error: Resource not found in cluster</div>
-                <div>X-Suggestion: Try checking the main routes</div>
-            </div>
-            
-            <div class="error-actions">
-                <a href="index.html" class="error-btn">
-                    <i class="fas fa-home"></i>
-                    Return Home
-                </a>
-                <a href="pages/about.html" class="error-btn secondary">
-                    <i class="fas fa-user"></i>
-                    About Me
-                </a>
-                <a href="pages/contact.html" class="error-btn secondary">
-                    <i class="fas fa-envelope"></i>
-                    Contact
-                </a>
-            </div>
-            
-            <p style="margin-top: 40px; color: var(--text-secondary, #666); font-size: 0.9rem;">
-                <i class="fas fa-lightbulb"></i>
-                Pro tip: Check the URL for typos, or use the navigation above to find what you're looking for.
-            </p>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2024 Jack Harter. All rights reserved.</p>
-    </footer>
-    <script src="assets/js/script.js"></script>
-    <script>
+custom_js: |
         // Show the actual requested URL in the terminal output
         document.addEventListener('DOMContentLoaded', function() {
             const requestedUrlElement = document.getElementById('requested-url');
@@ -193,6 +114,40 @@
                 requestedUrlElement.textContent = currentUrl;
             }
         });
-    </script>
-</body>
-</html>
+---
+
+<div class="error-404">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-message">Pipeline Failed: Page Not Found</h2>
+    <p class="error-description">
+        Looks like this page got lost in the DevOps pipeline! 🚀<br>
+        The requested resource couldn't be deployed to production.
+    </p>
+    
+    <div class="terminal-output">
+        <div class="terminal-prompt">$ cat /var/log/nginx/error.log</div>
+        <div>ERROR: HTTP 404 - Resource not found</div>
+        <div>Requested URL: <span id="requested-url"></span></div>
+        <div>Suggestion: Check your navigation or return home</div>
+    </div>
+    
+    <div class="error-actions">
+        <a href="{{ '/' | relative_url }}" class="error-btn">
+            <i class="fas fa-home"></i>
+            Return Home
+        </a>
+        <a href="{{ '/pages/about/' | relative_url }}" class="error-btn secondary">
+            <i class="fas fa-user"></i>
+            About Me
+        </a>
+        <a href="{{ '/pages/contact/' | relative_url }}" class="error-btn secondary">
+            <i class="fas fa-envelope"></i>
+            Contact
+        </a>
+    </div>
+    
+    <p style="margin-top: 40px; color: var(--text-secondary, #666); font-size: 0.9rem;">
+        <i class="fas fa-lightbulb"></i>
+        Pro tip: Check the URL for typos, or use the navigation above to find what you're looking for.
+    </p>
+</div>

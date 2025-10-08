@@ -1,0 +1,15 @@
+{% if page.hero %}
+<section class="hero animated-hero" aria-labelledby="hero-title">
+    {% if page.layout == 'home' %}
+    <h2 class="hero-name">Jack Harter:</h2>
+    <h1 id="hero-title"><span id="cursor" class="cursor">|</span></h1>
+    <p id="hero-subtitle" class="hero-content-hidden">Welcome to my corner of the internet</p>
+    <a href="{{ '/pages/about/' | relative_url }}" id="hero-cta" class="hero-cta hero-content-hidden">Learn more about me</a>
+    {% else %}
+    <h1 id="hero-title"></h1>
+    <span class="cursor" id="cursor">|</span>
+    <p class="hero-subtitle"></p>
+    <a href="#" class="cta-btn"></a>
+    {% endif %}
+</section>
+{% endif %}

@@ -1,0 +1,44 @@
+<header>
+    <div class="logo">
+        <h1>Hartr.net</h1>
+    </div>
+    <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <nav>
+        <ul>
+            {% for item in site.navigation %}
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a href="https://github.com/{{ site.social.github }}" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's GitHub profile (opens in a new tab)">
+            <i class="fab fa-github" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/{{ site.social.linkedin }}/" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's LinkedIn profile (opens in a new tab)">
+            <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+        <a href="{{ site.social.blog }}" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's Blog (opens in a new tab)">
+            <i class="fas fa-blog" aria-hidden="true"></i>
+        </a>
+        <a href="https://news.ycombinator.com/user?id={{ site.social.hackernews }}" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's Hacker News profile (opens in a new tab)">
+            <i class="fab fa-hacker-news" aria-hidden="true"></i>
+        </a>
+        <a href="https://linktr.ee/{{ site.social.linktree }}" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's LinkTree page (opens in a new tab)">
+            <i class="fas fa-link" aria-hidden="true"></i>
+        </a>
+    </div>
+    <div class="theme-switcher">
+        <label class="switch" for="theme-toggle">
+            <span class="sr-only">Toggle between light and dark theme</span>
+            <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
+            <span class="slider round" aria-hidden="true"></span>
+            <span class="theme-icon" aria-hidden="true">
+                <i class="fas fa-moon"></i>
+            </span>
+        </label>
+    </div>
+</header>
