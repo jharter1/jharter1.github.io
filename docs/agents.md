@@ -10,11 +10,9 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 /
 ├── _layouts/            # Jekyll page layouts
 │   ├── default.html     # Base layout with header/footer
-│   ├── home.html        # Homepage layout
-│   └── error.html       # 404 page layout
+│   └── home.html        # Homepage layout
 ├── _includes/           # Reusable components
 │   ├── header.html      # Site header with navigation
-│   ├── header-404.html  # Simplified 404 header
 │   ├── footer.html      # Site footer
 │   └── hero.html        # Hero section with typewriter
 ├── assets/              # Static resources
@@ -110,9 +108,8 @@ navigation:
   - Include sections: Problem Statement, Approach & Strategy, Technical Decisions, Implementation Details, Challenges & Solutions, Results & Impact, Lessons Learned
 
 ### Updating Header/Footer
-- **Header**: Edit `_includes/header.html` (changes apply to all pages)
+- **Header**: Edit `_includes/header.html` (changes apply to all pages including 404)
 - **Footer**: Edit `_includes/footer.html`
-- **404 Header**: Edit `_includes/header-404.html` (no social links)
 
 ### Building and Testing
 ```bash
