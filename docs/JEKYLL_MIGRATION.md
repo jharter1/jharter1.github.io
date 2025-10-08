@@ -14,13 +14,11 @@ This site has been successfully migrated from a static HTML site to use the Jeky
 #### Layouts (`_layouts/`)
 1. **default.html**: Base layout for most pages with header, footer, and hero section
 2. **home.html**: Extends default layout for the homepage
-3. **error.html**: Special layout for 404 page (with custom footer and header without social links)
 
 #### Includes (`_includes/`)
 1. **header.html**: Main site header with navigation and social links
-2. **header-404.html**: Simplified header for 404 page (no social links)
-3. **footer.html**: Site footer
-4. **hero.html**: Animated hero section with typewriter effect
+2. **footer.html**: Site footer
+3. **hero.html**: Animated hero section with typewriter effect
 
 #### Configuration
 - **_config.yml**: Central configuration for site metadata, navigation, and social links
