@@ -487,4 +487,385 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
         });
     }
+
+    // ===== Activity Feed Integration =====
+    /**
+     * ActivityFeed class - Manages GitHub activity feed integration
+     * Fetches, caches, and displays recent GitHub activity
+     */
+    class ActivityFeed {
+        constructor(options = {}) {
+            this.username = options.username || 'jharter1';
+            this.maxItems = options.maxItems || 10;
+            this.cacheKey = 'github_activity_cache';
+            this.cacheDuration = options.cacheDuration || 3600000; // 1 hour default
+            this.containerId = options.containerId || 'currently-card';
+            this.feedUrl = `https://github.com/${this.username}.atom`;
+        }
+
+        /**
+         * Initialize activity feed
+         */
+        async init() {
+            const container = document.getElementById(this.containerId);
+            if (!container) return;
+
+            try {
+                const activities = await this.fetchActivities();
+                this.renderFeed(container, activities);
+            } catch (error) {
+                console.error('Error initializing activity feed:', error);
+                this.renderError(container);
+            }
+        }
+
+        /**
+         * Fetch GitHub activities with caching
+         * @returns {Promise<Array>} Array of activity items
+         */
+        async fetchActivities() {
+            // Check cache first
+            const cached = this.getCache();
+            if (cached) {
+                return cached;
+            }
+
+            // Fetch fresh data
+            try {
+                const response = await fetch(this.feedUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                const activities = this.parseAtomFeed(text);
+                
+                // Cache the results
+                this.setCache(activities);
+                
+                return activities;
+            } catch (error) {
+                console.error('Error fetching GitHub activity:', error);
+                // Return cached data even if expired, or empty array
+                const expiredCache = this.getCache(true);
+                return expiredCache || [];
+            }
+        }
+
+        /**
+         * Parse GitHub Atom feed XML
+         * @param {string} xmlText - Atom feed XML text
+         * @returns {Array} Parsed activity items
+         */
+        parseAtomFeed(xmlText) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+            const entries = xmlDoc.querySelectorAll('entry');
+            
+            const activities = [];
+            entries.forEach((entry, index) => {
+                if (index >= this.maxItems) return;
+                
+                const title = entry.querySelector('title')?.textContent || '';
+                const link = entry.querySelector('link')?.getAttribute('href') || '';
+                const published = entry.querySelector('published')?.textContent || '';
+                const content = entry.querySelector('content')?.textContent || '';
+                const id = entry.querySelector('id')?.textContent || '';
+                
+                // Determine activity type from title
+                const type = this.determineActivityType(title);
+                
+                activities.push({
+                    platform: 'github',
+                    type: type,
+                    title: title,
+                    description: this.extractDescription(content, type),
+                    timestamp: published,
+                    url: link,
+                    id: id
+                });
+            });
+            
+            return activities;
+        }
+
+        /**
+         * Determine activity type from title
+         * @param {string} title - Activity title
+         * @returns {string} Activity type
+         */
+        determineActivityType(title) {
+            if (title.includes('pushed to')) return 'commit';
+            if (title.includes('opened pull request')) return 'pr-opened';
+            if (title.includes('merged pull request')) return 'pr-merged';
+            if (title.includes('opened issue')) return 'issue-opened';
+            if (title.includes('closed issue')) return 'issue-closed';
+            if (title.includes('starred')) return 'starred';
+            if (title.includes('forked')) return 'forked';
+            if (title.includes('created repository')) return 'repo-created';
+            if (title.includes('created a branch')) return 'branch-created';
+            return 'activity';
+        }
+
+        /**
+         * Extract description from content
+         * @param {string} content - Activity content HTML
+         * @param {string} type - Activity type
+         * @returns {string} Cleaned description
+         */
+        extractDescription(content, type) {
+            // Remove HTML tags and clean up
+            const temp = document.createElement('div');
+            temp.innerHTML = content;
+            let text = temp.textContent || temp.innerText || '';
+            
+            // Trim and limit length
+            text = text.trim().substring(0, 150);
+            if (text.length === 150) text += '...';
+            
+            return text;
+        }
+
+        /**
+         * Get cached activities
+         * @param {boolean} ignoreExpiry - Return expired cache if true
+         * @returns {Array|null} Cached activities or null
+         */
+        getCache(ignoreExpiry = false) {
+            try {
+                const cached = localStorage.getItem(this.cacheKey);
+                if (!cached) return null;
+                
+                const data = JSON.parse(cached);
+                const now = Date.now();
+                
+                if (!ignoreExpiry && now - data.timestamp > this.cacheDuration) {
+                    return null;
+                }
+                
+                return data.activities;
+            } catch (error) {
+                console.error('Error reading cache:', error);
+                return null;
+            }
+        }
+
+        /**
+         * Set cache with timestamp
+         * @param {Array} activities - Activities to cache
+         */
+        setCache(activities) {
+            try {
+                const data = {
+                    timestamp: Date.now(),
+                    activities: activities
+                };
+                localStorage.setItem(this.cacheKey, JSON.stringify(data));
+            } catch (error) {
+                console.error('Error setting cache:', error);
+            }
+        }
+
+        /**
+         * Render activity feed in container
+         * @param {HTMLElement} container - Container element
+         * @param {Array} activities - Activity items to render
+         */
+        renderFeed(container, activities) {
+            if (!activities || activities.length === 0) {
+                this.renderEmpty(container);
+                return;
+            }
+
+            // Update the Currently card to show feed
+            const feedHTML = `
+                <h2>Currently</h2>
+                <div class="activity-feed-header">
+                    <p>Recent GitHub Activity</p>
+                    <div class="activity-filters">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="commit">Commits</button>
+                        <button class="filter-chip" data-filter="pr">PRs</button>
+                        <button class="filter-chip" data-filter="issue">Issues</button>
+                    </div>
+                </div>
+                <div class="activity-timeline">
+                    ${activities.map(activity => this.renderActivityItem(activity)).join('')}
+                </div>
+                <div class="activity-footer">
+                    <a href="https://github.com/${this.username}" target="_blank" rel="noopener noreferrer">
+                        View all activity on GitHub <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            `;
+            
+            container.innerHTML = feedHTML;
+            
+            // Setup filter buttons
+            this.setupFilters(container);
+        }
+
+        /**
+         * Render single activity item
+         * @param {Object} activity - Activity data
+         * @returns {string} HTML string
+         */
+        renderActivityItem(activity) {
+            const icon = this.getActivityIcon(activity.type);
+            const timeAgo = this.getTimeAgo(activity.timestamp);
+            const filterClass = this.getFilterClass(activity.type);
+            
+            return `
+                <div class="activity-item ${filterClass}" data-type="${filterClass}">
+                    <div class="activity-icon">
+                        <i class="fab fa-github"></i>
+                        <span class="activity-type-icon">${icon}</span>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">
+                            <a href="${activity.url}" target="_blank" rel="noopener noreferrer">
+                                ${this.escapeHtml(activity.title)}
+                            </a>
+                        </div>
+                        <div class="activity-meta">
+                            <span class="activity-time">${timeAgo}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Get filter class for activity type
+         * @param {string} type - Activity type
+         * @returns {string} Filter class
+         */
+        getFilterClass(type) {
+            if (type === 'commit') return 'commit';
+            if (type.includes('pr-')) return 'pr';
+            if (type.includes('issue-')) return 'issue';
+            return 'other';
+        }
+
+        /**
+         * Get icon for activity type
+         * @param {string} type - Activity type
+         * @returns {string} Icon HTML
+         */
+        getActivityIcon(type) {
+            const icons = {
+                'commit': '<i class="fas fa-code-commit"></i>',
+                'pr-opened': '<i class="fas fa-code-pull-request"></i>',
+                'pr-merged': '<i class="fas fa-code-merge"></i>',
+                'issue-opened': '<i class="fas fa-circle-dot"></i>',
+                'issue-closed': '<i class="fas fa-circle-check"></i>',
+                'starred': '<i class="fas fa-star"></i>',
+                'forked': '<i class="fas fa-code-fork"></i>',
+                'repo-created': '<i class="fas fa-plus"></i>',
+                'branch-created': '<i class="fas fa-code-branch"></i>',
+                'activity': '<i class="fas fa-clock"></i>'
+            };
+            return icons[type] || icons['activity'];
+        }
+
+        /**
+         * Calculate time ago from timestamp
+         * @param {string} timestamp - ISO timestamp
+         * @returns {string} Human-readable time ago
+         */
+        getTimeAgo(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+            return date.toLocaleDateString();
+        }
+
+        /**
+         * Escape HTML to prevent XSS
+         * @param {string} text - Text to escape
+         * @returns {string} Escaped text
+         */
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /**
+         * Setup filter button functionality
+         * @param {HTMLElement} container - Container element
+         */
+        setupFilters(container) {
+            const filterButtons = container.querySelectorAll('.filter-chip');
+            const activityItems = container.querySelectorAll('.activity-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active state
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const filter = button.getAttribute('data-filter');
+                    
+                    // Filter items
+                    activityItems.forEach(item => {
+                        if (filter === 'all') {
+                            item.style.display = '';
+                        } else {
+                            const itemType = item.getAttribute('data-type');
+                            item.style.display = itemType === filter ? '' : 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        /**
+         * Render empty state
+         * @param {HTMLElement} container - Container element
+         */
+        renderEmpty(container) {
+            container.innerHTML = `
+                <h2>Currently</h2>
+                <p>Working on infrastructure automation and exploring new technologies in cloud-centric disciplines. Always learning and sharing knowledge through my <a href="https://blog.hartr.net">blog</a>.</p>
+                <p class="activity-status">
+                    <i class="fab fa-github"></i> Check out my <a href="https://github.com/${this.username}" target="_blank" rel="noopener noreferrer">GitHub profile</a> for recent activity.
+                </p>
+            `;
+        }
+
+        /**
+         * Render error state
+         * @param {HTMLElement} container - Container element
+         */
+        renderError(container) {
+            container.innerHTML = `
+                <h2>Currently</h2>
+                <p>Working on infrastructure automation and exploring new technologies in cloud-centric disciplines. Always learning and sharing knowledge through my <a href="https://blog.hartr.net">blog</a>.</p>
+                <p class="activity-status activity-error">
+                    <i class="fas fa-exclamation-circle"></i> Unable to load recent activity. Visit my <a href="https://github.com/${this.username}" target="_blank" rel="noopener noreferrer">GitHub profile</a> to see what I've been up to.
+                </p>
+            `;
+        }
+    }
+
+    // Initialize activity feed on home page
+    if (document.getElementById('currently-card')) {
+        const activityFeed = new ActivityFeed({
+            username: 'jharter1',
+            maxItems: 8,
+            cacheDuration: 3600000, // 1 hour
+            containerId: 'currently-card'
+        });
+        
+        // Initialize after a short delay to not block initial page load
+        setTimeout(() => {
+            activityFeed.init();
+        }, 1000);
+    }
 });
