@@ -1,30 +1,26 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Page two</title>
-    <style>
-        body {
-            width: 35em;
-            margin: 0 auto;
-            font-family: Arial, Helvetica, serif;
-        }
-    </style>
-  </head>
+---
+layout: default
+title: Page Two
+permalink: /pages/page_two/
+custom_css: |
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Arial, Helvetica, serif;
+    }
+---
 
-  <body>
-    <h1>My Second Webpage</h1>
-    <a href="https://github.com/jharter1">
-      Here </a> is where my code exists
+<h1>My Second Webpage</h1>
+<a href="https://github.com/jharter1">
+  Here </a> is where my code exists
 
-    <p>An example must be made if we are to build multiple pages!!</p>
-    <p>This should help illustrate how a paragraph gets built.</p>
-    <ul>
-      <li> This is an item in a non-enumerated list </li>
-      <li> Multiple items can be placed on like this </li>
-      <li> They can really be numbered as high as you want. </li>
-      <li> You can also use <b> nested </b> items, including <i>italic</i> ones. </li>
-      </ul>
-    <!-- This is an example of a comment! -->
-    <p>Here's a <a href="../index.html"> link to the primary page</a></p>
-  </body>
-</html>
+<p>An example must be made if we are to build multiple pages!!</p>
+<p>This should help illustrate how a paragraph gets built.</p>
+<ul>
+  <li> This is an item in a non-enumerated list </li>
+  <li> Multiple items can be placed on like this </li>
+  <li> They can really be numbered as high as you want. </li>
+  <li> You can also use <b> nested </b> items, including <i>italic</i> ones. </li>
+  </ul>
+<!-- This is an example of a comment! -->
+<p>Here's a <a href="{{ '/' | relative_url }}"> link to the primary page</a></p>

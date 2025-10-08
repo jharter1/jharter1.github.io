@@ -1,111 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jack Harter - Home</title>
-    <link rel="shortcut icon" type="image/svg" href="assets/images/favicon.svg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-</head>
-<body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    <header>
-        <div class="logo">
-            <h1>Hartr.net</h1>
-        </div>
-        <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="pages/about.html">About the Author</a></li>
-                <li><a href="pages/projects.html">Projects</a></li>
-                <li><a href="pages/contact.html">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="social-links">
-            <a href="https://github.com/jharter1" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's GitHub profile (opens in a new tab)">
-                <i class="fab fa-github" aria-hidden="true"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/jwharter/" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's LinkedIn profile (opens in a new tab)">
-                <i class="fab fa-linkedin" aria-hidden="true"></i>
-            </a>
-            <a href="https://blog.hartr.net" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's Blog (opens in a new tab)">
-                <i class="fas fa-blog" aria-hidden="true"></i>
-            </a>
-            <a href="https://news.ycombinator.com/user?id=jhartr" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's Hacker News profile (opens in a new tab)">
-                <i class="fab fa-hacker-news" aria-hidden="true"></i>
-            </a>
-            <a href="https://linktr.ee/jackharter" target="_blank" rel="noopener noreferrer" aria-label="Visit Jack's LinkTree page (opens in a new tab)">
-                <i class="fas fa-link" aria-hidden="true"></i>
-            </a>
-        </div>
-        <div class="theme-switcher">
-            <label class="switch" for="theme-toggle">
-                <span class="sr-only">Toggle between light and dark theme</span>
-                <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
-                <span class="slider round" aria-hidden="true"></span>
-                <span class="theme-icon" aria-hidden="true">
-                    <i class="fas fa-moon"></i>
-                </span>
-            </label>
-        </div>
-    </header>
-    <main id="main-content">
-        <section class="hero animated-hero" aria-labelledby="hero-title">
-            <h2 class="hero-name">Jack Harter:</h2>
-            <h1 id="hero-title"><span id="cursor" class="cursor">|</span></h1>
-            <p id="hero-subtitle" class="hero-content-hidden">Welcome to my corner of the internet</p>
-            <a href="pages/about.html" id="hero-cta" class="hero-cta hero-content-hidden">Learn more about me</a>
-        </section>
-        
-        <section aria-labelledby="content-heading">
-            <h2 id="content-heading" class="sr-only">Site Content</h2>
-            <div class="cards-grid">
-            <!-- Row 1 -->
-            <div id="about-card" class="card fade-in-section card-hidden">
-                <h2>About Me</h2>
-                <p>Hi, I'm Jack Harter, a DevOps and Linux engineer with a passion for open-source technologies. Learn more <a href="pages/about.html">about me</a>.</p>
-            </div>
-            <div id="what-i-do-card" class="card fade-in-section card-hidden">
-                <h2>What I Do</h2>
-                <p>I specialize in DevOps engineering, Linux administration, and building tough CI/CD pipelines. I help automate testing and make deployment more bearable.</p>
-            </div>
-            
-            <!-- Row 2 -->
-            <div id="projects-card" class="card fade-in-section card-hidden">
-                <h2>Projects</h2>
-                <p>Check out my latest work including infrastructure automation, monitoring solutions, and open-source contributions. <a href="pages/projects.html">View all projects</a>.</p>
-            </div>
-            <div id="stack-card" class="card fade-in-section card-hidden">
-                <h2>My Stack</h2>
-                <ul>
-                    <li><i class="fas fa-server"></i> Linux & Docker & K8s</li>
-                    <li><i class="fas fa-cloud"></i> AWS & Azure & Terraform</li>
-                    <li><i class="fas fa-code-branch"></i> GitOps & CI/CD</li>
-                    <li><i class="fas fa-chart-line"></i> Monitoring & Automation & AI</li>
-                </ul>
-            </div>
-            
-            <!-- Row 3 -->
-            <div id="currently-card" class="card fade-in-section card-hidden">
-                <h2>Currently</h2>
-                <p>Working on infrastructure automation and exploring new technologies in cloud-centric disciplines. Always learning and sharing knowledge through my <a href="https://blog.hartr.net">blog</a>.</p>
-            </div>
-            <div id="connect-card" class="card fade-in-section card-hidden">
-                <h2>Let's Connect</h2>
-                <p>Interested in collaborating or have questions about DevOps, GitOps, or Infrastructure as Code? <a href="pages/contact.html">Get in touch</a> or find me on <a href="https://www.linkedin.com/in/jwharter">LinkedIn</a>.</p>
-            </div>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>Loading...</p>
-    </footer>
-    <script src="assets/js/script.js"></script>
-</body>
-</html>
+---
+layout: home
+title: Home
+hero: true
+---
+
+<section aria-labelledby="content-heading">
+    <h2 id="content-heading" class="sr-only">Site Content</h2>
+    <div class="cards-grid">
+    <!-- Row 1 -->
+    <div id="about-card" class="card fade-in-section card-hidden">
+        <h2>About Me</h2>
+        <p>Hi, I'm Jack Harter, a DevOps and Linux engineer with a passion for open-source technologies. Learn more <a href="{{ '/pages/about/' | relative_url }}">about me</a>.</p>
+    </div>
+    <div id="what-i-do-card" class="card fade-in-section card-hidden">
+        <h2>What I Do</h2>
+        <p>I specialize in DevOps engineering, Linux administration, and building tough CI/CD pipelines. I help automate testing and make deployment more bearable.</p>
+    </div>
+    
+    <!-- Row 2 -->
+    <div id="projects-card" class="card fade-in-section card-hidden">
+        <h2>Projects</h2>
+        <p>Check out my latest work including infrastructure automation, monitoring solutions, and open-source contributions. <a href="{{ '/pages/projects/' | relative_url }}">View all projects</a>.</p>
+    </div>
+    <div id="stack-card" class="card fade-in-section card-hidden">
+        <h2>My Stack</h2>
+        <ul>
+            <li><i class="fas fa-server"></i> Linux & Docker & K8s</li>
+            <li><i class="fas fa-cloud"></i> AWS & Azure & Terraform</li>
+            <li><i class="fas fa-code-branch"></i> GitOps & CI/CD</li>
+            <li><i class="fas fa-chart-line"></i> Monitoring & Automation & AI</li>
+        </ul>
+    </div>
+    
+    <!-- Row 3 -->
+    <div id="currently-card" class="card fade-in-section card-hidden">
+        <h2>Currently</h2>
+        <p>Working on infrastructure automation and exploring new technologies in cloud-centric disciplines. Always learning and sharing knowledge through my <a href="{{ site.social.blog }}">blog</a>.</p>
+    </div>
+    <div id="connect-card" class="card fade-in-section card-hidden">
+        <h2>Let's Connect</h2>
+        <p>Interested in collaborating or have questions about DevOps, GitOps, or Infrastructure as Code? <a href="{{ '/pages/contact/' | relative_url }}">Get in touch</a> or find me on <a href="https://www.linkedin.com/in/{{ site.social.linkedin }}">LinkedIn</a>.</p>
+    </div>
+    </div>
+</section>
