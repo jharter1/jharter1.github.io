@@ -891,7 +891,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         // Configuration
         const config = {
-            particleCount: 50, // Reduced for subtlety and performance
+            particleCount: 120, // Increased for better visibility
             particleSpeed: 0.3, // Slow movement
             connectionDistance: 150,
             particleRadius: 2,

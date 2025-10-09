@@ -62,7 +62,7 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 ### Key Features
 1. **Dynamic Theme System**: Light/dark mode toggle with system preference detection
 2. **Rotating Typewriter Effect**: JavaScript-powered text animation in hero section
-3. **Geometric Background Animation**: Subtle particle network effect with theme-aware colors
+3. **Geometric Background Animation**: Particle network effect with theme-aware colors
 4. **Responsive Design**: Mobile-first layout with CSS Grid/Flexbox
 5. **Accessibility**: WCAG compliance with skip links, semantic markup, reduced-motion support
 6. **Custom 404 Page**: DevOps-themed terminal simulation
@@ -113,7 +113,7 @@ navigation:
 - **Footer**: Edit `_includes/footer.html`
 
 ### Geometric Background Animation
-The site features a subtle particle network animation rendered on canvas:
+The site features a particle network animation rendered on canvas:
 
 **Implementation:**
 - Canvas element in `_layouts/default.html` with `aria-hidden="true"`
@@ -123,7 +123,7 @@ The site features a subtle particle network animation rendered on canvas:
 
 **Configuration:**
 ```javascript
-particleCount: 50        // Number of particles
+particleCount: 120       // Number of particles
 particleSpeed: 0.3       // Movement speed
 connectionDistance: 150  // Max distance for line connections
 particleRadius: 2        // Size of particles
