@@ -23,8 +23,8 @@
     --moon-color: var(--text-color);
     
     /* Geometric background animation colors */
-    --bg-animation-particle: rgba(187, 134, 252, 0.3);
-    --bg-animation-line: rgba(187, 134, 252, 0.15);
+    --bg-animation-particle: rgba(187, 134, 252, 0.6);
+    --bg-animation-line: rgba(187, 134, 252, 0.3);
 }
 
 /* ===== Accessibility Styles ===== */
@@ -187,8 +187,8 @@ body.light-theme {
     --accent-color: #6200ee;
     
     /* Light theme animation colors */
-    --bg-animation-particle: rgba(98, 0, 238, 0.25);
-    --bg-animation-line: rgba(98, 0, 238, 0.1);
+    --bg-animation-particle: rgba(98, 0, 238, 0.5);
+    --bg-animation-line: rgba(98, 0, 238, 0.25);
 }
 
 /* ===== Base Body Styles ===== */
