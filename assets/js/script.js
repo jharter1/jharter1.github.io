@@ -510,6 +510,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const container = document.getElementById(this.containerId);
             if (!container) return;
 
+            // Show loading state
+            this.renderLoading(container);
+
             try {
                 const activities = await this.fetchActivities();
                 this.renderFeed(container, activities);
@@ -687,6 +690,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         <button class="filter-chip" data-filter="commit">Commits</button>
                         <button class="filter-chip" data-filter="pr">PRs</button>
                         <button class="filter-chip" data-filter="issue">Issues</button>
+                        <button class="filter-chip refresh-feed" id="refresh-activity-feed" aria-label="Refresh activity feed" title="Refresh activity">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="activity-timeline">
@@ -703,6 +709,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             
             // Setup filter buttons
             this.setupFilters(container);
+            
+            // Setup refresh button
+            const refreshButton = container.querySelector('#refresh-activity-feed');
+            if (refreshButton) {
+                refreshButton.addEventListener('click', () => {
+                    // Clear cache and reload
+                    localStorage.removeItem(this.cacheKey);
+                    refreshButton.querySelector('i').classList.add('fa-spin');
+                    this.init().then(() => {
+                        refreshButton.querySelector('i').classList.remove('fa-spin');
+                    });
+                });
+            }
         }
 
         /**
@@ -826,6 +845,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         /**
+         * Render loading state
+         * @param {HTMLElement} container - Container element
+         */
+        renderLoading(container) {
+            container.innerHTML = `
+                <h2>Currently</h2>
+                <p>Working on infrastructure automation and exploring new technologies in cloud-centric disciplines. Always learning and sharing knowledge through my <a href="https://blog.hartr.net">blog</a>.</p>
+                <p class="activity-status">
+                    <i class="fas fa-spinner fa-spin"></i> Loading recent GitHub activity...
+                </p>
+            `;
+        }
+
+        /**
          * Render empty state
          * @param {HTMLElement} container - Container element
          */
@@ -848,9 +881,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 <h2>Currently</h2>
                 <p>Working on infrastructure automation and exploring new technologies in cloud-centric disciplines. Always learning and sharing knowledge through my <a href="https://blog.hartr.net">blog</a>.</p>
                 <p class="activity-status activity-error">
-                    <i class="fas fa-exclamation-circle"></i> Unable to load recent activity. Visit my <a href="https://github.com/${this.username}" target="_blank" rel="noopener noreferrer">GitHub profile</a> to see what I've been up to.
+                    <i class="fas fa-exclamation-circle"></i> Unable to load recent activity. This may be due to browser ad blockers or network issues.
+                </p>
+                <p class="activity-status">
+                    <button class="retry-button" id="retry-activity-feed" aria-label="Retry loading activity feed">
+                        <i class="fas fa-refresh"></i> Retry
+                    </button>
+                    or visit my <a href="https://github.com/${this.username}" target="_blank" rel="noopener noreferrer">GitHub profile</a> to see what I've been up to.
                 </p>
             `;
+            
+            // Add retry button handler
+            const retryButton = container.querySelector('#retry-activity-feed');
+            if (retryButton) {
+                retryButton.addEventListener('click', () => {
+                    // Clear cache and retry
+                    localStorage.removeItem(this.cacheKey);
+                    this.init();
+                });
+            }
         }
     }
 

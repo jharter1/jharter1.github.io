@@ -1730,6 +1730,7 @@ body.light-theme .skill-bar {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+    flex-wrap: wrap;
 }
 
 .activity-status i {
@@ -1744,6 +1745,45 @@ body.light-theme .skill-bar {
 
 .activity-error i {
     color: #ff6b6b;
+}
+
+/* Retry and refresh buttons */
+.retry-button,
+.refresh-feed {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.retry-button:hover,
+.refresh-feed:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    transform: translateY(-1px);
+}
+
+.retry-button:focus,
+.refresh-feed:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.refresh-feed {
+    padding: var(--spacing-xs);
+    min-width: auto;
+}
+
+.refresh-feed i {
+    font-size: 1rem;
 }
 
 /* Light theme adjustments */

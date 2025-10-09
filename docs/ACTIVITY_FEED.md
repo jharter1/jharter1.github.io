@@ -3,6 +3,8 @@
 ## Overview
 The Activity Feed feature displays real-time GitHub activity on the homepage's "Currently" card, showcasing recent commits, pull requests, issues, and other GitHub activities.
 
+**Note on LinkedIn Integration**: LinkedIn activity integration is not currently available. LinkedIn's API requires OAuth authentication and formal approval, and there is no public feed API available. Web scraping would violate LinkedIn's Terms of Service. For professional updates, visitors are encouraged to connect via the LinkedIn profile link in the site header.
+
 ## How It Works
 
 ### Data Source
@@ -52,8 +54,15 @@ The feed gracefully handles errors:
 2. **No Cache Available**: Displays static fallback content with link to GitHub profile
 3. **CORS Issues**: Handles cross-origin restrictions gracefully
 4. **Parse Errors**: Logs errors and shows fallback content
+5. **Ad Blockers**: Detects when requests are blocked and provides retry option
+6. **Network Errors**: Shows user-friendly error message with manual retry button
 
 ## UI Components
+
+### Loading State
+When the feed is initializing, users see:
+- "Loading recent GitHub activity..." message with animated spinner
+- Prevents confusion while data is being fetched
 
 ### Activity Item Structure
 Each activity displays:
@@ -61,6 +70,13 @@ Each activity displays:
 - Activity title (linked to GitHub)
 - Time ago (e.g., "2h ago", "3d ago")
 - Hover effects for better UX
+- Refresh button to manually update the feed
+
+### Error State
+When loading fails, users see:
+- Clear error message explaining the issue (ad blockers, network, etc.)
+- Retry button to attempt loading again
+- Fallback link to GitHub profile
 
 ### Responsive Design
 - Desktop: Full-width activity items with detailed information
@@ -157,10 +173,21 @@ To disable the activity feed:
 
 ## Future Enhancements
 Potential improvements not currently implemented:
-- LinkedIn integration (requires API approval)
-- Twitter/X feed integration
+- **LinkedIn integration**: Requires OAuth 2.0 authentication, formal API approval from LinkedIn, and ongoing maintenance. LinkedIn does not offer a public RSS/Atom feed, and their API has strict rate limits and requires user consent for each access. Web scraping is prohibited by LinkedIn's Terms of Service and would be unreliable due to anti-scraping measures.
+- Twitter/X feed integration (similar API/auth requirements)
 - Contribution calendar visualization
 - Achievement badges for milestones
 - Real-time WebSocket updates
 - Activity search/filtering by date range
 - Export activity history
+
+### Why LinkedIn Integration is Challenging
+1. **No Public Feed**: Unlike GitHub's Atom feed, LinkedIn has no public RSS/Atom feed
+2. **OAuth Required**: API access requires user authentication via OAuth 2.0
+3. **API Approval**: Developers must apply and be approved for API access
+4. **Rate Limits**: Strict API rate limiting (throttled requests)
+5. **User Consent**: Each visitor would need to authenticate and grant permission
+6. **Maintenance**: Requires backend server to handle OAuth flow and token management
+7. **Terms of Service**: Web scraping violates LinkedIn's ToS and is unreliable
+
+For these reasons, LinkedIn activity integration is not planned for this static GitHub Pages site.
