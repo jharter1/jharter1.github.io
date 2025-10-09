@@ -21,6 +21,10 @@
     /* Theme icon colors */
     --sun-color: #ffd700;
     --moon-color: var(--text-color);
+    
+    /* Geometric background animation colors */
+    --bg-animation-particle: rgba(187, 134, 252, 0.3);
+    --bg-animation-line: rgba(187, 134, 252, 0.15);
 }
 
 /* ===== Accessibility Styles ===== */
@@ -51,6 +55,26 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* ===== Geometric Background Animation ===== */
+#geometric-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity var(--transition-fast);
+}
+
+/* Hide animation for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    #geometric-bg {
+        display: none;
+    }
 }
 
 /* ===== Initial Hidden States for Animations ===== */
@@ -161,6 +185,10 @@ body.light-theme {
     --text-color: #000000;
     --card-background-color: #f0f0f0;
     --accent-color: #6200ee;
+    
+    /* Light theme animation colors */
+    --bg-animation-particle: rgba(98, 0, 238, 0.25);
+    --bg-animation-line: rgba(98, 0, 238, 0.1);
 }
 
 /* ===== Base Body Styles ===== */

@@ -62,11 +62,12 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 ### Key Features
 1. **Dynamic Theme System**: Light/dark mode toggle with system preference detection
 2. **Rotating Typewriter Effect**: JavaScript-powered text animation in hero section
-3. **Responsive Design**: Mobile-first layout with CSS Grid/Flexbox
-4. **Accessibility**: WCAG compliance with skip links, semantic markup
-5. **Custom 404 Page**: DevOps-themed terminal simulation
-6. **Professional Portfolio**: Showcasing DevOps skills and experience
-7. **Case Study Expandables**: Detailed project case studies with expand/collapse functionality
+3. **Geometric Background Animation**: Subtle particle network effect with theme-aware colors
+4. **Responsive Design**: Mobile-first layout with CSS Grid/Flexbox
+5. **Accessibility**: WCAG compliance with skip links, semantic markup, reduced-motion support
+6. **Custom 404 Page**: DevOps-themed terminal simulation
+7. **Professional Portfolio**: Showcasing DevOps skills and experience
+8. **Case Study Expandables**: Detailed project case studies with expand/collapse functionality
 
 ## Common Tasks
 
@@ -110,6 +111,37 @@ navigation:
 ### Updating Header/Footer
 - **Header**: Edit `_includes/header.html` (changes apply to all pages including 404)
 - **Footer**: Edit `_includes/footer.html`
+
+### Geometric Background Animation
+The site features a subtle particle network animation rendered on canvas:
+
+**Implementation:**
+- Canvas element in `_layouts/default.html` with `aria-hidden="true"`
+- Animation logic in `assets/js/script.js` (`initGeometricBackground()`)
+- CSS styles in `assets/css/styles.css` (`#geometric-bg`)
+- Theme-aware colors via CSS custom properties
+
+**Configuration:**
+```javascript
+particleCount: 50        // Number of particles
+particleSpeed: 0.3       // Movement speed
+connectionDistance: 150  // Max distance for line connections
+particleRadius: 2        // Size of particles
+lineWidth: 1            // Thickness of connecting lines
+```
+
+**Customization:**
+- Adjust particle count in `script.js` for performance/density
+- Modify colors in CSS variables:
+  - `--bg-animation-particle`: Particle color/opacity
+  - `--bg-animation-line`: Connection line color/opacity
+- Animation automatically respects `prefers-reduced-motion`
+
+**Performance Notes:**
+- Uses requestAnimationFrame for 60fps
+- Canvas positioned with `z-index: -1` (behind all content)
+- Debounced resize handler prevents lag
+- Automatically disabled for reduced-motion users
 
 ### Building and Testing
 ```bash
@@ -184,6 +216,8 @@ bundle exec jekyll serve
 - [ ] Assets (CSS, JS, images) load properly
 - [ ] Responsive design works on mobile/desktop
 - [ ] Theme toggle functionality works
+- [ ] Background animation renders smoothly in both themes
+- [ ] Animation respects reduced-motion preference
 - [ ] Accessibility features intact
 
 ### Pull Request Guidelines
