@@ -44,6 +44,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
       
+      - name: Run Code Quality Analyzer
+        if: steps.pr-diff.outputs.has_changes == 'true'
+        id: code-analysis
+        run: |
+          # Make analyzer executable and run it
+          chmod +x .github/scripts/code-analyzer.sh
+          .github/scripts/code-analyzer.sh pr-diff.txt analyzer-output.md
+          
+          echo "analysis_complete=true" >> $GITHUB_OUTPUT
+      
       - name: Generate AI Review Summary
         if: steps.pr-diff.outputs.has_changes == 'true'
         id: ai-review
@@ -69,6 +79,15 @@ jobs:
           - Configuration files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(yml|yaml|json|toml)$' | wc -l) modified
           - Documentation: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(md|txt)$' | wc -l) modified  
           - Code files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(js|ts|html|css|rb|py)$' | wc -l) modified
+          
+          EOF
+          
+          # Append code quality suggestions if analyzer ran
+          if [ -f analyzer-output.md ]; then
+            cat analyzer-output.md >> review-output.md
+          fi
+          
+          cat >> review-output.md << 'EOF'
           
           ### Next Steps
           1. 👀 Review changes manually
