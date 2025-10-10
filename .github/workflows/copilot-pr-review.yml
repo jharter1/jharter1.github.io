@@ -44,155 +44,252 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
       
-      - name: Analyze File Changes for Best Practices
+      - name: Analyze Code Changes with AI
         if: steps.pr-diff.outputs.has_changes == 'true'
-        id: file-analysis
+        id: code-analysis
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
           
-          # Get list of changed files
+          # Get actual diff content for analysis
+          git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} > full-diff.txt
+          
+          # Get changed files with their content
           git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} > changed-files.txt
           
-          # Categorize files by type for specific suggestions
-          CSS_FILES=$(grep -E '\.(css|scss|sass)$' changed-files.txt || echo "")
-          HTML_FILES=$(grep -E '\.(html|htm)$' changed-files.txt || echo "")  
-          JS_FILES=$(grep -E '\.(js|ts)$' changed-files.txt || echo "")
-          JEKYLL_FILES=$(grep -E '\.(md|yml|yaml|rb)$|_config\.|Gemfile' changed-files.txt || echo "")
-          CONFIG_FILES=$(grep -E '\.(json|toml|xml)$|package\.json|\.github' changed-files.txt || echo "")
+          # Analyze each changed file for specific improvements
+          echo "## 🤖 AI Code Analysis" > analysis-output.md
+          echo "" >> analysis-output.md
           
-          # Set outputs for conditional suggestions
-          [ ! -z "$CSS_FILES" ] && echo "has_css=true" >> $GITHUB_OUTPUT
-          [ ! -z "$HTML_FILES" ] && echo "has_html=true" >> $GITHUB_OUTPUT
-          [ ! -z "$JS_FILES" ] && echo "has_js=true" >> $GITHUB_OUTPUT
-          [ ! -z "$JEKYLL_FILES" ] && echo "has_jekyll=true" >> $GITHUB_OUTPUT
-          [ ! -z "$CONFIG_FILES" ] && echo "has_config=true" >> $GITHUB_OUTPUT
+          while IFS= read -r file; do
+            if [[ -f "$file" ]]; then
+              echo "### 📄 \`$file\`" >> analysis-output.md
+              echo "" >> analysis-output.md
+              
+              # Get the actual changes for this file
+              git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} -- "$file" > "diff-$file.txt"
+              
+              # Analyze based on file type and actual content
+              case "$file" in
+                *.css|*.scss|*.sass)
+                  echo "**CSS Analysis:**" >> analysis-output.md
+                  # Check for specific CSS patterns in the diff
+                  if grep -q "color:" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🎨 Color changes detected - consider using CSS custom properties for consistency" >> analysis-output.md
+                  fi
+                  if grep -q "px\|em\|rem" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 📱 Unit usage found - consider \`clamp()\` for responsive values" >> analysis-output.md
+                  fi
+                  if grep -q "float\|position: absolute" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🏗️ Layout properties detected - consider modern CSS Grid/Flexbox" >> analysis-output.md
+                  fi
+                  ;;
+                *.html|*.htm)
+                  echo "**HTML Analysis:**" >> analysis-output.md
+                  if grep -q "<img" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🖼️ Images detected - add \`alt\` attributes and consider \`loading=\"lazy\"\`" >> analysis-output.md
+                  fi
+                  if grep -q "<a " "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🔗 Links detected - ensure proper \`aria-label\` for accessibility" >> analysis-output.md
+                  fi
+                  if grep -q "<button\|onclick" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🎯 Interactive elements - ensure keyboard navigation support" >> analysis-output.md
+                  fi
+                  ;;
+                *.js|*.ts)
+                  echo "**JavaScript Analysis:**" >> analysis-output.md
+                  if grep -q "var " "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🔧 \`var\` usage found - consider \`const\`/\`let\` for better scoping" >> analysis-output.md
+                  fi
+                  if grep -q "\.innerHTML" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🔒 \`innerHTML\` usage - validate input to prevent XSS attacks" >> analysis-output.md
+                  fi
+                  if grep -q "addEventListener" "diff-$file.txt" 2>/dev/null; then
+                    echo "- ♿ Event listeners added - ensure keyboard accessibility" >> analysis-output.md
+                  fi
+                  ;;
+                *.md)
+                  echo "**Markdown Analysis:**" >> analysis-output.md
+                  if grep -q "^#" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 📚 Heading structure - ensure proper hierarchy (h1 → h2 → h3)" >> analysis-output.md
+                  fi
+                  if grep -q "!\[.*\](" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🖼️ Images added - ensure descriptive alt text for accessibility" >> analysis-output.md
+                  fi
+                  ;;
+                *.yml|*.yaml|_config.yml)
+                  echo "**Configuration Analysis:**" >> analysis-output.md
+                  if grep -q "url:\|baseurl:" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🌐 URL configuration changed - verify for production deployment" >> analysis-output.md
+                  fi
+                  if grep -q "plugins:\|gems:" "diff-$file.txt" 2>/dev/null; then
+                    echo "- 🔌 Plugin configuration - ensure compatibility with GitHub Pages" >> analysis-output.md
+                  fi
+                  ;;
+              esac
+              echo "" >> analysis-output.md
+            fi
+          done < changed-files.txt
           
-          echo "analysis_complete=true" >> $GITHUB_OUTPUT
+          echo "code_analysis_complete=true" >> $GITHUB_OUTPUT
       
-      - name: Generate AI Review Summary
-        if: steps.pr-diff.outputs.has_changes == 'true'
-        id: ai-review
+      - name: Generate Improvement Suggestions
+        if: steps.code-analysis.outputs.code_analysis_complete == 'true'
+        id: suggestions
         run: |
-          # Create a more comprehensive review based on file changes
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          
+          # Create actionable improvement suggestions
+          cat > suggestions.md << 'EOF'
+          
+          ### 💡 Suggested Improvements
+          
+          Based on the code analysis, here are specific improvements you can make:
+          
+          EOF
+          
+          # Check for common improvement opportunities in the actual diff
+          if grep -q "color:" full-diff.txt 2>/dev/null; then
+            cat >> suggestions.md << 'EOF'
+          #### 🎨 CSS Color Consistency
+          ```css
+          /* Consider using CSS custom properties */
+          :root {
+            --primary-color: #your-color;
+            --secondary-color: #your-color;
+          }
+          
+          /* Instead of hardcoded colors */
+          .element {
+            color: var(--primary-color);
+          }
+          ```
+          
+          EOF
+          fi
+          
+          if grep -q "<img" full-diff.txt 2>/dev/null; then
+            cat >> suggestions.md << 'EOF'
+          #### 🖼️ Image Accessibility
+          ```html
+          <!-- Add descriptive alt text and lazy loading -->
+          <img src="image.jpg" 
+               alt="Descriptive text about the image content" 
+               loading="lazy" 
+               width="800" 
+               height="600">
+          ```
+          
+          EOF
+          fi
+          
+          if grep -q "var " full-diff.txt 2>/dev/null; then
+            cat >> suggestions.md << 'EOF'
+          #### 🔧 Modern JavaScript
+          ```javascript
+          // Replace var with const/let
+          const unchangingValue = "value";
+          let changingValue = "initial";
+          
+          // Use arrow functions for cleaner syntax
+          const handleClick = (event) => {
+            // Handle click
+          };
+          ```
+          
+          EOF
+          fi
+          
+          if grep -q "\.innerHTML" full-diff.txt 2>/dev/null; then
+            cat >> suggestions.md << 'EOF'
+          #### � Security Improvement
+          ```javascript
+          // Safer DOM manipulation
+          const safeElement = document.createElement('div');
+          safeElement.textContent = userInput; // Prevents XSS
+          
+          // Or use DOMPurify for HTML content
+          element.innerHTML = DOMPurify.sanitize(htmlContent);
+          ```
+          
+          EOF
+          fi
+          
+          # Add general best practices
+          cat >> suggestions.md << 'EOF'
+          
+          #### 📋 Quick Wins
+          - Run `npm audit` or `bundle audit` to check for security vulnerabilities
+          - Consider adding/updating unit tests for new functionality
+          - Validate HTML with W3C validator for semantic correctness
+          - Test responsive design on different screen sizes
+          - Verify keyboard navigation for accessibility
+          
+          ---
+          *� These suggestions are based on your actual code changes. Review and apply what makes sense for your project.*
+          EOF
+          
+          echo "suggestions_ready=true" >> $GITHUB_OUTPUT
+      
+      - name: Generate Final Review
+        if: steps.code-analysis.outputs.code_analysis_complete == 'true'
+        id: final-review
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
           DIFF_LINES=$(wc -l < pr-diff.txt)
           FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | wc -l)
           
+          # Combine analysis and suggestions into final review
           cat > review-output.md << EOF
-          ## 🤖 Automated PR Review
+          ## 🤖 AI-Powered Code Review
           
           **Summary:** This PR contains ${FILES_CHANGED} file(s) with ${DIFF_LINES} lines of changes.
           
           ### Files Modified
           $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | sed 's/^/- /')
           
-          ### Analysis
-          - ✅ **Change Detection**: Successfully identified modifications
-          - 📊 **Scope**: $([ ${FILES_CHANGED} -lt 5 ] && echo "Small change" || echo "Medium/Large change")
-          - 🔍 **Review Recommended**: Manual review by maintainers suggested
-          
-          ### Automated Checks
-          - Configuration files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(yml|yaml|json|toml)$' | wc -l) modified
-          - Documentation: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(md|txt)$' | wc -l) modified  
-          - Code files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(js|ts|html|css|rb|py)$' | wc -l) modified
           EOF
           
-          # Add best practice suggestions based on file types
-          if [[ "${{ steps.file-analysis.outputs.has_css }}" == "true" || "${{ steps.file-analysis.outputs.has_html }}" == "true" || "${{ steps.file-analysis.outputs.has_js }}" == "true" || "${{ steps.file-analysis.outputs.has_jekyll }}" == "true" || "${{ steps.file-analysis.outputs.has_config }}" == "true" ]]; then
-            cat >> review-output.md << 'EOF'
-          
-          ### 🔍 Best Practice Suggestions
-          EOF
+          # Add detailed code analysis if available
+          if [ -f analysis-output.md ]; then
+            cat analysis-output.md >> review-output.md
+            echo "" >> review-output.md
           fi
           
-          # CSS suggestions
-          if [[ "${{ steps.file-analysis.outputs.has_css }}" == "true" ]]; then
-            cat >> review-output.md << 'EOF'
-          
-          #### 🎨 CSS/Styling Files
-          - **Performance**: Consider using `contain: layout style` for components to improve rendering performance
-          - **Modern CSS**: Use CSS custom properties (variables) for consistent theming  
-          - **Responsive**: Implement fluid typography with `clamp()` for better responsive design
-          - **Accessibility**: Ensure sufficient color contrast ratios (WCAG AA: 4.5:1 for normal text)
-          EOF
+          # Add actionable suggestions if available  
+          if [ -f suggestions.md ]; then
+            cat suggestions.md >> review-output.md
+            echo "" >> review-output.md
           fi
           
-          # HTML suggestions
-          if [[ "${{ steps.file-analysis.outputs.has_html }}" == "true" ]]; then
-            cat >> review-output.md << 'EOF'
-          
-          #### 🏗️ HTML Structure Files  
-          - **Accessibility**: Add `aria-label` attributes to interactive elements for screen readers
-          - **SEO**: Include proper `meta` tags (description, viewport, Open Graph)
-          - **Performance**: Use `loading="lazy"` for images below the fold
-          - **Semantic HTML**: Use appropriate semantic elements (`<main>`, `<section>`, `<article>`)
-          EOF
-          fi
-          
-          # JavaScript suggestions
-          if [[ "${{ steps.file-analysis.outputs.has_js }}" == "true" ]]; then
-            cat >> review-output.md << 'EOF'
-          
-          #### ⚡ JavaScript Files
-          - **Performance**: Use `const` and `let` instead of `var` for better scoping
-          - **Modern JS**: Consider using async/await for better promise handling
-          - **Accessibility**: Ensure keyboard navigation support for interactive elements
-          - **Security**: Validate and sanitize any user inputs to prevent XSS attacks
-          EOF
-          fi
-          
-          # Jekyll suggestions
-          if [[ "${{ steps.file-analysis.outputs.has_jekyll }}" == "true" ]]; then
-            cat >> review-output.md << 'EOF'
-          
-          #### 💎 Jekyll/Ruby Files
-          - **Performance**: Use `\{{ '/path' | relative_url \}}` for all internal links and assets
-          - **SEO**: Implement proper front matter with title, description, and meta tags  
-          - **Liquid Templates**: Use `\{% unless %\}` and `\{% if %\}` efficiently to avoid unnecessary processing
-          - **Security**: Never expose sensitive data in front matter or public repositories
-          EOF
-          fi
-          
-          # Configuration suggestions
-          if [[ "${{ steps.file-analysis.outputs.has_config }}" == "true" ]]; then
-            cat >> review-output.md << 'EOF'
-          
-          #### ⚙️ Configuration Files
-          - **Security**: Never commit secrets, API keys, or sensitive credentials
-          - **Documentation**: Add comments explaining complex configuration options
-          - **Validation**: Use schema validation where available (JSON Schema, etc.)
-          - **Maintenance**: Keep dependencies updated and remove unused configurations
-          EOF
-          fi
-          
-          # Add closing sections
+          # Add next steps
           cat >> review-output.md << 'EOF'
           
-          ### Next Steps
-          1. 👀 Review changes manually
-          2. 🧪 Test functionality locally  
-          3. ✅ Approve if changes look good
-          4. 🚀 Merge when ready
+          ### 🚀 Next Steps
+          1. 👀 Review the specific suggestions above
+          2. 🛠️ Apply relevant code improvements
+          3. 🧪 Test changes locally
+          4. ✅ Request human review when ready
           
           ---
           EOF
           
-          # Add timestamp with proper command substitution
-          echo "*Automated review with best practices generated at $(date)*" >> review-output.md
+          # Add timestamp
+          echo "*AI review generated at $(date)*" >> review-output.md
           
-          echo "review_created=true" >> $GITHUB_OUTPUT
+          echo "final_review_ready=true" >> $GITHUB_OUTPUT
       
       - name: Post Review Comment
-        if: steps.ai-review.outputs.review_created == 'true'
+        if: steps.final-review.outputs.final_review_ready == 'true'
         run: |
           gh pr comment ${{ github.event.pull_request.number }} --body-file review-output.md
         env:
           GH_TOKEN: ${{ github.token }}
       
       - name: Update PR with Labels  
-        if: steps.ai-review.outputs.review_created == 'true'
+        if: steps.final-review.outputs.final_review_ready == 'true'
         continue-on-error: true
         run: |
           # Try to add an automated-review label if it exists
-          gh pr edit ${{ github.event.pull_request.number }} --add-label "automated-review" 2>/dev/null || echo "Label 'automated-review' does not exist, skipping"
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "ai-reviewed" 2>/dev/null || echo "Label 'ai-reviewed' does not exist, skipping"
         env:
           GH_TOKEN: ${{ github.token }}
