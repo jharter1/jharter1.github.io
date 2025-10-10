@@ -174,8 +174,10 @@ jobs:
           4. 🚀 Merge when ready
           
           ---
-          *Automated review with best practices generated at $(date)*
           EOF
+          
+          # Add timestamp with proper command substitution
+          echo "*Automated review with best practices generated at $(date)*" >> review-output.md
           
           echo "review_created=true" >> $GITHUB_OUTPUT
       
