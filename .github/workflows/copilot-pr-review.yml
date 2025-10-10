@@ -26,7 +26,7 @@ jobs:
           PR_NUMBER="${{ github.event.pull_request.number }}"
           echo "Analyzing PR #${PR_NUMBER}"
           
-          # Fetch the PR diff using git (more reliable than gh pr diff)
+          # Fetch the PR head using simpler, more reliable approach
           git fetch origin pull/${PR_NUMBER}/head:pr-${PR_NUMBER}
           git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} > pr-diff.txt
           
@@ -50,7 +50,7 @@ jobs:
         run: |
           # Create a more comprehensive review based on file changes
           DIFF_LINES=$(wc -l < pr-diff.txt)
-          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...origin/pr-${PR_NUMBER} | wc -l)
+          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | wc -l)
           
           cat > review-output.md << EOF
           ## 🤖 Automated PR Review
@@ -58,7 +58,7 @@ jobs:
           **Summary:** This PR contains ${FILES_CHANGED} file(s) with ${DIFF_LINES} lines of changes.
           
           ### Files Modified
-          $(git diff --name-only origin/${{ github.base_ref }}...origin/pr-${PR_NUMBER} | sed 's/^/- /')
+          $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | sed 's/^/- /')
           
           ### Analysis
           - ✅ **Change Detection**: Successfully identified modifications
@@ -66,9 +66,9 @@ jobs:
           - 🔍 **Review Recommended**: Manual review by maintainers suggested
           
           ### Automated Checks
-          - Configuration files: $(git diff --name-only origin/${{ github.base_ref }}...origin/pr-${PR_NUMBER} | grep -E '\.(yml|yaml|json|toml)$' | wc -l) modified
-          - Documentation: $(git diff --name-only origin/${{ github.base_ref }}...origin/pr-${PR_NUMBER} | grep -E '\.(md|txt)$' | wc -l) modified  
-          - Code files: $(git diff --name-only origin/${{ github.base_ref }}...origin/pr-${PR_NUMBER} | grep -E '\.(js|ts|html|css|rb|py)$' | wc -l) modified
+          - Configuration files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(yml|yaml|json|toml)$' | wc -l) modified
+          - Documentation: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(md|txt)$' | wc -l) modified  
+          - Code files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(js|ts|html|css|rb|py)$' | wc -l) modified
           
           ### Next Steps
           1. 👀 Review changes manually
