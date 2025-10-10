@@ -8,3 +8,7 @@ _site/
 .jekyll-metadata
 Gemfile.lock
 vendor/
+
+# Ruby/rbenv
+.bundle/
+.ruby-gemset

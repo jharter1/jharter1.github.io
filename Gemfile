@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 gem "jekyll", "~> 4.4"
+gem "webrick", "~> 1.7"
 
 # GitHub Pages compatibility
 group :jekyll_plugins do
