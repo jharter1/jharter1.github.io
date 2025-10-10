@@ -186,9 +186,13 @@ jobs:
           EOF
           fi
           
+          # Track if we have any auto-fixable issues
+          AUTO_FIXES_AVAILABLE=false
+          
           if grep -q "var " full-diff.txt 2>/dev/null; then
+            AUTO_FIXES_AVAILABLE=true
             cat >> suggestions.md << 'EOF'
-          #### 🔧 Modern JavaScript
+          #### 🔧 Modern JavaScript (Auto-fixable ✨)
           ```javascript
           // Replace var with const/let
           const unchangingValue = "value";
@@ -199,6 +203,7 @@ jobs:
             // Handle click
           };
           ```
+          🤖 **Auto-fix available**: Click the "Apply Auto-fixes" button below to automatically update var declarations.
           
           EOF
           fi
@@ -233,6 +238,69 @@ jobs:
           EOF
           
           echo "suggestions_ready=true" >> $GITHUB_OUTPUT
+          echo "auto_fixes_available=$AUTO_FIXES_AVAILABLE" >> $GITHUB_OUTPUT
+      
+      - name: Prepare Auto-fix Suggestions
+        if: steps.suggestions.outputs.auto_fixes_available == 'true'
+        id: auto-fixes
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          FIXES_PREPARED=false
+          
+          # Prepare preview of automatic fixes without applying them
+          echo "## 🤖 Proposed Auto-fixes" > auto-fix-preview.md
+          echo "" >> auto-fix-preview.md
+          echo "The following automatic fixes are available. **Review carefully before applying:**" >> auto-fix-preview.md
+          echo "" >> auto-fix-preview.md
+          
+          while IFS= read -r file; do
+            if [[ "$file" == *.js ]] && [[ -f "$file" ]]; then
+              echo "🔧 Analyzing $file for auto-fixes..."
+              
+              # Check for var usage and show what would change
+              if grep -q "var " "$file"; then
+                echo "### � \`$file\`" >> auto-fix-preview.md
+                echo "" >> auto-fix-preview.md
+                echo "**Proposed changes:**" >> auto-fix-preview.md
+                echo '```javascript' >> auto-fix-preview.md
+                
+                # Show before/after for var declarations
+                grep -n "var " "$file" | head -5 | while read -r line; do
+                  line_num=$(echo "$line" | cut -d: -f1)
+                  original=$(echo "$line" | cut -d: -f2-)
+                  # Simple preview of what would change
+                  fixed=$(echo "$original" | perl -pe 's/var\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(["\047][^"\047]*["\047]|[0-9]+|true|false|null)\s*;/const $1 = $2;/g; s/for\s*\(\s*var\s+/for (let /g;')
+                  echo "// Line $line_num:" >> auto-fix-preview.md
+                  echo "- $original" >> auto-fix-preview.md
+                  echo "+ $fixed" >> auto-fix-preview.md
+                  echo "" >> auto-fix-preview.md
+                done
+                
+                echo '```' >> auto-fix-preview.md
+                echo "" >> auto-fix-preview.md
+                FIXES_PREPARED=true
+              fi
+            fi
+          done < changed-files.txt
+          
+          if [[ "$FIXES_PREPARED" == "true" ]]; then
+            echo "" >> auto-fix-preview.md
+            echo "### ⚠️ Important Notes" >> auto-fix-preview.md
+            echo "- These are conservative automatic fixes" >> auto-fix-preview.md
+            echo "- Always test your code after applying auto-fixes" >> auto-fix-preview.md
+            echo "- Original code will be preserved in git history" >> auto-fix-preview.md
+            echo "" >> auto-fix-preview.md
+            echo "### 🚀 How to Apply" >> auto-fix-preview.md
+            echo "To apply these fixes:" >> auto-fix-preview.md
+            echo "1. **Comment \`@github-actions apply-auto-fixes\`** on this PR" >> auto-fix-preview.md
+            echo "2. Or manually apply the changes above to your local branch" >> auto-fix-preview.md
+            echo "3. Or run the \"Apply Auto-fixes\" workflow manually from the Actions tab" >> auto-fix-preview.md
+            
+            echo "auto_fixes_prepared=true" >> $GITHUB_OUTPUT
+          else
+            echo "auto_fixes_prepared=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  No auto-fixable issues found in this PR." > auto-fix-preview.md
+          fi
       
       - name: Generate Final Review
         if: steps.code-analysis.outputs.code_analysis_complete == 'true'
@@ -262,6 +330,13 @@ jobs:
           # Add actionable suggestions if available  
           if [ -f suggestions.md ]; then
             cat suggestions.md >> review-output.md
+            echo "" >> review-output.md
+          fi
+          
+          # Add auto-fix preview if available
+          if [ -f auto-fix-preview.md ]; then
+            echo "" >> review-output.md
+            cat auto-fix-preview.md >> review-output.md
             echo "" >> review-output.md
           fi
           
