@@ -203,7 +203,7 @@ jobs:
             // Handle click
           };
           ```
-          🤖 **Auto-fix available**: Click the "Apply Auto-fixes" button below to automatically update var declarations.
+          🤖 **Auto-fix available**: Comment `@github-actions apply-auto-fixes` to automatically apply these changes.
           
           EOF
           fi
@@ -292,14 +292,18 @@ jobs:
             echo "" >> auto-fix-preview.md
             echo "### 🚀 How to Apply" >> auto-fix-preview.md
             echo "To apply these fixes:" >> auto-fix-preview.md
-            echo "1. **Comment \`@github-actions apply-auto-fixes\`** on this PR" >> auto-fix-preview.md
-            echo "2. Or manually apply the changes above to your local branch" >> auto-fix-preview.md
-            echo "3. Or run the \"Apply Auto-fixes\" workflow manually from the Actions tab" >> auto-fix-preview.md
+            echo "1. **Comment**: \`@github-actions apply-auto-fixes\` on this PR" >> auto-fix-preview.md
+            echo "2. **Manual**: Copy the changes above to your local branch" >> auto-fix-preview.md
+            echo "3. **Workflow**: Run the \"Apply Auto-fixes\" workflow manually from the Actions tab" >> auto-fix-preview.md
             
             echo "auto_fixes_prepared=true" >> $GITHUB_OUTPUT
           else
             echo "auto_fixes_prepared=false" >> $GITHUB_OUTPUT
-            echo "ℹ️  No auto-fixable issues found in this PR." > auto-fix-preview.md
+            echo "## 🤖 Auto-fix Analysis" > auto-fix-preview.md
+            echo "" >> auto-fix-preview.md
+            echo "ℹ️  No auto-fixable issues found in this PR's changed files." >> auto-fix-preview.md
+            echo "" >> auto-fix-preview.md
+            echo "The code follows modern JavaScript practices or doesn't contain patterns we can safely auto-fix." >> auto-fix-preview.md
           fi
       
       - name: Generate Final Review
@@ -334,7 +338,7 @@ jobs:
           fi
           
           # Add auto-fix preview if available
-          if [ -f auto-fix-preview.md ]; then
+          if [ -f auto-fix-preview.md ] && [[ "${{ steps.suggestions.outputs.auto_fixes_available }}" == "true" ]]; then
             echo "" >> review-output.md
             cat auto-fix-preview.md >> review-output.md
             echo "" >> review-output.md
