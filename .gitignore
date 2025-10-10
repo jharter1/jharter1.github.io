@@ -12,3 +12,8 @@ vendor/
 # Ruby/rbenv
 .bundle/
 .ruby-gemset
+
+# PR Review workflow artifacts
+pr-diff.txt
+analyzer-output.md
+review-output.md

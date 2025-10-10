@@ -3,6 +3,18 @@ name: Copilot PR Review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      enable_code_analysis:
+        description: 'Enable code quality analysis'
+        required: false
+        default: 'true'
+        type: boolean
+      max_suggestions_per_file:
+        description: 'Maximum suggestions per file'
+        required: false
+        default: '5'
+        type: string
 
 permissions:
   contents: read
@@ -44,6 +56,24 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
       
+      - name: Run Code Quality Analyzer
+        if: steps.pr-diff.outputs.has_changes == 'true' && (github.event.inputs.enable_code_analysis != 'false')
+        id: code-analysis
+        run: |
+          # Make analyzer executable and run it
+          chmod +x .github/scripts/code-analyzer.sh
+          
+          # Set max suggestions (use input if available, otherwise default to 5)
+          MAX_SUGGESTIONS="${{ github.event.inputs.max_suggestions_per_file || '5' }}"
+          
+          # Update MAX_SUGGESTIONS_PER_FILE in the script
+          sed -i "s/^MAX_SUGGESTIONS_PER_FILE=.*/MAX_SUGGESTIONS_PER_FILE=$MAX_SUGGESTIONS/" .github/scripts/code-analyzer.sh
+          
+          # Run the analyzer
+          .github/scripts/code-analyzer.sh pr-diff.txt analyzer-output.md
+          
+          echo "analysis_complete=true" >> $GITHUB_OUTPUT
+      
       - name: Generate AI Review Summary
         if: steps.pr-diff.outputs.has_changes == 'true'
         id: ai-review
@@ -69,6 +99,15 @@ jobs:
           - Configuration files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(yml|yaml|json|toml)$' | wc -l) modified
           - Documentation: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(md|txt)$' | wc -l) modified  
           - Code files: $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | grep -E '\.(js|ts|html|css|rb|py)$' | wc -l) modified
+          
+          EOF
+          
+          # Append code quality suggestions if analyzer ran
+          if [ -f analyzer-output.md ]; then
+            cat analyzer-output.md >> review-output.md
+          fi
+          
+          cat >> review-output.md << 'EOF'
           
           ### Next Steps
           1. 👀 Review changes manually
