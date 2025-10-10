@@ -145,9 +145,9 @@ jobs:
             cat >> review-output.md << 'EOF'
           
           #### 💎 Jekyll/Ruby Files
-          - **Performance**: Use `{{ '/path' | relative_url }}` for all internal links and assets
-          - **SEO**: Implement proper front matter with title, description, and meta tags
-          - **Liquid Templates**: Use `{% unless %}` and `{% if %}` efficiently to avoid unnecessary processing
+          - **Performance**: Use `\{{ '/path' | relative_url \}}` for all internal links and assets
+          - **SEO**: Implement proper front matter with title, description, and meta tags  
+          - **Liquid Templates**: Use `\{% unless %\}` and `\{% if %\}` efficiently to avoid unnecessary processing
           - **Security**: Never expose sensitive data in front matter or public repositories
           EOF
           fi
