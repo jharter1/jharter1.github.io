@@ -203,7 +203,7 @@ jobs:
             // Handle click
           };
           ```
-          🤖 **Auto-fix available**: Comment `@github-actions apply-auto-fixes` to automatically apply these changes.
+          🤖 **Auto-fix available**: Comment `@copilot apply-auto-fixes` to automatically apply these changes.
           
           EOF
           fi
@@ -292,9 +292,9 @@ jobs:
             echo "" >> auto-fix-preview.md
             echo "### 🚀 How to Apply" >> auto-fix-preview.md
             echo "To apply these fixes:" >> auto-fix-preview.md
-            echo "1. **Comment**: \`@github-actions apply-auto-fixes\` on this PR" >> auto-fix-preview.md
-            echo "2. **Manual**: Copy the changes above to your local branch" >> auto-fix-preview.md
-            echo "3. **Workflow**: Run the \"Apply Auto-fixes\" workflow manually from the Actions tab" >> auto-fix-preview.md
+            echo "1. **Comment**: \`@copilot apply-auto-fixes\` on this PR" >> auto-fix-preview.md
+            echo "2. **Actions Tab**: Go to Actions → \"Apply Auto-fixes\" → Run workflow (enter PR number)" >> auto-fix-preview.md
+            echo "3. **Manual**: Copy the changes above to your local branch" >> auto-fix-preview.md
             
             echo "auto_fixes_prepared=true" >> $GITHUB_OUTPUT
           else
