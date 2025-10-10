@@ -65,63 +65,67 @@ jobs:
               echo "### 📄 \`$file\`" >> analysis-output.md
               echo "" >> analysis-output.md
               
+              # Create a safe filename for the diff (replace / with -)
+              safe_filename=$(echo "$file" | tr '/' '-' | tr '.' '_')
+              diff_file="diff-${safe_filename}.txt"
+              
               # Get the actual changes for this file
-              git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} -- "$file" > "diff-$file.txt"
+              git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} -- "$file" > "$diff_file"
               
               # Analyze based on file type and actual content
               case "$file" in
                 *.css|*.scss|*.sass)
                   echo "**CSS Analysis:**" >> analysis-output.md
                   # Check for specific CSS patterns in the diff
-                  if grep -q "color:" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "color:" "$diff_file" 2>/dev/null; then
                     echo "- 🎨 Color changes detected - consider using CSS custom properties for consistency" >> analysis-output.md
                   fi
-                  if grep -q "px\|em\|rem" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "px\|em\|rem" "$diff_file" 2>/dev/null; then
                     echo "- 📱 Unit usage found - consider \`clamp()\` for responsive values" >> analysis-output.md
                   fi
-                  if grep -q "float\|position: absolute" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "float\|position: absolute" "$diff_file" 2>/dev/null; then
                     echo "- 🏗️ Layout properties detected - consider modern CSS Grid/Flexbox" >> analysis-output.md
                   fi
                   ;;
                 *.html|*.htm)
                   echo "**HTML Analysis:**" >> analysis-output.md
-                  if grep -q "<img" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "<img" "$diff_file" 2>/dev/null; then
                     echo "- 🖼️ Images detected - add \`alt\` attributes and consider \`loading=\"lazy\"\`" >> analysis-output.md
                   fi
-                  if grep -q "<a " "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "<a " "$diff_file" 2>/dev/null; then
                     echo "- 🔗 Links detected - ensure proper \`aria-label\` for accessibility" >> analysis-output.md
                   fi
-                  if grep -q "<button\|onclick" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "<button\|onclick" "$diff_file" 2>/dev/null; then
                     echo "- 🎯 Interactive elements - ensure keyboard navigation support" >> analysis-output.md
                   fi
                   ;;
                 *.js|*.ts)
                   echo "**JavaScript Analysis:**" >> analysis-output.md
-                  if grep -q "var " "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "var " "$diff_file" 2>/dev/null; then
                     echo "- 🔧 \`var\` usage found - consider \`const\`/\`let\` for better scoping" >> analysis-output.md
                   fi
-                  if grep -q "\.innerHTML" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "\.innerHTML" "$diff_file" 2>/dev/null; then
                     echo "- 🔒 \`innerHTML\` usage - validate input to prevent XSS attacks" >> analysis-output.md
                   fi
-                  if grep -q "addEventListener" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "addEventListener" "$diff_file" 2>/dev/null; then
                     echo "- ♿ Event listeners added - ensure keyboard accessibility" >> analysis-output.md
                   fi
                   ;;
                 *.md)
                   echo "**Markdown Analysis:**" >> analysis-output.md
-                  if grep -q "^#" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "^#" "$diff_file" 2>/dev/null; then
                     echo "- 📚 Heading structure - ensure proper hierarchy (h1 → h2 → h3)" >> analysis-output.md
                   fi
-                  if grep -q "!\[.*\](" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "!\[.*\](" "$diff_file" 2>/dev/null; then
                     echo "- 🖼️ Images added - ensure descriptive alt text for accessibility" >> analysis-output.md
                   fi
                   ;;
                 *.yml|*.yaml|_config.yml)
                   echo "**Configuration Analysis:**" >> analysis-output.md
-                  if grep -q "url:\|baseurl:" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "url:\|baseurl:" "$diff_file" 2>/dev/null; then
                     echo "- 🌐 URL configuration changed - verify for production deployment" >> analysis-output.md
                   fi
-                  if grep -q "plugins:\|gems:" "diff-$file.txt" 2>/dev/null; then
+                  if grep -q "plugins:\|gems:" "$diff_file" 2>/dev/null; then
                     echo "- 🔌 Plugin configuration - ensure compatibility with GitHub Pages" >> analysis-output.md
                   fi
                   ;;
