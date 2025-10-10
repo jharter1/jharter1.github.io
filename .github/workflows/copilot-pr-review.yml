@@ -27,8 +27,8 @@ jobs:
           echo "Analyzing PR #${PR_NUMBER}"
           
           # Fetch the PR diff using git (more reliable than gh pr diff)
-          git fetch origin +refs/pull/${PR_NUMBER}/head:refs/remotes/origin/pr-${PR_NUMBER}
-          git diff origin/${{ github.base_ref }}...origin/pr-${PR_NUMBER} > pr-diff.txt
+          git fetch origin pull/${PR_NUMBER}/head:pr-${PR_NUMBER}
+          git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} > pr-diff.txt
           
           # Debug: Show diff file size
           ls -la pr-diff.txt
