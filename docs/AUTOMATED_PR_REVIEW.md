@@ -2,7 +2,25 @@
 
 ## Overview
 
-This repository uses GitHub Actions to provide automated pull request reviews. The workflow is designed to assist with code quality checks and provide initial feedback on submitted PRs.
+This repository uses GitHub Actions to provide automated pull request reviews with **intelligent code quality suggestions**. The workflow analyzes different file types and provides specific, actionable best-practice recommendations based on modern web development standards.
+
+## Key Features
+
+✨ **File-Type Specific Analysis**
+- JavaScript: Performance tips, modern practices, memory management
+- HTML: Accessibility checks, semantic markup, SEO recommendations
+- CSS: Responsive design, modern layouts, accessibility
+- Ruby/Jekyll: Template best practices, security considerations
+- Configuration files: Security checks, version pinning
+
+🎯 **Severity Levels**
+- 🚨 **Error**: Critical issues requiring immediate attention
+- ⚠️ **Warning**: Important improvements recommended
+- 💡 **Info**: Helpful suggestions for best practices
+
+📚 **Documentation Links**
+- Each suggestion includes links to relevant documentation
+- Resources from MDN, Web.dev, WCAG, and official tool docs
 
 ## How It Works
 
@@ -17,28 +35,64 @@ The automated review workflow (`.github/workflows/copilot-pr-review.yml`) is tri
 
 1. **Checkout Code**: The workflow checks out the repository code
 2. **Fetch PR Diff**: Retrieves the changes made in the pull request
-3. **Generate Review**: Creates an automated review with:
+3. **Run Code Quality Analyzer**: Analyzes changed files for best practices
+   - JavaScript files: Checks for console.log, var usage, equality operators, event handlers
+   - HTML files: Validates alt attributes, semantic HTML, accessibility features
+   - CSS files: Reviews for modern practices, responsive design, accessibility
+   - Ruby/Jekyll files: Checks Liquid templates, URL handling, security
+   - YAML/JSON files: Security checks, syntax validation, version pinning
+4. **Generate Review**: Creates an automated review with:
    - Summary of changes
-   - Potential issues or concerns
-   - Improvement suggestions
-   - Positive observations
-4. **Post Comment**: Adds the review as a comment on the PR
-5. **Apply Labels**: Optionally adds an `automated-review` label to the PR
+   - File modification statistics
+   - Specific code quality suggestions with severity levels
+   - Documentation links for improvements
+5. **Post Comment**: Adds the review as a comment on the PR
+6. **Apply Labels**: Optionally adds an `automated-review` label to the PR
 
 ### What Gets Reviewed
 
 The automated review analyzes:
-- Code changes in the PR diff
-- File modifications, additions, and deletions
-- Overall change patterns
+- **Code changes in the PR diff** - Only new or modified lines are analyzed
+- **File-specific patterns** - Each file type has tailored checks
+- **Security concerns** - Hardcoded secrets, XSS vulnerabilities, permission issues
+- **Accessibility** - ARIA labels, alt text, motion preferences, semantic HTML
+- **Performance** - Lazy loading, DOM queries, CSS optimizations
+- **Modern practices** - ES6+ features, Flexbox/Grid, relative units
 
 ### Review Content
 
 Each automated review includes:
-- 📝 **Summary**: Brief overview of detected changes
-- ⚠️ **Recommendations**: General best practices checklist
+- 📝 **Summary**: Brief overview with file count and change statistics
+- 📊 **Analysis**: Change scope and detection status
+- 🔍 **Code Quality Suggestions**: File-specific best-practice recommendations
+  - Severity levels (error, warning, info)
+  - Category tags (Accessibility, Security, Performance, etc.)
+  - Actionable messages explaining the issue
+  - Links to relevant documentation
+- ⚠️ **Automated Checks**: Breakdown of file types modified
 - 🎯 **Next Steps**: Guidance for manual review process
-- 📚 **Resources**: Links to additional review tools
+
+### Example Output
+
+```markdown
+### 🔍 Code Quality Suggestions
+
+#### 📜 assets/js/script.js
+- 💡 **info** | **Development Code**: Consider removing console.log statements before production
+  - 📚 [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/Console/log)
+- ⚠️ **warning** | **Type Safety**: Use strict equality (===) instead of loose equality (==)
+  - 📚 [Learn more](https://developer.mozilla.org/...)
+
+#### 🌐 pages/about.html
+- 🚨 **error** | **Accessibility**: Images should have alt attributes for screen readers
+  - 📚 [Learn more](https://www.w3.org/WAI/tutorials/images/)
+- 💡 **info** | **Performance**: Consider adding loading='lazy' to images
+  - 📚 [Learn more](https://web.dev/browser-level-image-lazy-loading/)
+
+#### 🎨 assets/css/styles.css
+- ⚠️ **warning** | **Accessibility**: Add @media (prefers-reduced-motion) to respect user motion preferences
+  - 📚 [Learn more](https://developer.mozilla.org/...)
+```
 
 ## Permissions
 
@@ -49,26 +103,37 @@ The workflow requires the following permissions:
 
 ## Current Limitations
 
-### GitHub Copilot API Availability
-
-As of the current implementation, GitHub does not provide a direct API for Copilot to perform automated code reviews via GitHub Actions. The current workflow:
+### Scope of Analysis
 
 ✅ **What It Does:**
-- Automatically comments on PRs with review guidelines
-- Provides a consistent review checklist
-- Reminds contributors of best practices
-- Helps maintain review standards
+- Analyzes code changes with pattern-based checks
+- Provides actionable, specific suggestions
+- Covers JavaScript, HTML, CSS, Ruby/Jekyll, YAML, JSON
+- Detects common anti-patterns and security issues
+- Maintains consistency across PRs
+- Executes quickly (< 30 seconds)
 
-❌ **What It Doesn't Do (Yet):**
-- Deep AI-powered code analysis via Copilot API
-- Specific bug detection using Copilot intelligence
-- Context-aware refactoring suggestions from Copilot
+⚠️ **Current Limitations:**
+- Pattern-based (not AI-powered semantic analysis)
+- Cannot understand complex code logic or context
+- May suggest improvements for intentional patterns
+- Limited to grep/regex pattern matching
+- Cannot detect all edge cases
+
+### Best Practices for Using Suggestions
+
+1. **Review all suggestions** - Automated checks may flag intentional code
+2. **Use judgment** - Not all suggestions apply to every situation
+3. **Learn from patterns** - Suggestions help identify recurring issues
+4. **Prioritize by severity** - Address errors first, then warnings, then info
+5. **Follow documentation links** - Understand the reasoning behind suggestions
 
 ### Alternative Approaches
 
-While waiting for full Copilot API integration, consider these alternatives:
+For additional code quality checks, consider these complementary tools:
 
 #### 1. **GitHub Code Scanning (CodeQL)**
+Deep semantic analysis for security vulnerabilities:
 ```yaml
 # Add to your workflow
 - name: Initialize CodeQL
@@ -81,22 +146,24 @@ While waiting for full Copilot API integration, consider these alternatives:
 ```
 
 #### 2. **GitHub Copilot in IDE**
-- Use GitHub Copilot directly in VS Code, Visual Studio, or other supported IDEs
-- Get real-time suggestions while reviewing code
-- More context-aware than automated workflows
+- Use GitHub Copilot directly in VS Code or other supported IDEs
+- Get real-time, context-aware suggestions while reviewing
+- More intelligent than pattern-based automation
 
 #### 3. **Linters and Static Analysis**
-For this Jekyll site, you could add:
+For this Jekyll site, consider adding:
 - **HTMLProofer**: Validate HTML and check for broken links
-- **Stylelint**: Enforce CSS coding standards
+- **Stylelint**: Enforce CSS coding standards  
 - **ESLint**: Check JavaScript code quality
 
-Example addition to workflow:
+Example workflow addition:
 ```yaml
-- name: Setup Ruby
-  uses: ruby/setup-ruby@v1
-  with:
-    ruby-version: '3.2'
+- name: Run Linters
+  run: |
+    npm install -g stylelint eslint
+    stylelint "assets/css/**/*.css"
+    eslint "assets/js/**/*.js"
+```
 
 - name: Install HTMLProofer
   run: gem install html-proofer
@@ -115,6 +182,37 @@ The most effective approach currently:
 3. Gets AI-powered suggestions for improvements
 4. Provides informed feedback on the PR
 
+## Configuration
+
+### Workflow Parameters
+
+The PR review workflow can be customized with the following parameters:
+
+#### Manual Trigger Options (workflow_dispatch)
+
+```yaml
+# Trigger manually from Actions tab
+enable_code_analysis: true/false  # Enable or disable code quality analysis
+max_suggestions_per_file: 5       # Maximum number of suggestions per file (1-10)
+```
+
+### Automatic Behavior
+
+By default, the workflow:
+- ✅ Runs automatically on PR open, sync, and reopen events
+- ✅ Analyzes all supported file types in the diff
+- ✅ Provides up to 5 suggestions per file
+- ✅ Includes all severity levels (error, warning, info)
+- ✅ Runs in under 30 seconds for typical PRs
+
+### Performance Optimization
+
+The analyzer is optimized for speed:
+- Only analyzes changed lines (not entire files)
+- Limits suggestions per file to avoid overwhelming output
+- Skips binary files and build artifacts
+- Uses efficient bash/grep patterns for pattern matching
+
 ## Customization
 
 ### Modifying Review Templates
@@ -130,14 +228,54 @@ Edit the review template in `.github/workflows/copilot-pr-review.yml`:
     EOF
 ```
 
+### Adjusting Code Analysis Rules
+
+Edit the analyzer script at `.github/scripts/code-analyzer.sh`:
+
+```bash
+# Modify existing checks
+if echo "$content" | grep -q "pattern"; then
+    add_suggestion "$file" "severity" "Category" "Message" "docs_link"
+fi
+
+# Add new checks for your needs
+if echo "$content" | grep -q "your-pattern"; then
+    add_suggestion "$file" "warning" "Custom Check" "Your message" "https://..."
+fi
+
+# Adjust max suggestions per file
+MAX_SUGGESTIONS_PER_FILE=10  # Change from default 5
+```
+
+### File Type Coverage
+
+To add support for new file types, extend the `analyze_file()` function:
+
+```bash
+case "$extension" in
+    js)
+        analyze_javascript "$file" "$content"
+        ;;
+    # Add your new file type
+    ts|tsx)
+        analyze_typescript "$file" "$content"
+        ;;
+esac
+```
+
+Then create the corresponding analyzer function following the existing patterns.
+
 ### Adding Repository-Specific Checks
 
-For this portfolio site, you might want to add checks for:
-- Jekyll build validation
-- Asset optimization
-- Accessibility compliance
-- Responsive design
-- Performance metrics
+For this portfolio site, you might want to add custom checks:
+
+```bash
+# In code-analyzer.sh, add to analyze_html():
+# Check for portfolio-specific requirements
+if echo "$content" | grep -qE "<a.*github\.com" && ! echo "$content" | grep -qE "target=\"_blank\""; then
+    add_suggestion "$file" "info" "External Links" "Open GitHub links in new tabs with target='_blank'" ""
+fi
+```
 
 ### Customizing Triggers
 
