@@ -71,6 +71,15 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 
 ## Common Tasks
 
+### Automated PR Reviews
+This repository includes an automated PR review workflow that runs on all pull requests:
+- **Workflow File**: `.github/workflows/copilot-pr-review.yml`
+- **Documentation**: See `docs/AUTOMATED_PR_REVIEW.md` for detailed information
+- **Features**: Automatic review comments, best practices checklist, recommendations
+- **Triggers**: Runs on PR open, synchronize, and reopen events
+
+For more details on customizing or maintaining the automated review system, refer to the dedicated documentation.
+
 ### Adding New Pages
 1. Create HTML file in `pages/` directory with Jekyll front matter:
    ```yaml
@@ -201,6 +210,7 @@ bundle exec jekyll serve
 - ✅ Animation timing fixes (Issue #13)
 - ✅ Code quality improvements (Issues #25, #26)
 - ✅ Automated branch cleanup workflow
+- ✅ Automated PR review workflow with GitHub Copilot integration
 
 ## Working with This Project
 
