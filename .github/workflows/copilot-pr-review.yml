@@ -52,7 +52,7 @@ jobs:
           DIFF_LINES=$(wc -l < pr-diff.txt)
           FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | wc -l)
           
-          cat > review-output.md << EOF
+          cat > review-output.md << 'EOF'
           ## 🤖 Automated PR Review
           
           **Summary:** This PR contains ${FILES_CHANGED} file(s) with ${DIFF_LINES} lines of changes.
