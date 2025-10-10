@@ -224,6 +224,7 @@ If you have suggestions for improving the automated review process:
 
 ## Resources
 
+- [Workflow Technical Details](COPILOT_REVIEW_WORKFLOW.md) - Detailed technical documentation
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
 - [GitHub CLI Manual](https://cli.github.com/manual/)
