@@ -4,7 +4,7 @@ description: DevOps and Linux Engineer portfolio showcasing professional experie
 author: Jack Harter
 email: jack.harter.8@gmail.com
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://hartr.net" # the base hostname & protocol for your site
+url: "https://j.hartr.net" # the base hostname & protocol for your site
 
 # Build settings
 markdown: kramdown
@@ -34,10 +34,14 @@ plugins:
 navigation:
   - title: Home
     url: /
-  - title: About the Author
+  - title: About
     url: /pages/about/
   - title: Projects
     url: /pages/projects/
+  - title: Uses
+    url: /pages/uses/
+  - title: Resume
+    url: /pages/resume/
   - title: Contact
     url: /pages/contact/
 

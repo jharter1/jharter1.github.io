@@ -397,6 +397,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     setTimeout(setupScrollAnimations, 100);
 
+    // ===== Dynamic Job Duration =====
+    document.querySelectorAll('.job-duration').forEach(el => {
+        const [year, month] = el.dataset.start.split('-').map(Number);
+        const now = new Date();
+        let years = now.getFullYear() - year;
+        let months = now.getMonth() + 1 - month;
+        if (months < 0) { years--; months += 12; }
+        const parts = [];
+        if (years > 0) parts.push(`${years} yr${years !== 1 ? 's' : ''}`);
+        if (months > 0) parts.push(`${months} mo${months !== 1 ? 's' : ''}`);
+        el.textContent = parts.join(' ') || 'less than a month';
+    });
+
     // ===== Timeline Expand/Collapse =====
     const timelineHeaders = document.querySelectorAll('.timeline-header');
 
