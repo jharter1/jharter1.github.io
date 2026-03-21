@@ -1,0 +1,141 @@
+name: Apply Auto-fixes
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to apply auto-fixes to'
+        required: true
+        type: string
+  issue_comment:
+    types: [created]
+
+jobs:
+  apply-fixes:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event_name == 'issue_comment' && 
+       github.event.issue.pull_request &&
+       contains(github.event.comment.body, '@github-actions apply-auto-fixes'))
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Get PR Information
+        id: pr-info
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            PR_NUMBER="${{ github.event.inputs.pr_number }}"
+          else
+            PR_NUMBER="${{ github.event.issue.number }}"
+          fi
+          
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          
+          # Get PR details
+          gh pr view $PR_NUMBER --json headRefName,headRepository > pr-details.json
+          HEAD_REF=$(jq -r '.headRefName' pr-details.json)
+          echo "head_ref=$HEAD_REF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+      
+      - name: Verify Permission
+        run: |
+          # Check if the user has permission to apply auto-fixes
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            COMMENTER="${{ github.event.comment.user.login }}"
+            # Check if commenter is repo owner or collaborator
+            if ! gh api repos/${{ github.repository }}/collaborators/$COMMENTER --silent; then
+              echo "❌ User $COMMENTER does not have permission to apply auto-fixes"
+              exit 1
+            fi
+            echo "✅ User $COMMENTER has permission to apply auto-fixes"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+      
+      - name: Checkout PR Branch
+        run: |
+          git fetch origin ${{ steps.pr-info.outputs.head_ref }}
+          git checkout ${{ steps.pr-info.outputs.head_ref }}
+      
+      - name: Apply Auto-fixes
+        id: apply-fixes
+        run: |
+          PR_NUMBER="${{ steps.pr-info.outputs.pr_number }}"
+          FIXES_APPLIED=false
+          
+          # Get list of changed files in the PR
+          git diff --name-only origin/${{ github.base_ref }}...${{ steps.pr-info.outputs.head_ref }} > changed-files.txt
+          
+          echo "🔧 Applying automatic fixes..."
+          
+          # Apply fixes to JavaScript files
+          while IFS= read -r file; do
+            if [[ "$file" == *.js ]] && [[ -f "$file" ]]; then
+              echo "📁 Checking $file..."
+              
+              if grep -q "var " "$file"; then
+                echo "  🔧 Applying fixes to $file"
+                
+                # Create backup
+                cp "$file" "$file.backup"
+                
+                # Apply conservative var → const/let fixes
+                perl -i -pe '
+                  # Replace var declarations that are clearly constants
+                  s/var\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(["\047][^"\047]*["\047]|[0-9]+|true|false|null)\s*;/const $1 = $2;/g;
+                  # Replace var in for loops with let
+                  s/for\s*\(\s*var\s+/for (let /g;
+                ' "$file"
+                
+                # Check if changes were made
+                if ! cmp -s "$file" "$file.backup"; then
+                  echo "  ✅ Applied fixes to $file"
+                  FIXES_APPLIED=true
+                else
+                  echo "  ℹ️  No applicable fixes found in $file"
+                  mv "$file.backup" "$file"
+                fi
+                
+                rm -f "$file.backup"
+              fi
+            fi
+          done < changed-files.txt
+          
+          echo "fixes_applied=$FIXES_APPLIED" >> $GITHUB_OUTPUT
+      
+      - name: Commit and Push Changes
+        if: steps.apply-fixes.outputs.fixes_applied == 'true'
+        run: |
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Show what changed
+          echo "📋 Files modified:"
+          git diff --name-only
+          
+          # Add and commit changes
+          git add -A
+          git commit -m "🤖 Auto-fix: Modernize JavaScript declarations (Applied by: ${{ github.actor }})"
+          
+          # Push changes
+          git push origin ${{ steps.pr-info.outputs.head_ref }}
+      
+      - name: Report Results
+        run: |
+          PR_NUMBER="${{ steps.pr-info.outputs.pr_number }}"
+          
+          if [[ "${{ steps.apply-fixes.outputs.fixes_applied }}" == "true" ]]; then
+            gh pr comment $PR_NUMBER --body "✅ Auto-fixes applied successfully! Replaced var declarations with const/let. Please review and test the changes."
+          else
+            gh pr comment $PR_NUMBER --body "ℹ️ No auto-fixable issues found in this PR. Manual review recommended."
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}

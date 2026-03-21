@@ -1,4 +1,5 @@
 .DS_Store
+docs/screenshots/
 
 # Environment variables and secrets
 .env
@@ -9,3 +10,15 @@
 
 # MCP server logs
 *.log
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+vendor/
+
+# Ruby/rbenv
+.bundle/
+.ruby-gemset

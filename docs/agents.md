@@ -3,39 +3,54 @@
 ## Project Overview
 This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website hosted on GitHub Pages. The site showcases Jack's professional experience, skills, and projects in DevOps, Linux engineering, and open-source technologies.
 
+**Note**: This site has been migrated to use Jekyll static site generator. See `docs/JEKYLL_MIGRATION.md` for details.
+
 ## Project Structure
 ```
 /
+├── _layouts/            # Jekyll page layouts
+│   ├── default.html     # Base layout with header/footer
+│   └── home.html        # Homepage layout
+├── _includes/           # Reusable components
+│   ├── header.html      # Site header with navigation
+│   ├── footer.html      # Site footer
+│   └── hero.html        # Hero section with typewriter
 ├── assets/              # Static resources
 │   ├── css/            # Stylesheets
 │   ├── js/             # JavaScript files
 │   └── images/         # Images, icons, favicon
-├── pages/              # HTML pages (except root-required)
+├── pages/              # Content pages
 ├── docs/               # Documentation
 ├── .github/workflows/  # GitHub Actions
-├── index.html          # Homepage (GitHub Pages root)
-├── 404.html            # Custom error page (GitHub Pages root)
-└── CNAME               # Custom domain config (GitHub Pages root)
+├── _config.yml         # Jekyll configuration
+├── Gemfile             # Ruby dependencies
+├── index.html          # Homepage (Jekyll front matter + content)
+├── 404.html            # Custom error page
+└── CNAME               # Custom domain config
 ```
 
 ## Technical Stack
-- **Frontend**: Pure HTML5, CSS3, JavaScript (no frameworks)
+- **Static Site Generator**: Jekyll 4.4+
+- **Frontend**: HTML5, CSS3, JavaScript (vanilla)
 - **Hosting**: GitHub Pages with custom domain
-- **CI/CD**: GitHub Actions for automation
+- **CI/CD**: GitHub Actions for Jekyll build and deployment
 - **Version Control**: Git with feature branch workflow
 
 ## Development Guidelines
 
 ### File Organization
-- **Root files**: Only `index.html`, `404.html`, and `CNAME` for GitHub Pages compatibility
+- **Root files**: `index.html`, `404.html`, and `CNAME` (required for GitHub Pages)
+- **Jekyll structure**: Layouts in `_layouts/`, includes in `_includes/`
 - **Assets**: Organized by type in `assets/css/`, `assets/js/`, `assets/images/`
-- **Pages**: All HTML pages in `pages/` directory for clean URLs
+- **Pages**: All content pages in `pages/` directory with Jekyll front matter
 - **Documentation**: All docs in `docs/` directory
+- **Config**: `_config.yml` for site-wide settings, `Gemfile` for dependencies
 
 ### Code Standards
 - **HTML**: Semantic HTML5 with accessibility features (skip links, alt text)
 - **CSS**: Custom properties for theming, mobile-first responsive design
 - **JavaScript**: Vanilla JS, no dependencies, progressive enhancement
+- **Jekyll**: Use Liquid templating, `relative_url` filter for paths
 - **Performance**: Optimized for fast loading, minimal external dependencies
 
 ### GitHub Workflow
@@ -47,28 +62,109 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 ### Key Features
 1. **Dynamic Theme System**: Light/dark mode toggle with system preference detection
 2. **Rotating Typewriter Effect**: JavaScript-powered text animation in hero section
-3. **Responsive Design**: Mobile-first layout with CSS Grid/Flexbox
-4. **Accessibility**: WCAG compliance with skip links, semantic markup
-5. **Custom 404 Page**: DevOps-themed terminal simulation
-6. **Professional Portfolio**: Showcasing DevOps skills and experience
+3. **Geometric Background Animation**: Particle network effect with theme-aware colors
+4. **Responsive Design**: Mobile-first layout with CSS Grid/Flexbox
+5. **Accessibility**: WCAG compliance with skip links, semantic markup, reduced-motion support
+6. **Custom 404 Page**: DevOps-themed terminal simulation
+7. **Professional Portfolio**: Showcasing DevOps skills and experience
+8. **Case Study Expandables**: Detailed project case studies with expand/collapse functionality
 
 ## Common Tasks
 
+### Automated PR Reviews
+This repository includes an automated PR review workflow that runs on all pull requests:
+- **Workflow File**: `.github/workflows/copilot-pr-review.yml`
+- **Documentation**: See `docs/AUTOMATED_PR_REVIEW.md` for detailed information
+- **Features**: Automatic review comments, best practices checklist, recommendations
+- **Triggers**: Runs on PR open, synchronize, and reopen events
+
+For more details on customizing or maintaining the automated review system, refer to the dedicated documentation.
+
 ### Adding New Pages
-1. Create HTML file in `pages/` directory
-2. Use existing page template structure
-3. Update navigation in all existing pages
-4. Ensure relative paths are correct (`../` for assets from pages/)
+1. Create HTML file in `pages/` directory with Jekyll front matter:
+   ```yaml
+   ---
+   layout: default
+   title: Page Title
+   hero: true  # Optional
+   permalink: /pages/pagename/
+   ---
+   ```
+2. Add page content (no need for header/footer/navigation)
+3. Navigation updates automatically from `_config.yml`
+4. Use `{{ '/path' | relative_url }}` for internal links
+
+### Updating Navigation
+Edit `_config.yml` and modify the `navigation` section:
+```yaml
+navigation:
+  - title: New Page
+    url: /pages/newpage/
+```
 
 ### Asset Management
 - **CSS**: Add to `assets/css/styles.css` or create new files
 - **JS**: Add to `assets/js/script.js` or create new files  
 - **Images**: Place in `assets/images/` with descriptive names
+- Use Jekyll's `relative_url` filter: `{{ '/assets/...' | relative_url }}`
 
 ### Content Updates
-- **About**: Edit `pages/about.html`
+- **About**: Edit `pages/about.html` (front matter + content only)
 - **Contact**: Edit `pages/contact.html`
 - **Homepage**: Edit `index.html`
+- **Projects**: Edit `pages/projects.html` 
+  - Add new project cards following existing structure
+  - For case studies: Add `.case-study-toggle` button and `.case-study-content` section
+  - Include sections: Problem Statement, Approach & Strategy, Technical Decisions, Implementation Details, Challenges & Solutions, Results & Impact, Lessons Learned
+
+### Updating Header/Footer
+- **Header**: Edit `_includes/header.html` (changes apply to all pages including 404)
+- **Footer**: Edit `_includes/footer.html`
+
+### Geometric Background Animation
+The site features a particle network animation rendered on canvas:
+
+**Implementation:**
+- Canvas element in `_layouts/default.html` with `aria-hidden="true"`
+- Animation logic in `assets/js/script.js` (`initGeometricBackground()`)
+- CSS styles in `assets/css/styles.css` (`#geometric-bg`)
+- Theme-aware colors via CSS custom properties
+
+**Configuration:**
+```javascript
+particleCount: 120       // Number of particles
+particleSpeed: 0.3       // Movement speed
+connectionDistance: 150  // Max distance for line connections
+particleRadius: 2        // Size of particles
+lineWidth: 1            // Thickness of connecting lines
+```
+
+**Customization:**
+- Adjust particle count in `script.js` for performance/density
+- Modify colors in CSS variables:
+  - `--bg-animation-particle`: Particle color/opacity
+  - `--bg-animation-line`: Connection line color/opacity
+- Animation automatically respects `prefers-reduced-motion`
+
+**Performance Notes:**
+- Uses requestAnimationFrame for 60fps
+- Canvas positioned with `z-index: -1` (behind all content)
+- Debounced resize handler prevents lag
+- Automatically disabled for reduced-motion users
+
+### Building and Testing
+```bash
+# Install dependencies (first time)
+bundle install
+
+# Build the site
+bundle exec jekyll build
+
+# Serve locally with live reload
+bundle exec jekyll serve
+
+# View at http://localhost:4000
+```
 
 ## Important Considerations
 
@@ -93,6 +189,14 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 
 ## Recent Major Changes
 
+### Jekyll Migration (Current)
+- Migrated from static HTML to Jekyll static site generator
+- Implemented DRY principles using layouts and includes
+- Centralized configuration in `_config.yml`
+- Reduced code duplication by ~75%
+- Added Jekyll build/deploy GitHub Actions workflow
+- All existing functionality preserved
+
 ### Project Reorganization (Issue #10)
 - Moved from flat structure to organized directories
 - All file references updated for new paths
@@ -100,11 +204,13 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 - Improved maintainability and professionalism
 
 ### Implemented Features
+- ✅ Jekyll static site generator with DRY architecture
 - ✅ Custom 404 page with DevOps theme (Issue #8)
 - ✅ Rotating typewriter effect (Issue #16)
 - ✅ Animation timing fixes (Issue #13)
 - ✅ Code quality improvements (Issues #25, #26)
 - ✅ Automated branch cleanup workflow
+- ✅ Automated PR review workflow with GitHub Copilot integration
 
 ## Working with This Project
 
@@ -120,6 +226,8 @@ This is **jharter1.github.io** - Jack Harter's personal DevOps portfolio website
 - [ ] Assets (CSS, JS, images) load properly
 - [ ] Responsive design works on mobile/desktop
 - [ ] Theme toggle functionality works
+- [ ] Background animation renders smoothly in both themes
+- [ ] Animation respects reduced-motion preference
 - [ ] Accessibility features intact
 
 ### Pull Request Guidelines
