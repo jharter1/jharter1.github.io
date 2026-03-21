@@ -12,27 +12,27 @@ permissions:
 jobs:
   copilot-review:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Get PR diff
         id: pr-diff
         run: |
           # Get PR number from context
           PR_NUMBER="${{ github.event.pull_request.number }}"
           echo "Analyzing PR #${PR_NUMBER}"
-          
+
           # Fetch the PR head using simpler, more reliable approach
           git fetch origin pull/${PR_NUMBER}/head:pr-${PR_NUMBER}
           git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} > pr-diff.txt
-          
+
           # Debug: Show diff file size
           ls -la pr-diff.txt
-          
+
           # Check if diff exists and is not empty
           if [ ! -s pr-diff.txt ]; then
             echo "No changes detected in PR"
@@ -43,23 +43,23 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ github.token }}
-      
+
       - name: Analyze Code Changes with AI
         if: steps.pr-diff.outputs.has_changes == 'true'
         id: code-analysis
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
-          
+
           # Get actual diff content for analysis
           git diff origin/${{ github.base_ref }}...pr-${PR_NUMBER} > full-diff.txt
-          
+
           # Get changed files with their content
           git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} > changed-files.txt
-          
+
           # Analyze each changed file for specific improvements
           echo "## 🤖 AI Code Analysis" > analysis-output.md
           echo "" >> analysis-output.md
-          
+
           while IFS= read -r file; do
             if [[ -f "$file" ]]; then
               echo "### 📄 \`$file\`" >> analysis-output.md
@@ -133,24 +133,24 @@ jobs:
               echo "" >> analysis-output.md
             fi
           done < changed-files.txt
-          
+
           echo "code_analysis_complete=true" >> $GITHUB_OUTPUT
-      
+
       - name: Generate Improvement Suggestions
         if: steps.code-analysis.outputs.code_analysis_complete == 'true'
         id: suggestions
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
-          
+
           # Create actionable improvement suggestions
           cat > suggestions.md << 'EOF'
-          
+
           ### 💡 Suggested Improvements
-          
+
           Based on the code analysis, here are specific improvements you can make:
-          
+
           EOF
-          
+
           # Check for common improvement opportunities in the actual diff
           if grep -q "color:" full-diff.txt 2>/dev/null; then
             cat >> suggestions.md << 'EOF'
@@ -161,16 +161,16 @@ jobs:
             --primary-color: #your-color;
             --secondary-color: #your-color;
           }
-          
+
           /* Instead of hardcoded colors */
           .element {
             color: var(--primary-color);
           }
           ```
-          
+
           EOF
           fi
-          
+
           if grep -q "<img" full-diff.txt 2>/dev/null; then
             cat >> suggestions.md << 'EOF'
           #### 🖼️ Image Accessibility
@@ -182,13 +182,13 @@ jobs:
                width="800" 
                height="600">
           ```
-          
+
           EOF
           fi
-          
+
           # Track if we have any auto-fixable issues
           AUTO_FIXES_AVAILABLE=false
-          
+
           if grep -q "var " full-diff.txt 2>/dev/null; then
             AUTO_FIXES_AVAILABLE=true
             cat >> suggestions.md << 'EOF'
@@ -197,17 +197,17 @@ jobs:
           // Replace var with const/let
           const unchangingValue = "value";
           let changingValue = "initial";
-          
+
           // Use arrow functions for cleaner syntax
           const handleClick = (event) => {
             // Handle click
           };
           ```
           🤖 **Auto-fix available**: Comment `@github-actions apply-auto-fixes` to automatically apply these changes.
-          
+
           EOF
           fi
-          
+
           if grep -q "\.innerHTML" full-diff.txt 2>/dev/null; then
             cat >> suggestions.md << 'EOF'
           #### � Security Improvement
@@ -215,44 +215,44 @@ jobs:
           // Safer DOM manipulation
           const safeElement = document.createElement('div');
           safeElement.textContent = userInput; // Prevents XSS
-          
+
           // Or use DOMPurify for HTML content
           element.innerHTML = DOMPurify.sanitize(htmlContent);
           ```
-          
+
           EOF
           fi
-          
+
           # Add general best practices
           cat >> suggestions.md << 'EOF'
-          
+
           #### 📋 Quick Wins
           - Run `npm audit` or `bundle audit` to check for security vulnerabilities
           - Consider adding/updating unit tests for new functionality
           - Validate HTML with W3C validator for semantic correctness
           - Test responsive design on different screen sizes
           - Verify keyboard navigation for accessibility
-          
+
           ---
           *� These suggestions are based on your actual code changes. Review and apply what makes sense for your project.*
           EOF
-          
+
           echo "suggestions_ready=true" >> $GITHUB_OUTPUT
           echo "auto_fixes_available=$AUTO_FIXES_AVAILABLE" >> $GITHUB_OUTPUT
-      
+
       - name: Prepare Auto-fix Suggestions
         if: steps.suggestions.outputs.auto_fixes_available == 'true'
         id: auto-fixes
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
           FIXES_PREPARED=false
-          
+
           # Prepare preview of automatic fixes without applying them
           echo "## 🤖 Proposed Auto-fixes" > auto-fix-preview.md
           echo "" >> auto-fix-preview.md
           echo "The following automatic fixes are available. **Review carefully before applying:**" >> auto-fix-preview.md
           echo "" >> auto-fix-preview.md
-          
+
           while IFS= read -r file; do
             if [[ "$file" == *.js ]] && [[ -f "$file" ]]; then
               echo "🔧 Analyzing $file for auto-fixes..."
@@ -282,7 +282,7 @@ jobs:
               fi
             fi
           done < changed-files.txt
-          
+
           if [[ "$FIXES_PREPARED" == "true" ]]; then
             echo "" >> auto-fix-preview.md
             echo "### ⚠️ Important Notes" >> auto-fix-preview.md
@@ -305,7 +305,7 @@ jobs:
             echo "" >> auto-fix-preview.md
             echo "The code follows modern JavaScript practices or doesn't contain patterns we can safely auto-fix." >> auto-fix-preview.md
           fi
-      
+
       - name: Generate Final Review
         if: steps.code-analysis.outputs.code_analysis_complete == 'true'
         id: final-review
@@ -313,62 +313,62 @@ jobs:
           PR_NUMBER="${{ github.event.pull_request.number }}"
           DIFF_LINES=$(wc -l < pr-diff.txt)
           FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | wc -l)
-          
+
           # Combine analysis and suggestions into final review
           cat > review-output.md << EOF
           ## 🤖 AI-Powered Code Review
-          
+
           **Summary:** This PR contains ${FILES_CHANGED} file(s) with ${DIFF_LINES} lines of changes.
-          
+
           ### Files Modified
           $(git diff --name-only origin/${{ github.base_ref }}...pr-${PR_NUMBER} | sed 's/^/- /')
-          
+
           EOF
-          
+
           # Add detailed code analysis if available
           if [ -f analysis-output.md ]; then
             cat analysis-output.md >> review-output.md
             echo "" >> review-output.md
           fi
-          
+
           # Add actionable suggestions if available  
           if [ -f suggestions.md ]; then
             cat suggestions.md >> review-output.md
             echo "" >> review-output.md
           fi
-          
+
           # Add auto-fix preview if available
           if [ -f auto-fix-preview.md ] && [[ "${{ steps.suggestions.outputs.auto_fixes_available }}" == "true" ]]; then
             echo "" >> review-output.md
             cat auto-fix-preview.md >> review-output.md
             echo "" >> review-output.md
           fi
-          
+
           # Add next steps
           cat >> review-output.md << 'EOF'
-          
+
           ### 🚀 Next Steps
           1. 👀 Review the specific suggestions above
           2. 🛠️ Apply relevant code improvements
           3. 🧪 Test changes locally
           4. ✅ Request human review when ready
-          
+
           ---
           EOF
-          
+
           # Add timestamp
           echo "*AI review generated at $(date)*" >> review-output.md
-          
+
           echo "final_review_ready=true" >> $GITHUB_OUTPUT
-      
+
       - name: Post Review Comment
         if: steps.final-review.outputs.final_review_ready == 'true'
         run: |
           gh pr comment ${{ github.event.pull_request.number }} --body-file review-output.md
         env:
           GH_TOKEN: ${{ github.token }}
-      
-      - name: Update PR with Labels  
+
+      - name: Update PR with Labels
         if: steps.final-review.outputs.final_review_ready == 'true'
         continue-on-error: true
         run: |

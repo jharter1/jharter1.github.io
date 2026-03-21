@@ -7,102 +7,211 @@ description: "Jack Harter's daily setup — MacBook Pro, Fish shell, Vim, Tmux, 
 ---
 
 <section aria-labelledby="uses-heading">
-    <h2 id="uses-heading" class="sr-only">My Setup</h2>
+  <h2 id="uses-heading" class="sr-only">My Setup</h2>
 
-    <div class="card fade-in-section card-hidden">
-        <h2><i class="fas fa-laptop"></i> Hardware</h2>
-        <ul class="uses-list">
-            <li><strong>MacBook Pro</strong> — primary development machine</li>
-            <li><strong>Proxmox VE Cluster</strong> — homelab running a 9-node HashiCorp Nomad cluster (3 servers, 6 clients) for self-hosted services and infrastructure experimentation</li>
-            <li><strong>NFS Storage</strong> — shared persistent storage across all homelab nodes</li>
-        </ul>
-    </div>
+  <div class="card fade-in-section card-hidden">
+    <h2><i class="fas fa-laptop"></i> Hardware</h2>
+    <ul class="uses-list">
+      <li><strong>MacBook Pro</strong> — primary development machine</li>
+      <li>
+        <strong>Proxmox VE Cluster</strong> — homelab running a 9-node HashiCorp
+        Nomad cluster (3 servers, 6 clients) for self-hosted services and
+        infrastructure experimentation
+      </li>
+      <li>
+        <strong>NFS Storage</strong> — shared persistent storage across all
+        homelab nodes
+      </li>
+    </ul>
+  </div>
 
-    <div class="card fade-in-section card-hidden">
-        <h2><i class="fas fa-terminal"></i> Terminal &amp; Shell</h2>
-        <ul class="uses-list">
-            <li><strong>Fish Shell</strong> — friendly interactive shell with great autocomplete and syntax highlighting out of the box</li>
-            <li><strong>Tmux</strong> — terminal multiplexer for persistent sessions and window management; see my <a href="https://github.com/jharter1/tmux" target="_blank" rel="noopener noreferrer">tmux config</a></li>
-            <li><strong>Starship</strong> — cross-shell prompt with a fast, minimal, and highly customizable setup; config in my <a href="https://github.com/jharter1/configs" target="_blank" rel="noopener noreferrer">configs repo</a></li>
-            <li><strong>Vim</strong> — primary editor for anything in the terminal; been using it long enough that leaving home row feels wrong</li>
-        </ul>
-    </div>
+  <div class="card fade-in-section card-hidden">
+    <h2><i class="fas fa-terminal"></i> Terminal &amp; Shell</h2>
+    <ul class="uses-list">
+      <li>
+        <strong>Fish Shell</strong> — friendly interactive shell with great
+        autocomplete and syntax highlighting out of the box
+      </li>
+      <li>
+        <strong>Tmux</strong> — terminal multiplexer for persistent sessions and
+        window management; see my
+        <a
+          href="https://github.com/jharter1/tmux"
+          target="_blank"
+          rel="noopener noreferrer"
+          >tmux config</a
+        >
+      </li>
+      <li>
+        <strong>Starship</strong> — cross-shell prompt with a fast, minimal, and
+        highly customizable setup; config in my
+        <a
+          href="https://github.com/jharter1/configs"
+          target="_blank"
+          rel="noopener noreferrer"
+          >configs repo</a
+        >
+      </li>
+      <li>
+        <strong>Vim</strong> — primary editor for anything in the terminal;
+        check out my config in my
+        <a
+          href="https://github.com/jharter1/configs"
+          target="_blank"
+          rel="noopener noreferrer"
+          >configs repo</a
+        >
+      </li>
+    </ul>
+  </div>
 
-    <div class="card fade-in-section card-hidden">
-        <h2><i class="fas fa-code"></i> Editor &amp; IDE</h2>
-        <ul class="uses-list">
-            <li><strong>VS Code</strong> — for larger projects, pair programming, and anything that benefits from a GUI debugger</li>
-            <li><strong>Vim</strong> — for config files, quick edits, and anything SSH'd into a remote machine</li>
-        </ul>
-    </div>
+  <div class="card fade-in-section card-hidden">
+    <h2><i class="fas fa-code"></i> Editor &amp; IDE</h2>
+    <ul class="uses-list">
+      <li>
+        <strong>VS Code</strong> — for larger projects, pair programming, and
+        anything that benefits from a GUI debugger
+      </li>
+      <li>
+        <strong>Vim</strong> — for config files, quick edits, and anything SSH'd
+        into a remote machine
+      </li>
+    </ul>
+  </div>
 
-    <div class="card fade-in-section card-hidden">
-        <h2><i class="fas fa-cloud"></i> Infrastructure &amp; DevOps</h2>
-        <ul class="uses-list">
-            <li><strong>Terraform</strong> — infrastructure as code for everything from homelab VMs to cloud resources</li>
-            <li><strong>Ansible</strong> — configuration management and idempotent provisioning</li>
-            <li><strong>Packer</strong> — automated VM template builds baked with all dependencies pre-installed</li>
-            <li><strong>Docker</strong> — containerizing workloads locally and in CI pipelines</li>
-            <li><strong>Nomad</strong> — lightweight container orchestration running the homelab; less overhead than Kubernetes at home scale</li>
-            <li><strong>Consul</strong> — service discovery and health checking across the homelab cluster</li>
-            <li><strong>Vault</strong> — secrets management integrated with Nomad workloads</li>
-            <li><strong>Tailscale</strong> — zero-config VPN for secure remote access to homelab services; can't imagine going back to managing WireGuard manually</li>
-        </ul>
-    </div>
+  <div class="card fade-in-section card-hidden">
+    <h2><i class="fas fa-cloud"></i> Infrastructure &amp; DevOps</h2>
+    <ul class="uses-list">
+      <li>
+        <strong>Terraform</strong> — infrastructure as code for everything from
+        homelab VMs to cloud resources
+      </li>
+      <li>
+        <strong>Ansible</strong> — configuration management and idempotent
+        provisioning
+      </li>
+      <li>
+        <strong>Packer</strong> — automated VM template builds baked with all
+        dependencies pre-installed
+      </li>
+      <li>
+        <strong>Docker</strong> — containerizing workloads locally and in CI
+        pipelines
+      </li>
+      <li>
+        <strong>Nomad</strong> — lightweight container orchestration running the
+        homelab; less overhead than Kubernetes at home scale
+      </li>
+      <li>
+        <strong>Consul</strong> — service discovery and health checking across
+        the homelab cluster
+      </li>
+      <li>
+        <strong>Vault</strong> — secrets management integrated with Nomad
+        workloads
+      </li>
+      <li>
+        <strong>Tailscale</strong> — zero-config VPN for secure remote access to
+        homelab services; can't imagine going back to managing WireGuard
+        manually
+      </li>
+    </ul>
+  </div>
 
-    <div class="card fade-in-section card-hidden">
-        <h2><i class="fas fa-chart-line"></i> Observability</h2>
-        <ul class="uses-list">
-            <li><strong>Prometheus</strong> — metrics collection across all homelab nodes and services</li>
-            <li><strong>Grafana</strong> — dashboards for everything; homelab, cloud spend, system health</li>
-            <li><strong>Loki + Grafana Alloy</strong> — log aggregation and shipping from all nodes into a central Grafana view</li>
-            <li><strong>Traefik</strong> — reverse proxy with automatic routing via Consul Catalog — new services just appear</li>
-        </ul>
-    </div>
+  <div class="card fade-in-section card-hidden">
+    <h2><i class="fas fa-chart-line"></i> Observability</h2>
+    <ul class="uses-list">
+      <li>
+        <strong>Prometheus</strong> — metrics collection across all homelab
+        nodes and services
+      </li>
+      <li>
+        <strong>Grafana</strong> — dashboards for everything; homelab, cloud
+        spend, system health
+      </li>
+      <li>
+        <strong>Loki + Grafana Alloy</strong> — log aggregation and shipping
+        from all nodes into a central Grafana view
+      </li>
+      <li>
+        <strong>Traefik</strong> — reverse proxy with automatic routing via
+        Consul Catalog — new services just appear
+      </li>
+    </ul>
+  </div>
 
-    <div class="card fade-in-section card-hidden">
-        <h2><i class="fas fa-book"></i> Productivity &amp; Notes</h2>
-        <ul class="uses-list">
-            <li><strong>Obsidian</strong> — personal knowledge base and note-taking; local-first with git sync</li>
-            <li><strong>GitHub</strong> — version control for everything, including <a href="https://github.com/jharter1/configs" target="_blank" rel="noopener noreferrer">dotfiles and configs</a></li>
-        </ul>
-    </div>
+  <div class="card fade-in-section card-hidden">
+    <h2><i class="fas fa-book"></i> Productivity &amp; Notes</h2>
+    <ul class="uses-list">
+      <li>
+        <strong>Obsidian</strong> — personal knowledge base and note-taking;
+        local-first with git sync
+      </li>
+      <li>
+        <strong>GitHub</strong> — version control for everything, including
+        <a
+          href="https://github.com/jharter1/configs"
+          target="_blank"
+          rel="noopener noreferrer"
+          >dotfiles and configs</a
+        >
+      </li>
+    </ul>
+  </div>
 
-    <div class="card fade-in-section card-hidden">
-        <h2><i class="fas fa-cloud-upload-alt"></i> Cloud Providers</h2>
-        <ul class="uses-list">
-            <li><strong>AWS</strong> — primary cloud; EC2, S3, Route 53, GovCloud, and more</li>
-            <li><strong>Azure</strong> — used heavily at Veradigm and Uptake; AKS, Azure DevOps</li>
-            <li><strong>GCP</strong> — GKE for Kubernetes workloads; see the <a href="https://github.com/jharter1/argocd-gke-cost-optimized" target="_blank" rel="noopener noreferrer">ArgoCD GKE project</a></li>
-            <li><strong>GitHub Pages</strong> — hosts this site, zero cost, automatic deployments via Actions</li>
-        </ul>
-    </div>
-
+  <div class="card fade-in-section card-hidden">
+    <h2><i class="fas fa-cloud-upload-alt"></i> Cloud Providers</h2>
+    <ul class="uses-list">
+      <li>
+        <strong>AWS</strong> — primary cloud; EC2, S3, Route 53, GovCloud, and
+        more
+      </li>
+      <li>
+        <strong>Azure</strong> — used heavily at Veradigm and Uptake; AKS, Azure
+        DevOps
+      </li>
+      <li>
+        <strong>GCP</strong> — GKE for Kubernetes workloads; see the
+        <a
+          href="https://github.com/jharter1/argocd-gke-cost-optimized"
+          target="_blank"
+          rel="noopener noreferrer"
+          >ArgoCD GKE project</a
+        >
+      </li>
+      <li>
+        <strong>GitHub Pages</strong> — hosts this site, zero cost, automatic
+        deployments via Actions
+      </li>
+    </ul>
+  </div>
 </section>
 
 <style>
-.uses-list {
+  .uses-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
-}
-.uses-list li {
+  }
+  .uses-list li {
     padding-left: var(--spacing-md);
     position: relative;
     line-height: 1.6;
-}
-.uses-list li::before {
-    content: '→';
+  }
+  .uses-list li::before {
+    content: "→";
     position: absolute;
     left: 0;
     color: var(--accent-color);
-}
-.uses-list a {
+  }
+  .uses-list a {
     color: var(--accent-color);
     text-decoration: none;
-}
-.uses-list a:hover { text-decoration: underline; }
+  }
+  .uses-list a:hover {
+    text-decoration: underline;
+  }
 </style>

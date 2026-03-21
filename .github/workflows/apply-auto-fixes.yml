@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to apply auto-fixes to'
+        description: "PR number to apply auto-fixes to"
         required: true
         type: string
   issue_comment:
@@ -18,14 +18,14 @@ jobs:
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request &&
        contains(github.event.comment.body, '@github-actions apply-auto-fixes'))
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Get PR Information
         id: pr-info
         run: |
@@ -34,16 +34,16 @@ jobs:
           else
             PR_NUMBER="${{ github.event.issue.number }}"
           fi
-          
+
           echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          
+
           # Get PR details
           gh pr view $PR_NUMBER --json headRefName,headRepository > pr-details.json
           HEAD_REF=$(jq -r '.headRefName' pr-details.json)
           echo "head_ref=$HEAD_REF" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ github.token }}
-      
+
       - name: Verify Permission
         run: |
           # Check if the user has permission to apply auto-fixes
@@ -58,23 +58,23 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ github.token }}
-      
+
       - name: Checkout PR Branch
         run: |
           git fetch origin ${{ steps.pr-info.outputs.head_ref }}
           git checkout ${{ steps.pr-info.outputs.head_ref }}
-      
+
       - name: Apply Auto-fixes
         id: apply-fixes
         run: |
           PR_NUMBER="${{ steps.pr-info.outputs.pr_number }}"
           FIXES_APPLIED=false
-          
+
           # Get list of changed files in the PR
           git diff --name-only origin/${{ github.base_ref }}...${{ steps.pr-info.outputs.head_ref }} > changed-files.txt
-          
+
           echo "🔧 Applying automatic fixes..."
-          
+
           # Apply fixes to JavaScript files
           while IFS= read -r file; do
             if [[ "$file" == *.js ]] && [[ -f "$file" ]]; then
@@ -107,31 +107,31 @@ jobs:
               fi
             fi
           done < changed-files.txt
-          
+
           echo "fixes_applied=$FIXES_APPLIED" >> $GITHUB_OUTPUT
-      
+
       - name: Commit and Push Changes
         if: steps.apply-fixes.outputs.fixes_applied == 'true'
         run: |
           # Configure git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           # Show what changed
           echo "📋 Files modified:"
           git diff --name-only
-          
+
           # Add and commit changes
           git add -A
           git commit -m "🤖 Auto-fix: Modernize JavaScript declarations (Applied by: ${{ github.actor }})"
-          
+
           # Push changes
           git push origin ${{ steps.pr-info.outputs.head_ref }}
-      
+
       - name: Report Results
         run: |
           PR_NUMBER="${{ steps.pr-info.outputs.pr_number }}"
-          
+
           if [[ "${{ steps.apply-fixes.outputs.fixes_applied }}" == "true" ]]; then
             gh pr comment $PR_NUMBER --body "✅ Auto-fixes applied successfully! Replaced var declarations with const/let. Please review and test the changes."
           else
