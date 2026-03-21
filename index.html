@@ -2,6 +2,7 @@
 layout: home
 title: Home
 hero: true
+description: "DevOps and Linux Engineer based in Chicago. Portfolio showcasing infrastructure automation, Kubernetes, Terraform, CI/CD, and open-source projects."
 ---
 
 <section aria-labelledby="content-heading">
@@ -25,11 +26,14 @@ hero: true
     <div id="stack-card" class="card fade-in-section card-hidden">
         <h2>My Stack</h2>
         <ul>
-            <li><i class="fas fa-server"></i> Linux & Docker & K8s</li>
-            <li><i class="fas fa-cloud"></i> AWS & Azure & Terraform</li>
-            <li><i class="fas fa-code-branch"></i> GitOps & CI/CD</li>
-            <li><i class="fas fa-chart-line"></i> Monitoring & Automation & AI</li>
+            <li><i class="fas fa-server"></i> Linux &middot; Docker &middot; Kubernetes &middot; Nomad</li>
+            <li><i class="fas fa-cloud"></i> AWS &middot; Azure &middot; GCP &middot; Terraform</li>
+            <li><i class="fas fa-code-branch"></i> GitHub Actions &middot; ArgoCD &middot; GitOps</li>
+            <li><i class="fas fa-chart-line"></i> Prometheus &middot; Grafana &middot; Loki</li>
+            <li><i class="fas fa-cog"></i> Ansible &middot; Packer &middot; Vault &middot; Consul</li>
+            <li><i class="fas fa-terminal"></i> Bash &middot; Python &middot; Vim &middot; Tmux</li>
         </ul>
+        <p style="margin-top: 1em; font-size: 0.9em;"><a href="{{ '/pages/uses/' | relative_url }}">See my full setup &rarr;</a></p>
     </div>
     
     <!-- Row 3 -->
@@ -40,6 +44,20 @@ hero: true
     <div id="connect-card" class="card fade-in-section card-hidden">
         <h2>Let's Connect</h2>
         <p>Interested in collaborating or have questions about DevOps, GitOps, or Infrastructure as Code? <a href="{{ '/pages/contact/' | relative_url }}">Get in touch</a> or find me on <a href="https://www.linkedin.com/in/{{ site.social.linkedin }}">LinkedIn</a>.</p>
+    </div>
+
+    <!-- Podcast — full width -->
+    <div class="card fade-in-section card-hidden" style="grid-column: 1 / -1;">
+        <h2><i class="fas fa-podcast"></i> Podcast Appearance</h2>
+        <p>I joined the <strong>Cloud Security Podcast</strong> to talk DevOps, automation, and the evolving infrastructure landscape. Give it a listen:</p>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+            <a href="https://podcasts.apple.com/podcast/id1489678590?i=1000696847392" target="_blank" rel="noopener noreferrer" class="project-link">
+                <i class="fab fa-apple"></i> Apple Podcasts
+            </a>
+            <a href="https://open.spotify.com/episode/09OlT42HiWdfKTsJIGyz2O" target="_blank" rel="noopener noreferrer" class="project-link">
+                <i class="fab fa-spotify"></i> Spotify
+            </a>
+        </div>
     </div>
     </div>
 </section>

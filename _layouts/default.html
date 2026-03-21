@@ -22,6 +22,20 @@
         {{ content }}
     </main>
     {% include footer.html %}
+    <!-- MGS Easter Egg -->
+    <div id="mgs-box" aria-hidden="true">
+        <div class="box-exclaim" id="box-exclaim">!</div>
+        <div class="box-top"></div>
+        <div class="box-body"></div>
+        <div class="box-feet">
+            <div class="box-foot"></div>
+            <div class="box-foot"></div>
+        </div>
+    </div>
+
+    <button id="back-to-top" aria-label="Back to top" title="Back to top">
+        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+    </button>
     <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
     {% if page.custom_js %}
     <script>

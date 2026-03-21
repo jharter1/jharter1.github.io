@@ -10,7 +10,7 @@
     <nav>
         <ul>
             {% for item in site.navigation %}
-            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+            <li><a href="{{ item.url | relative_url }}"{% if page.url == item.url %} class="active"{% endif %}>{{ item.title }}</a></li>
             {% endfor %}
         </ul>
     </nav>
@@ -36,7 +36,7 @@
             <span class="sr-only">Toggle between light and dark theme</span>
             <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
             <span class="slider round" aria-hidden="true"></span>
-            <span class="theme-icon" aria-hidden="true">
+            <span class="theme-icon" aria-hidden="true" id="theme-icon">
                 <i class="fas fa-moon"></i>
             </span>
         </label>

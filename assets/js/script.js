@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // ===== Theme Management =====
     const themeToggle = document.getElementById('theme-toggle');
-    
+    const themeIcon = document.querySelector('#theme-icon i');
+
     /**
      * Get system theme preference
      * @returns {string} 'light' or 'dark'
@@ -35,7 +36,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const getSystemTheme = () => {
         return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     };
-    
+
+    const applyThemeIcon = (theme) => {
+        if (themeIcon) themeIcon.className = theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+    };
+
     // Apply saved or system theme
     const currentTheme = localStorage.getItem('theme') || getSystemTheme();
 
@@ -43,15 +48,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.body.classList.add('light-theme');
         themeToggle.checked = true;
     }
-    
+    applyThemeIcon(currentTheme);
+
     themeToggle.addEventListener('change', () => {
         if (themeToggle.checked) {
             document.body.classList.add('light-theme');
             localStorage.setItem('theme', 'light');
+            applyThemeIcon('light');
             announceThemeChange('Light theme activated');
         } else {
             document.body.classList.remove('light-theme');
             localStorage.setItem('theme', 'dark');
+            applyThemeIcon('dark');
             announceThemeChange('Dark theme activated');
         }
     });
@@ -132,9 +140,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
             ctaHref: '/pages/contact/',
             isHomePage: false
         },
+        'Uses': {
+            titlePhrases: ['My Setup'],
+            subtitle: 'Tools, hardware, and software I use daily',
+            ctaText: 'View my projects',
+            ctaHref: '/pages/projects/',
+            isHomePage: false
+        },
+        'Resume': {
+            titlePhrases: ['Resume'],
+            subtitle: 'My experience, skills, and certifications',
+            ctaText: 'Get in touch',
+            ctaHref: '/pages/contact/',
+            isHomePage: false
+        },
         'Contact': {
             titlePhrases: ['Contact Jack Harter'],
-            subtitle: 'Get in touch with me',
+            subtitle: 'Happy to connect',
             ctaText: 'Learn about me',
             ctaHref: '/pages/about/',
             isHomePage: false
@@ -142,8 +164,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         'Projects': {
             titlePhrases: ['My Projects'],
             subtitle: 'Explore my work',
-            ctaText: 'Get in touch',
-            ctaHref: '/pages/contact/',
+            ctaText: 'View my GitHub',
+            ctaHref: 'https://github.com/jharter1',
             isHomePage: false
         },
         'Home': {
@@ -315,6 +337,50 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 triggerHomePageAnimations();
             }
         }, 400);
+    }
+
+    // ===== MGS Konami Code Easter Egg =====
+    const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let konamiIndex = 0;
+    let mgsCount = 0;
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === KONAMI[konamiIndex]) {
+            konamiIndex++;
+            if (konamiIndex === KONAMI.length) {
+                konamiIndex = 0;
+                triggerMGSBox();
+            }
+        } else {
+            konamiIndex = e.key === KONAMI[0] ? 1 : 0;
+        }
+    });
+
+    function triggerMGSBox() {
+        const box = document.getElementById('mgs-box');
+        if (!box || box.classList.contains('active')) return;
+
+        mgsCount++;
+        box.classList.toggle('reverse', mgsCount % 2 === 0);
+        box.classList.add('active');
+
+        box.addEventListener('animationend', function onEnd(e) {
+            if (e.animationName === 'box-sneak' || e.animationName === 'box-sneak-reverse') {
+                box.classList.remove('active', 'reverse');
+                box.removeEventListener('animationend', onEnd);
+            }
+        });
+    }
+
+    // ===== Back to Top Button =====
+    const backToTop = document.getElementById('back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
 
     // ===== Sticky Header with Scroll Effects =====
