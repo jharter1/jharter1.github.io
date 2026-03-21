@@ -2,7 +2,7 @@
 title: Jack Harter - DevOps Engineer
 description: DevOps and Linux Engineer portfolio showcasing professional experience, skills, and projects
 author: Jack Harter
-email: 
+email: jack.harter.8@gmail.com
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://hartr.net" # the base hostname & protocol for your site
 
@@ -24,28 +24,6 @@ exclude:
   - .git/
   - .github/
   - README.md
-
-# Include files that start with underscore or dot (if needed)
-include:
-  - _pages
-
-# Collections (if needed in future)
-collections:
-  pages:
-    output: true
-    permalink: /pages/:name/
-
-# Default front matter
-defaults:
-  - scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "default"
-  - scope:
-      path: ""
-    values:
-      layout: "default"
 
 # GitHub Pages compatibility
 plugins:

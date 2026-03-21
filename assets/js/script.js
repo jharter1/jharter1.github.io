@@ -129,21 +129,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
             titlePhrases: ['Jack Harter'],
             subtitle: 'DevOps and Linux Engineer',
             ctaText: 'Get in touch',
-            ctaHref: 'contact.html',
+            ctaHref: '/pages/contact/',
             isHomePage: false
         },
         'Contact': {
             titlePhrases: ['Contact Jack Harter'],
             subtitle: 'Get in touch with me',
             ctaText: 'Learn about me',
-            ctaHref: 'about.html',
+            ctaHref: '/pages/about/',
             isHomePage: false
         },
         'Projects': {
             titlePhrases: ['My Projects'],
             subtitle: 'Explore my work',
             ctaText: 'Get in touch',
-            ctaHref: 'contact.html',
+            ctaHref: '/pages/contact/',
             isHomePage: false
         },
         'Home': {
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             ],
             subtitle: 'Welcome to my corner of the internet',
             ctaText: 'Learn more about me',
-            ctaHref: 'pages/about.html',
+            ctaHref: '/pages/about/',
             isHomePage: true
         }
     };
@@ -500,7 +500,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             this.cacheKey = 'github_activity_cache';
             this.cacheDuration = options.cacheDuration || 3600000; // 1 hour default
             this.containerId = options.containerId || 'currently-card';
-            this.feedUrl = `https://github.com/${this.username}.atom`;
+            this.feedUrl = `https://api.github.com/users/${this.username}/events/public`;
         }
 
         /**
@@ -532,17 +532,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             // Fetch fresh data
             try {
-                const response = await fetch(this.feedUrl);
+                const response = await fetch(this.feedUrl, {
+                    headers: { 'Accept': 'application/vnd.github+json' }
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
-                const text = await response.text();
-                const activities = this.parseAtomFeed(text);
-                
+
+                const events = await response.json();
+                const activities = this.parseEvents(events);
+
                 // Cache the results
                 this.setCache(activities);
-                
+
                 return activities;
             } catch (error) {
                 console.error('Error fetching GitHub activity:', error);
@@ -553,77 +555,80 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         /**
-         * Parse GitHub Atom feed XML
-         * @param {string} xmlText - Atom feed XML text
+         * Parse GitHub Events API JSON response
+         * @param {Array} events - Array of GitHub event objects
          * @returns {Array} Parsed activity items
          */
-        parseAtomFeed(xmlText) {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-            const entries = xmlDoc.querySelectorAll('entry');
-            
+        parseEvents(events) {
             const activities = [];
-            entries.forEach((entry, index) => {
-                if (index >= this.maxItems) return;
-                
-                const title = entry.querySelector('title')?.textContent || '';
-                const link = entry.querySelector('link')?.getAttribute('href') || '';
-                const published = entry.querySelector('published')?.textContent || '';
-                const content = entry.querySelector('content')?.textContent || '';
-                const id = entry.querySelector('id')?.textContent || '';
-                
-                // Determine activity type from title
-                const type = this.determineActivityType(title);
-                
+            for (let i = 0; i < events.length && activities.length < this.maxItems; i++) {
+                const event = events[i];
+                const type = this.determineActivityType(event);
+                if (!type) continue;
+
+                const repoName = event.repo?.name || '';
+                const repoUrl = `https://github.com/${repoName}`;
+                const title = this.buildTitle(event, type, repoName);
+
                 activities.push({
                     platform: 'github',
                     type: type,
                     title: title,
-                    description: this.extractDescription(content, type),
-                    timestamp: published,
-                    url: link,
-                    id: id
+                    timestamp: event.created_at,
+                    url: repoUrl,
+                    id: event.id
                 });
-            });
-            
+            }
             return activities;
         }
 
         /**
-         * Determine activity type from title
-         * @param {string} title - Activity title
-         * @returns {string} Activity type
+         * Determine activity type from a GitHub event object
+         * @param {Object} event - GitHub event object
+         * @returns {string|null} Activity type, or null to skip
          */
-        determineActivityType(title) {
-            if (title.includes('pushed to')) return 'commit';
-            if (title.includes('opened pull request')) return 'pr-opened';
-            if (title.includes('merged pull request')) return 'pr-merged';
-            if (title.includes('opened issue')) return 'issue-opened';
-            if (title.includes('closed issue')) return 'issue-closed';
-            if (title.includes('starred')) return 'starred';
-            if (title.includes('forked')) return 'forked';
-            if (title.includes('created repository')) return 'repo-created';
-            if (title.includes('created a branch')) return 'branch-created';
-            return 'activity';
+        determineActivityType(event) {
+            switch (event.type) {
+                case 'PushEvent': return 'commit';
+                case 'PullRequestEvent':
+                    if (event.payload?.action === 'opened') return 'pr-opened';
+                    if (event.payload?.action === 'closed' && event.payload?.pull_request?.merged) return 'pr-merged';
+                    return null;
+                case 'IssuesEvent':
+                    if (event.payload?.action === 'opened') return 'issue-opened';
+                    if (event.payload?.action === 'closed') return 'issue-closed';
+                    return null;
+                case 'WatchEvent': return 'starred';
+                case 'ForkEvent': return 'forked';
+                case 'CreateEvent':
+                    if (event.payload?.ref_type === 'repository') return 'repo-created';
+                    if (event.payload?.ref_type === 'branch') return 'branch-created';
+                    return null;
+                default: return null;
+            }
         }
 
         /**
-         * Extract description from content
-         * @param {string} content - Activity content HTML
+         * Build a human-readable title for an activity
+         * @param {Object} event - GitHub event object
          * @param {string} type - Activity type
-         * @returns {string} Cleaned description
+         * @param {string} repoName - Repository name
+         * @returns {string} Title string
          */
-        extractDescription(content, type) {
-            // Remove HTML tags and clean up
-            const temp = document.createElement('div');
-            temp.innerHTML = content;
-            let text = temp.textContent || temp.innerText || '';
-            
-            // Trim and limit length
-            text = text.trim().substring(0, 150);
-            if (text.length === 150) text += '...';
-            
-            return text;
+        buildTitle(event, type, repoName) {
+            const short = repoName.replace(`${this.username}/`, '');
+            switch (type) {
+                case 'commit': return `Pushed to ${short}`;
+                case 'pr-opened': return `Opened PR in ${short}`;
+                case 'pr-merged': return `Merged PR in ${short}`;
+                case 'issue-opened': return `Opened issue in ${short}`;
+                case 'issue-closed': return `Closed issue in ${short}`;
+                case 'starred': return `Starred ${short}`;
+                case 'forked': return `Forked ${short}`;
+                case 'repo-created': return `Created repository ${short}`;
+                case 'branch-created': return `Created branch in ${short}`;
+                default: return `Activity in ${short}`;
+            }
         }
 
         /**
