@@ -1,1 +1,11 @@
 .DS_Store
+
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+*.pem
+*.key
+
+# MCP server logs
+*.log
