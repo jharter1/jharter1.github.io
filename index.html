@@ -6,58 +6,121 @@ description: "DevOps and Linux Engineer based in Chicago. Portfolio showcasing i
 ---
 
 <section aria-labelledby="content-heading">
-    <h2 id="content-heading" class="sr-only">Site Content</h2>
-    <div class="cards-grid">
+  <h2 id="content-heading" class="sr-only">Site Content</h2>
+  <div class="cards-grid">
     <!-- Row 1 -->
     <div id="about-card" class="card fade-in-section card-hidden">
-        <h2>About Me</h2>
-        <p>Hi, I'm Jack Harter, a DevOps and Linux engineer with a passion for open-source technologies. Learn more <a href="{{ '/pages/about/' | relative_url }}">about me</a>.</p>
+      <h2>About Me</h2>
+      <p>
+        Hi, I'm Jack Harter, a DevOps and Linux engineer with a passion for
+        open-source technologies. I love taking a good crack at the things that
+        make our faces melt. Learn more
+        <a href="{{ '/pages/about/' | relative_url }}">about me</a>.
+      </p>
     </div>
     <div id="what-i-do-card" class="card fade-in-section card-hidden">
-        <h2>What I Do</h2>
-        <p>I specialize in DevOps engineering, Linux administration, and building tough CI/CD pipelines. I help automate testing and make deployment more bearable.</p>
+      <h2>What I Do</h2>
+      <p>
+        I specialize in DevOps engineering, Linux administration, and building
+        tough CI/CD pipelines. I help automate testing and make deployment more
+        bearable. If your deployments make you want to smash your
+        keyboard,please
+        <a href="{{ '/pages/contact/' | relative_url }}">get in touch</a>.
+      </p>
     </div>
-    
+
     <!-- Row 2 -->
     <div id="projects-card" class="card fade-in-section card-hidden">
-        <h2>Projects</h2>
-        <p>Check out my latest work including infrastructure automation, monitoring solutions, and open-source contributions. <a href="{{ '/pages/projects/' | relative_url }}">View all projects</a>.</p>
+      <h2>Projects</h2>
+      <p>
+        Check out my latest work including infrastructure automation, monitoring
+        solutions, and open-source contributions.
+        <a href="{{ '/pages/projects/' | relative_url }}">View all projects</a>.
+      </p>
     </div>
     <div id="stack-card" class="card fade-in-section card-hidden">
-        <h2>My Stack</h2>
-        <ul>
-            <li><i class="fas fa-server"></i> Linux &middot; Docker &middot; Kubernetes &middot; Nomad</li>
-            <li><i class="fas fa-cloud"></i> AWS &middot; Azure &middot; GCP &middot; Terraform</li>
-            <li><i class="fas fa-code-branch"></i> GitHub Actions &middot; ArgoCD &middot; GitOps</li>
-            <li><i class="fas fa-chart-line"></i> Prometheus &middot; Grafana &middot; Loki</li>
-            <li><i class="fas fa-cog"></i> Ansible &middot; Packer &middot; Vault &middot; Consul</li>
-            <li><i class="fas fa-terminal"></i> Bash &middot; Python &middot; Vim &middot; Tmux</li>
-        </ul>
-        <p style="margin-top: 1em; font-size: 0.9em;"><a href="{{ '/pages/uses/' | relative_url }}">See my full setup &rarr;</a></p>
+      <h2>My Stack</h2>
+      <ul>
+        <li>
+          <i class="fas fa-server"></i> Linux &middot; Docker &middot;
+          Kubernetes &middot; Nomad
+        </li>
+        <li>
+          <i class="fas fa-cloud"></i> AWS &middot; Azure &middot; GCP &middot;
+          Terraform
+        </li>
+        <li>
+          <i class="fas fa-code-branch"></i> GitHub Actions &middot; ArgoCD
+          &middot; GitOps
+        </li>
+        <li>
+          <i class="fas fa-chart-line"></i> Prometheus &middot; Grafana &middot;
+          Loki
+        </li>
+        <li>
+          <i class="fas fa-cog"></i> Ansible &middot; Packer &middot; Vault
+          &middot; Consul
+        </li>
+        <li>
+          <i class="fas fa-terminal"></i> Bash &middot; Python &middot; Vim
+          &middot; Tmux
+        </li>
+      </ul>
+      <p style="margin-top: 1em; font-size: 0.9em">
+        <a href="{{ '/pages/uses/' | relative_url }}"
+          >See my full setup &rarr;</a
+        >
+      </p>
     </div>
-    
+
     <!-- Row 3 -->
     <div id="currently-card" class="card fade-in-section card-hidden">
-        <h2>Currently</h2>
-        <p>Working on infrastructure automation and exploring new technologies in cloud-centric disciplines. Always learning and sharing knowledge through my <a href="{{ site.social.blog }}">blog</a>.</p>
+      <h2>Currently</h2>
+      <p>
+        Working on infrastructure automation and exploring new technologies in
+        cloud-centric disciplines. Always learning and sharing knowledge through
+        my <a href="{{ site.social.blog }}">blog</a>.
+      </p>
     </div>
     <div id="connect-card" class="card fade-in-section card-hidden">
-        <h2>Let's Connect</h2>
-        <p>Interested in collaborating or have questions about DevOps, GitOps, or Infrastructure as Code? <a href="{{ '/pages/contact/' | relative_url }}">Get in touch</a> or find me on <a href="https://www.linkedin.com/in/{{ site.social.linkedin }}">LinkedIn</a>.</p>
+      <h2>Let's Connect</h2>
+      <p>
+        Interested in collaborating or have questions about DevOps, GitOps, or
+        Infrastructure as Code?
+        <a href="{{ '/pages/contact/' | relative_url }}">Get in touch</a> or
+        find me on
+        <a href="https://www.linkedin.com/in/{{ site.social.linkedin }}"
+          >LinkedIn</a
+        >.
+      </p>
     </div>
 
     <!-- Podcast — full width -->
-    <div class="card fade-in-section card-hidden" style="grid-column: 1 / -1;">
-        <h2><i class="fas fa-podcast"></i> Podcast Appearance</h2>
-        <p>I joined the <strong>Cloud Security Podcast</strong> to talk DevOps, automation, and the evolving infrastructure landscape. Give it a listen:</p>
-        <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
-            <a href="https://podcasts.apple.com/podcast/id1489678590?i=1000696847392" target="_blank" rel="noopener noreferrer" class="project-link">
-                <i class="fab fa-apple"></i> Apple Podcasts
-            </a>
-            <a href="https://open.spotify.com/episode/09OlT42HiWdfKTsJIGyz2O" target="_blank" rel="noopener noreferrer" class="project-link">
-                <i class="fab fa-spotify"></i> Spotify
-            </a>
-        </div>
+    <div class="card fade-in-section card-hidden" style="grid-column: 1 / -1">
+      <h2><i class="fas fa-podcast"></i> Podcast Appearance</h2>
+      <p>
+        I joined the <strong>Cloud Security Podcast</strong> to talk DevOps,
+        automation, and the evolving infrastructure landscape. Give it a listen:
+      </p>
+      <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap">
+        <a
+          href="https://podcasts.apple.com/podcast/id1489678590?i=1000696847392"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project-link"
+        >
+          <i class="fab fa-apple"></i> Apple Podcasts
+        </a>
+        <a
+          href="https://open.spotify.com/episode/09OlT42HiWdfKTsJIGyz2O"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project-link"
+        >
+          <i class="fab fa-spotify"></i> Spotify
+        </a>
+      </div>
     </div>
-    </div>
+  </div>
 </section>
+
