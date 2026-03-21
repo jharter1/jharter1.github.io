@@ -9,6 +9,92 @@ permalink: /pages/projects/
         <section aria-labelledby="projects-heading">
             <h2 id="projects-heading" class="sr-only">My Projects</h2>
             <div class="projects-grid">
+                <!-- Project Card: HashiCorp Homelab -->
+                <div class="project-card fade-in-section card-hidden">
+                    <h3>HashiCorp Homelab on Proxmox</h3>
+                    <p class="project-description">Production-ready infrastructure-as-code solution for deploying a full container orchestration platform on Proxmox VE. Combines Packer, Terraform, Ansible, Nomad, Consul, Vault, Traefik, and a complete observability stack into a reproducible homelab environment.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-cube"></i> Terraform</span>
+                        <span class="tech-badge"><i class="fas fa-cog"></i> Ansible</span>
+                        <span class="tech-badge"><i class="fas fa-box-open"></i> Packer</span>
+                        <span class="tech-badge"><i class="fas fa-dharmachakra"></i> Nomad</span>
+                        <span class="tech-badge"><i class="fas fa-network-wired"></i> Consul</span>
+                        <span class="tech-badge"><i class="fas fa-chart-line"></i> Grafana</span>
+                    </div>
+
+                    <button class="case-study-toggle" aria-expanded="false" aria-controls="case-study-homelab">
+                        <i class="fas fa-chevron-down"></i> View Case Study
+                    </button>
+
+                    <div class="case-study-content" id="case-study-homelab" hidden>
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-exclamation-circle"></i> Problem Statement</h4>
+                            <p>Running a homelab typically means a collection of manually configured VMs that are impossible to reproduce, difficult to maintain, and offer no observability. Rebuilding after hardware failure or OS changes is painful and time-consuming. I wanted a homelab that could be torn down and rebuilt from scratch with a single command — production patterns at home scale.</p>
+                        </div>
+
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-lightbulb"></i> Approach & Strategy</h4>
+                            <p>Adopted a full infrastructure-as-code approach using the HashiCorp stack on Proxmox VE. Every layer — from VM templates to service configuration — is defined in code and version-controlled. The result is a multi-node container orchestration platform that's fully reproducible, observable, and manageable remotely.</p>
+                        </div>
+
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-cogs"></i> Technical Decisions</h4>
+                            <ul>
+                                <li><strong>Proxmox VE:</strong> Bare-metal hypervisor providing efficient multi-VM hosting on commodity hardware</li>
+                                <li><strong>Packer:</strong> Builds optimized Debian VM templates with HashiCorp tools pre-installed, enabling fast cluster spin-up</li>
+                                <li><strong>Terraform:</strong> Provisions the full multi-node cluster (3 servers, 6 clients) reproducibly from a single apply</li>
+                                <li><strong>Ansible:</strong> Idempotent configuration management for Nomad, Consul, and supporting services</li>
+                                <li><strong>Nomad + Consul:</strong> Lightweight container orchestration with integrated service discovery and health checking</li>
+                                <li><strong>Traefik:</strong> Automatic reverse proxy routing via Consul Catalog — no manual config per service</li>
+                                <li><strong>Tailscale:</strong> Zero-config VPN for secure remote access without exposing any ports publicly</li>
+                            </ul>
+                        </div>
+
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-code"></i> Implementation Details</h4>
+                            <p>Packer builds layered Debian images with HashiCorp tools pre-baked, reducing provisioning time significantly. Terraform provisions a 9-node cluster (3 Nomad servers in Raft consensus, 6 clients) with NFS-backed persistent storage for high availability. Ansible roles handle Nomad job definitions and service configuration. The full observability stack — Prometheus, Grafana, Loki, and Grafana Alloy for log shipping — runs as Nomad jobs alongside workloads. A local Docker registry with pull-through cache eliminates redundant image pulls across nodes.</p>
+                        </div>
+
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-wrench"></i> Challenges & Solutions</h4>
+                            <ul>
+                                <li><strong>Challenge:</strong> Proxmox networking complexity with multi-node cluster communication</li>
+                                <li><strong>Solution:</strong> Defined static IP allocation in Terraform and pre-configured bridge networking in Packer templates</li>
+                                <li><strong>Challenge:</strong> Persistent storage across ephemeral container workloads</li>
+                                <li><strong>Solution:</strong> NFS mounts provisioned via Terraform and accessible from all Nomad clients for stateful workloads</li>
+                                <li><strong>Challenge:</strong> Secrets distribution without hardcoding credentials</li>
+                                <li><strong>Solution:</strong> Vault HA cluster integrated with Nomad's native Vault secrets provider</li>
+                            </ul>
+                        </div>
+
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-chart-line"></i> Results & Impact</h4>
+                            <ul>
+                                <li><strong>Reproducibility:</strong> Full cluster rebuild time reduced from days to under an hour</li>
+                                <li><strong>Observability:</strong> Complete metrics, logs, and dashboards across all nodes and workloads</li>
+                                <li><strong>Security:</strong> No public ports exposed; all remote access via Tailscale VPN</li>
+                                <li><strong>Automation:</strong> New services auto-register with Consul and get Traefik routing with zero manual config</li>
+                            </ul>
+                        </div>
+
+                        <div class="case-study-section">
+                            <h4><i class="fas fa-graduation-cap"></i> Lessons Learned</h4>
+                            <ul>
+                                <li>Packer's layered image approach pays off significantly — fast iteration without full rebuilds</li>
+                                <li>Nomad is dramatically simpler to operate than Kubernetes for homelab-scale workloads</li>
+                                <li>Consul service discovery makes Traefik routing almost entirely self-managing</li>
+                                <li>Investing in observability early makes debugging distributed systems far less painful</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-links">
+                        <a href="https://github.com/jharter1/hashi_homelab" class="project-link" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Project Card 1 -->
                 <div class="project-card fade-in-section card-hidden">
                     <h3>ArgoCD GKE Cost-Optimized</h3>
