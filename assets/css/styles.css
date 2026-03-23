@@ -4,6 +4,7 @@
   --text-color: #e0e0e0;
   --card-background-color: #1f1f1f;
   --accent-color: #bb86fc;
+  --accent-color-deep: #6200ee;
 
   /* Spacing scale */
   --spacing-xs: 8px;
@@ -185,6 +186,7 @@ body.light-theme {
   --text-color: #000000;
   --card-background-color: #f0f0f0;
   --accent-color: #6200ee;
+  --accent-color-deep: #4a00b0;
 
   /* Light theme animation colors */
   --bg-animation-particle: rgba(98, 0, 238, 0.5);
@@ -537,50 +539,58 @@ main {
   transform: translateY(0);
 }
 
-.card {
+.card,
+.project-card {
   background-color: var(--card-background-color);
   color: var(--text-color);
-  border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
-  width: 100%;
-  max-width: 800px;
   box-sizing: border-box;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
-.card::before {
+.card::before,
+.project-card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--accent-color), #6200ee);
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-color-deep));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
 }
 
-.card:hover::before {
+.card:hover::before,
+.project-card:hover::before {
   transform: scaleX(1);
 }
 
-.card--clickable {
-  cursor: pointer;
-}
-
-.card:hover {
+.card:hover,
+.project-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 
-.card:focus-within {
+.card:focus-within,
+.project-card:focus-within {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
+}
+
+.card {
+  border-radius: 8px;
+  margin-bottom: var(--spacing-md);
+  width: 100%;
+  max-width: 800px;
+}
+
+.card--clickable {
+  cursor: pointer;
 }
 
 h1,
@@ -857,45 +867,10 @@ ul {
 
 /* Project Card Styles */
 .project-card {
-  background-color: var(--card-background-color);
-  color: var(--text-color);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: var(--spacing-md);
-  box-sizing: border-box;
-  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.project-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--accent-color), #6200ee);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-
-.project-card:hover::before {
-  transform: scaleX(1);
-}
-
-.project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-}
-
-.project-card:focus-within {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
 }
 
 .project-card h3 {
@@ -1509,7 +1484,7 @@ ul {
 
 .skill-progress {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-color), #6200ee);
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-color-deep));
   border-radius: 10px;
   transition: width 0.5s ease;
   position: relative;
