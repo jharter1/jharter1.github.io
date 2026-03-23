@@ -3,7 +3,7 @@
 [![Deploy Jekyll](https://github.com/jharter1/jharter1.github.io/workflows/Deploy%20Jekyll%20site%20to%20GitHub%20Pages/badge.svg)](https://github.com/jharter1/jharter1.github.io/actions)
 [![Automated PR Review](https://img.shields.io/badge/PR%20Review-Automated-blue)](docs/AUTOMATED_PR_REVIEW.md)
 
-Personal portfolio website for Jack Harter - DevOps and Linux Engineer. Visit the live site at [jharter1.github.io](https://jharter1.github.io) or [hartr.net](https://hartr.net).
+Personal portfolio website for Jack Harter - DevOps and Linux Engineer. Visit the live site at [j.hartr.net](https://j.hartr.net).
 
 ## 🚀 Features
 
@@ -94,7 +94,9 @@ Automatically deletes merged feature branches to keep the repository clean.
 ├── pages/              # Content pages
 │   ├── about.html      # About page
 │   ├── contact.html    # Contact page
-│   └── projects.html   # Projects showcase
+│   ├── projects.html   # Projects showcase
+│   ├── resume.html     # Printable resume
+│   └── uses.html       # Setup / uses page
 ├── docs/               # Documentation
 ├── .github/workflows/  # GitHub Actions workflows
 ├── _config.yml         # Jekyll configuration
@@ -168,7 +170,7 @@ This project is open source and available for reference. Some content may be spe
 
 ## 📬 Contact
 
-- **Website**: [hartr.net](https://hartr.net)
+- **Website**: [j.hartr.net](https://j.hartr.net)
 - **Blog**: [blog.hartr.net](https://blog.hartr.net)
 - **LinkedIn**: [jwharter](https://www.linkedin.com/in/jwharter)
 - **GitHub**: [@jharter1](https://github.com/jharter1)
@@ -182,4 +184,4 @@ This project is open source and available for reference. Some content may be spe
 
 ---
 
-*Last Updated: October 2025*
+*Last Updated: March 2026*
